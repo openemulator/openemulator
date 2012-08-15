@@ -14,6 +14,8 @@
 
 AppleIIIDiskIO::AppleIIIDiskIO() : AppleDiskIIInterfaceCard()
 {
+    systemControl = NULL;
+    
     appleIIMode = false;
     
     driveSelect = 0;
@@ -176,7 +178,7 @@ void AppleIIIDiskIO::updateDriveSelect()
     else
     {
         if (OEGetBit(driveSelect, (1 << 2)))
-            selectDrive(0);
+            selectDrive(4);
         else
             selectDrive(driveSelect & 0x3);
     }

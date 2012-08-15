@@ -1,11 +1,11 @@
 ==1.0.4==
-* Disable C0D0 when /AIISW
-* Implement AppleIIIVideo+font upload
-* Implement MOS6522
-* Implement AppleIIIVideo VBL
 * Implement AppleIIIGamePort
+* Implement MOS6522
+* Implement AppleIIVideo VBL
+* Implement AppleIIIVideo+font upload
+* Implement AppleIIIKeyboard CTRL+RESET/NMI
+* Disable C0D0 when /AIISW
 * Implement MOS6551 ACIA
-* Fix AppleIIIKeyboard
 * Implement AppleIIKeyboard key stealing
 * Implement JoystickMapper keyboard joystick
 * Fix Apple Silentype Interface Card spurious data problems

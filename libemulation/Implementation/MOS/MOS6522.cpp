@@ -5,13 +5,30 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a MOS 6530 (ROM, RAM, I/O, Timer)
+ * Implements a MOS 6522 VIA (Versatile Interface Adaptor)
  */
 
 #include "MOS6522.h"
 
 #include "ControlBusInterface.h"
 #include "AddressDecoder.h"
+
+#define RS_DATA_B               0x00
+#define RS_DATA_A               0x01
+#define RS_DDR_B                0x02
+#define RS_DDR_A                0x03
+#define RS_TIMER1_COUNTL        0x04
+#define RS_TIMER1_COUNTH        0x05
+#define RS_TIMER1_LATCHL        0x06
+#define RS_TIMER1_LATCHH        0x07
+#define RS_TIMER2_COUNTL        0x08
+#define RS_TIMER2_COUNTH        0x09
+#define RS_SHIFT                0x0a
+#define RS_AUXCONTROL           0x0b
+#define RS_PERIPHERALCONTROL    0x0c
+#define RS_INTERRUPTFLAGS       0x0d
+#define RS_INTERRUPTENABLE      0x0e
+#define RS_DATA_A_NO_HS         0x0f
 
 MOS6522::MOS6522()
 {
@@ -127,30 +144,30 @@ OEChar MOS6522::read(OEAddress address)
 {
     switch (address & 0xf)
     {
-        case 0x0:
+        case RS_DATA_B:
             dataB &= ddrB;
             if (portB)
                 dataB |= portB->read(addressB) & ~ddrB;
             
             return dataB;
             
-        case 0x1:
+        case RS_DATA_A:
             dataA &= ddrA;
             if (portA)
                 dataA |= portA->read(addressA) & ~ddrA;
             
             return dataA;
             
-        case 0x2:
+        case RS_DDR_B:
             return ddrB;
             
-        case 0x3:
+        case RS_DDR_A:
             return ddrA;
             
-        case 0xd:
+        case RS_INTERRUPTFLAGS:
             return 0xff;
             
-        case 0xf:
+        case RS_DATA_A_NO_HS:
             dataA &= ddrA;
             if (portA)
                 dataA |= portA->read(addressA) & ~ddrA;
@@ -165,7 +182,7 @@ void MOS6522::write(OEAddress address, OEChar value)
 {
     switch (address & 0xf)
     {
-        case 0x0:
+        case RS_DATA_B:
             dataB = value;
             
             if (portB)
@@ -173,7 +190,7 @@ void MOS6522::write(OEAddress address, OEChar value)
             
             break;
             
-        case 0x1:
+        case RS_DATA_A:
             dataA = value;
             
             if (portA)
@@ -181,17 +198,17 @@ void MOS6522::write(OEAddress address, OEChar value)
             
             break;
             
-        case 0x2:
+        case RS_DDR_B:
             ddrB = value;
             
             break;
             
-        case 0x3:
+        case RS_DDR_A:
             ddrA = value;
             
             break;
             
-        case 0xf:
+        case RS_DATA_A_NO_HS:
             dataA = value;
             
             if (portA)

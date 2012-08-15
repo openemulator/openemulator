@@ -29,6 +29,7 @@ AppleIIKeyboard::AppleIIKeyboard()
     
     // Default value for Apple III key flags
     appleIIIKeyFlags = 0x7e;
+    keypadCount = 0;
 }
 
 bool AppleIIKeyboard::setValue(string name, string value)
@@ -167,6 +168,10 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                 updateKeyFlags();
                 
                 CanvasHIDEvent *hidEvent = (CanvasHIDEvent *)data;
+                
+                if ((hidEvent->usageId >= CANVAS_KP_NUMLOCK) &&
+                    (hidEvent->usageId <= CANVAS_KP_PERIOD))
+                    keypadCount += hidEvent->value ? 1 : -1;
                 
                 switch (state)
                 {
@@ -332,13 +337,26 @@ void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
     if (type == APPLEIIKEYBOARD_TYPE_APPLEIII)
     {
         if (key == CANVAS_U_LEFT)
-            key = 0x8b;
+            key = 0x88;
         else if (key == CANVAS_U_RIGHT)
             key = 0x95;
         else if (key == CANVAS_U_UP)
             key = 0x8b;
         else if (key == CANVAS_U_DOWN)
             key = 0x8a;
+        else if (key == 0x9)
+            key = 0x88;
+        else if (key == 0x1b)
+            key = 0x98;
+        else if (key == 0x20)
+            key = 0xa0;
+        else if (key == 0x7f)
+            key = 0x88;
+        else if (key >= 0x80)
+            return;
+        
+        if (keypadCount)
+            key |= 0x80;
         
         if (key >= 'a' && key <= 'z')
             key -= 0x20;
@@ -349,6 +367,10 @@ void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
             key = 0x8;
         else if (key == CANVAS_U_RIGHT)
             key = 0x15;
+        else if (key == 0x7f)
+            key = 0x8;
+        else if (key >= 0x80)
+            return;
         
         if (type != APPLEIIKEYBOARD_TYPE_FULLASCII)
         {
@@ -358,11 +380,6 @@ void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
                 return;
         }
     }
-    
-    if (key == 0x7f)
-        key = 0x8;
-    else if (key >= 0x80)
-        return;
     
     keyLatch = key;
     keyStrobe = true;

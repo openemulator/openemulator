@@ -59,6 +59,7 @@ private:
     OEInt stateUsageId;
     
     OEChar appleIIIKeyFlags;
+    OEInt keypadCount;
     
     queue<OEChar> pasteBuffer;
     

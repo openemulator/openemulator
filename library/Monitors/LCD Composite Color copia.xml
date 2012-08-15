@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Studio Composite Color Monitor" image="images/Generic/Composite Color Monitor.png" description="A studio 14-inch composite color monitor that can be connected to any composite video source.">
+    
+    <device id="lcdMonitor" label="LCD Composite Color Monitor" image="images/Generic/LCD Color Monitor.png">
+        <setting ref="lcdMonitor.monitor" name="videoBrightness" label="Brightness" type="slider" options="-1.0,1.0"/>
+        <setting ref="lcdMonitor.monitor" name="videoContrast" label="Contrast" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="lcdMonitor.monitor" name="videoSaturation" label="Saturation" type="slider" options="0.0,2.0,1.0"/>
+        <setting ref="lcdMonitor.monitor" name="videoHue" label="Hue" type="slider" options="-0.5,0.5,0.0"/>
+        <setting ref="lcdMonitor.monitor" name="videoWhiteOnly" label="White Only" type="checkbox"/>
+        <setting ref="lcdMonitor.monitor" name="videoHorizontalCenter" label="Horizontal Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="lcdMonitor.monitor" name="videoHorizontalSize" label="Horizontal Size" type="slider" options="0.85,1.15"/>
+        <setting ref="lcdMonitor.monitor" name="videoVerticalCenter" label="Vertical Center" type="slider" options="-0.1,0.1"/>
+        <setting ref="lcdMonitor.monitor" name="videoVerticalSize" label="Vertical Size" type="slider" options="0.85,1.15"/>
+    </device>
+    <connector id="lcdMonitor.connector" type="Composite Video Port">
+        <inlet ref="lcdMonitor.monitor" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="lcdMonitor.monitor" class="Monitor">
+        <property name="device" ref="lcdMonitor"/>
+        <property name="controlBus" ref=""/>
+        <property name="videoDecoder" value="Composite Y'UV"/>
+        <property name="videoBrightness" value="0"/>
+        <property name="videoContrast" value="1"/>
+        <property name="videoSaturation" value="1"/>
+        <property name="videoHue" value="0"/>
+        <property name="videoWhiteOnly" value="0"/>
+        <property name="videoHorizontalCenter" value="0"/>
+        <property name="videoHorizontalSize" value="1.0"/>
+        <property name="videoVerticalCenter" value="0"/>
+        <property name="videoVerticalSize" value="1.0"/>
+        <property name="videoBandwidth" value="6000000"/>
+        <property name="videoLumaBandwidth" value="2000000"/>
+        <property name="videoChromaBandwidth" value="600000"/>
+        <property name="displayBarrel" value="0"/>
+        <property name="displayScanlineLevel" value="0"/>
+        <property name="displayShadowMaskLevel" value="0"/>
+        <property name="displayShadowMaskDotPitch" value="0.5"/>
+        <property name="displayShadowMask" value="Triad"/>
+        <property name="displayPersistence" value="0"/>
+        <property name="displayCenterLighting" value="1"/>
+        <property name="displayLuminanceGain" value="1"/>
+    </component>
+    
+</edl>

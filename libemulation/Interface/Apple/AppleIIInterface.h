@@ -19,44 +19,12 @@
 
 #define APPLEII_CLOCKFREQUENCY   (14318180.0F * 65 / 912)
 
-#define APPLEIII_SYSTEMBANK 2
-
-typedef enum
-{
-    APPLEIII_SET_ZEROPAGE = CPU_END,
-} AppleIIIMOS6502Message;
-
-// Apple III environment register
-#define APPLEIII_ROMSEL1        (1 << 0)
-#define APPLEIII_ROMSEL2        (1 << 1)
-#define APPLEIII_NORMALSTACK    (1 << 2)
-#define APPLEIII_RAMWP          (1 << 3)
-#define APPLEIII_RESETENABLE    (1 << 4)
-#define APPLEIII_VIDEOENABLE    (1 << 5)
-#define APPLEIII_IOENABLE       (1 << 6)
-#define APPLEIII_SLOWSPEED      (1 << 7)
-
-// Apple III ram bank register
-#define APPLEIII_NOTAPPLEIIMODE (1 << 6)
-
 typedef enum
 {
     APPLEII_MAP_SLOT = ADDRESSDECODER_END,
     APPLEII_UNMAP_SLOT,
     APPLEII_ADDRESSDECODER_END,
 } AppleIIAddressDecoderMessage;
-
-typedef enum
-{
-    APPLEIII_GET_ENVIRONMENT,
-    APPLEIII_GET_APPLEIIMODE,
-} AppleIIISystemControlMessage;
-
-typedef enum
-{
-    APPLEIII_ENVIRONMENT_DID_CHANGE,
-    APPLEIII_APPLEIIMODE_DID_CHANGE,
-} AppleIIISystemControlNotification;
 
 // Apple IIe memory control
 typedef enum
@@ -82,6 +50,7 @@ typedef enum
 {
     APPLEII_REFRESH_VIDEO = CANVAS_END,
     APPLEII_READ_FLOATINGBUS,
+    APPLEII_IS_VBL,
     APPLEII_REQUEST_MONITOR,
     APPLEII_RELEASE_MONITOR,
     APPLEII_IS_MONITOR_CONNECTED,
@@ -91,6 +60,8 @@ typedef enum
 
 typedef enum
 {
+    APPLEII_VBL_DID_BEGIN,
+    APPLEII_VBL_DID_END,
     APPLEII_COLORKILLER_DID_CHANGE = CANVAS_NOTIFICATION_END,
     APPLEII_MONITOR_DID_CHANGE,
 } AppleIIVideoNotification;

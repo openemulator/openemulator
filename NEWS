@@ -1,4 +1,6 @@
 ==Latest==
+* Fixed CPU speed with VBL 1/2 MHz switching
+* Fixed AppleIIIKeyboard
 * Fixed AppleIIIDiskIO
 * Implemented AppleIIIBeeper
 * Implemented MOS6551
@@ -27,7 +29,7 @@
 * Implemented power/reset signals as global emulation properties
 * Added F12 reset key for Apple II
 * Added CFFA ROM 1.2 and ROM 1.0 firmware
-* Fixed disk image extension detection in libdiskimage
+* Fixed uppercase disk image extension detection in libdiskimage
 * Implemented Apple III MOS6502
 * Implemented Apple III keyboard
 * Implemented Apple III framework

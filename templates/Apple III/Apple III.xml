@@ -76,6 +76,48 @@
     <component id="appleIII.floatingBus" class="FloatingBus">
         <property name="type" value="vcc"/>
     </component>
+    <component id="appleIII.dVIA" class="MOS6522">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="portA" ref="appleIII.systemControl"/>
+        <property name="addressA" value="0x0"/>
+        <property name="ddrA" value="0x0"/>
+        <property name="dataA" value="0xff"/>
+        <property name="ca1" value="0"/>
+        <property name="ca2" value="0"/>
+        <property name="portB" ref="appleIII.systemControl"/>
+        <property name="addressB" value="0x1"/>
+        <property name="ddrB" value="0x0"/>
+        <property name="dataB" value="0x0"/>
+        <property name="cb1" value="0"/>
+        <property name="cb2" value="0"/>
+    </component>
+    <component id="appleIII.eVIA" class="MOS6522">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="portA" ref="appleIII.systemControl"/>
+        <property name="addressA" value="0x2"/>
+        <property name="ddrA" value="0x0"/>
+        <property name="dataA" value="0x0"/>
+        <property name="ca1" value="0"/>
+        <property name="ca2" value="0"/>
+        <property name="portB" ref="appleIII.systemControl"/>
+        <property name="addressB" value="0x3"/>
+        <property name="ddrB" value="0x0"/>
+        <property name="dataB" value="0x0"/>
+        <property name="cb1" value="0"/>
+        <property name="cb2" value="0"/>
+    </component>
+    <component id="appleIII.systemControl" class="AppleIIISystemControl">
+        <property name="cpu" ref="appleIII.cpu"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="memoryBus" ref="appleIII.memoryBus"/>
+        <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
+        <property name="memoryAddressDecoder" ref="appleIII.memoryAddressDecoder"/>
+        <property name="memory" ref="appleIII.memory"/>
+        <property name="video" ref="appleIII.video"/>
+        <property name="dVIA" ref="appleIII.dVIA"/>
+        <property name="eVIA" ref="appleIII.eVIA"/>
+        <property name="dac" ref="appleIII.dac"/>
+    </component>
     <component id="appleIII.memoryBus" class="AddressOffset">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
@@ -226,48 +268,6 @@
         <property name="mapDVIA" value="0xd0-0xdf"/>
         <property name="refEVIA" ref="appleIII.eVIA"/>
         <property name="mapEVIA" value="0xe0-0xef"/>
-    </component>
-    <component id="appleIII.systemControl" class="AppleIIISystemControl">
-        <property name="cpu" ref="appleIII.cpu"/>
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="memoryBus" ref="appleIII.memoryBus"/>
-        <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
-        <property name="memoryAddressDecoder" ref="appleIII.memoryAddressDecoder"/>
-        <property name="memory" ref="appleIII.memory"/>
-        <property name="video" ref="appleIII.video"/>
-        <property name="dVIA" ref="appleIII.dVIA"/>
-        <property name="eVIA" ref="appleIII.eVIA"/>
-        <property name="dac" ref="appleIII.dac"/>
-    </component>
-    <component id="appleIII.dVIA" class="MOS6522">
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="portA" ref="appleIII.systemControl"/>
-        <property name="addressA" value="0x0"/>
-        <property name="ddrA" value="0x0"/>
-        <property name="dataA" value="0xff"/>
-        <property name="ca1" value="0"/>
-        <property name="ca2" value="0"/>
-        <property name="portB" ref="appleIII.systemControl"/>
-        <property name="addressB" value="0x1"/>
-        <property name="ddrB" value="0x0"/>
-        <property name="dataB" value="0x0"/>
-        <property name="cb1" value="0"/>
-        <property name="cb2" value="0"/>
-    </component>
-    <component id="appleIII.eVIA" class="MOS6522">
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="portA" ref="appleIII.systemControl"/>
-        <property name="addressA" value="0x2"/>
-        <property name="ddrA" value="0x0"/>
-        <property name="dataA" value="0x0"/>
-        <property name="ca1" value="0"/>
-        <property name="ca2" value="0"/>
-        <property name="portB" ref="appleIII.systemControl"/>
-        <property name="addressB" value="0x3"/>
-        <property name="ddrB" value="0x0"/>
-        <property name="dataB" value="0x0"/>
-        <property name="cb1" value="0"/>
-        <property name="cb2" value="0"/>
     </component>
     <component id="appleIII.dac" class="AudioCodec">
         <property name="audio" ref="audio"/>

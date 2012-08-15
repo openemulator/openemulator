@@ -58,7 +58,19 @@ bool AppleIIISystemControl::setRef(string name, OEComponent *ref)
     else if (name == "memory")
         memory = ref;
     else if (name == "video")
+    {
+        if (video)
+        {
+            video->removeObserver(this, APPLEII_VBL_DID_BEGIN);
+            video->removeObserver(this, APPLEII_VBL_DID_END);
+        }
         video = ref;
+        if (video)
+        {
+            video->addObserver(this, APPLEII_VBL_DID_BEGIN);
+            video->addObserver(this, APPLEII_VBL_DID_END);
+        }
+    }
     else if (name == "dVIA")
         dVIA = ref;
     else if (name == "eVIA")
@@ -108,10 +120,30 @@ bool AppleIIISystemControl::init()
 
 void AppleIIISystemControl::notify(OEComponent *sender, int notification, void *data)
 {
-    setEnvironment(0xff);
-    setZeroPage(0);
-    setRAMBank(0);
-    setDACOutput(0);
+    if (sender == controlBus)
+    {
+        setEnvironment(0xff);
+        setZeroPage(0);
+        setRAMBank(0);
+        setDACOutput(0);
+    }
+    else if (sender == video)
+    {
+        bool videoEnabled = OEGetBit(environment, APPLEIII_VIDEOENABLE);
+        bool slowSpeed = OEGetBit(environment, APPLEIII_SLOWSPEED);
+        
+        if (videoEnabled && !slowSpeed)
+        {
+            float clockCPUMultiplier;
+            
+            if (notification == APPLEII_VBL_DID_END)
+                clockCPUMultiplier = 2.0F * (65 - 40) / 65 + 1.0F * 40 / 65;
+            else
+                clockCPUMultiplier = 2;
+            
+            controlBus->postMessage(this, CONTROLBUS_SET_CPUCLOCKMULTIPLIER, &clockCPUMultiplier);
+        }
+    }
 }
 
 OEChar AppleIIISystemControl::read(OEAddress address)
@@ -130,7 +162,17 @@ OEChar AppleIIISystemControl::read(OEAddress address)
             return 0xb0;    // For now, return IRQ's clear
             
         case 0x3:
-            return 0;
+        {
+            bool vbl;
+            
+            video->postMessage(this, APPLEII_IS_VBL, &vbl);
+            
+            OEChar value = 0;
+            
+            OESetBit(value, APPLEIII_BL, vbl);
+            
+            return value;
+        }
     }
     
     return 0;
@@ -175,7 +217,20 @@ inline void AppleIIISystemControl::setEnvironment(OEChar value)
          else if (videoEnabled && !newVideoEnabled)
          video->postMessage(this, APPLEII_REQUEST_MONITOR, NULL);*/
         
-        float clockCPUMultiplier = OEGetBit(value, APPLEIII_SLOWSPEED) ? 1 : 2;
+        bool videoEnabled = OEGetBit(value, APPLEIII_VIDEOENABLE);
+        bool slowSpeed = OEGetBit(value, APPLEIII_SLOWSPEED);
+        bool isVBL;
+        
+        video->postMessage(this, APPLEII_IS_VBL, &isVBL);
+        
+        float clockCPUMultiplier;
+        
+        if (slowSpeed)
+            clockCPUMultiplier = 1;
+        else if (videoEnabled && !isVBL)
+            clockCPUMultiplier = 2.0F * (65 - 40) / 65 + 1.0F * 40 / 65;
+        else
+            clockCPUMultiplier = 2;
         
         controlBus->postMessage(this, CONTROLBUS_SET_CPUCLOCKMULTIPLIER, &clockCPUMultiplier);
         
@@ -240,7 +295,6 @@ inline void AppleIIISystemControl::setDACOutput(OEChar value)
         return;
     
     OEChar audioSample = value << 2;
-    // bool BL = OEGetBit(value, (1 << 6));
     // bool ioNoNMI = OEGetBit(value, (1 << 7));
     
     dac->write(0, audioSample);

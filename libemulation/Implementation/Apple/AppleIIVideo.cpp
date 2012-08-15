@@ -264,8 +264,14 @@ bool AppleIIVideo::setRef(string name, OEComponent *ref)
         vram2000 = ref;
 	else if (name == "vram4000")
         vram4000 = ref;
-    else if (name == "sytemControl")
+    else if (name == "systemControl")
+    {
+        if (systemControl)
+            systemControl->removeObserver(this, APPLEIII_APPLEIIMODE_DID_CHANGE);
         systemControl = ref;
+        if (systemControl)
+            systemControl->addObserver(this, APPLEIII_APPLEIIMODE_DID_CHANGE);
+    }
     else
 		return false;
 	
@@ -369,6 +375,11 @@ bool AppleIIVideo::postMessage(OEComponent *sender, int message, void *data)
             
         case APPLEII_READ_FLOATINGBUS:
             *((OEChar *)data) = readFloatingBus();
+            
+            return true;
+            
+        case APPLEII_IS_VBL:
+            *((bool *)data) = (currentTimer == TIMER_VSYNC);
             
             return true;
             
@@ -1070,6 +1081,8 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
     switch (currentTimer)
     {
         case TIMER_DISPLAYMIXED:
+            postNotification(this, APPLEII_VBL_DID_END, NULL);
+            
             if (imageModified)
             {
                 imageModified = false;
@@ -1108,6 +1121,8 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
             break;
             
         case TIMER_VSYNC:
+            postNotification(this, APPLEII_VBL_DID_BEGIN, NULL);
+            
             cycles += (vertTotal - (vertStart + VERT_DISPLAY)) * HORIZ_TOTAL;
             
             break;

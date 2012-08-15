@@ -45,7 +45,7 @@ protected:
     
 private:
 	OEComponent *controlBus;
-	OEComponent *drive[4];
+	OEComponent *drive[5];
     
     OEInt phaseControl;
     bool driveOn;

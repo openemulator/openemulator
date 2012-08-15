@@ -5,7 +5,7 @@
  * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Implements a MOS 6522 (ROM, RAM, I/O, Timer)
+ * Implements a MOS 6522 VIA (Versatile Interface Adaptor)
  */
 
 #ifndef _MOS6522_H

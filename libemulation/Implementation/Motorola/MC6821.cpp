@@ -2,16 +2,21 @@
 /**
  * libemulation
  * MC6821
- * (C) 2010-2011 by Marc S. Ressl (mressl@umich.edu)
+ * (C) 2010-2012 by Marc S. Ressl (mressl@umich.edu)
  * Released under the GPL
  *
- * Controls a generic MC6821 PIA (Peripheral Interface Adapter)
+ * Controls an MC6821 PIA (Peripheral Interface Adapter)
  */
 
 #include "MC6821.h"
 
 #include "ControlBusInterface.h"
 #include "AddressDecoder.h"
+
+#define RS_DATA_A       0x00
+#define RS_CONTROL_A    0x01
+#define RS_DATA_B       0x02
+#define RS_CONTROL_B    0x03
 
 MC6821::MC6821()
 {
@@ -264,7 +269,7 @@ OEChar MC6821::read(OEAddress address)
 {
     switch(address & 0x3)
     {
-        case MC6821_RS_DATAREGISTERA:
+        case RS_DATA_A:
             if (controlA & MC6821_CR_DATAREGISTER)
             {
                 setControlA(controlA & ~MC6821_CR_IRQFLAGS);
@@ -285,10 +290,10 @@ OEChar MC6821::read(OEAddress address)
             else
                 return ddrA;
             
-        case MC6821_RS_CONTROLREGISTERA:
+        case RS_CONTROL_A:
             return controlA;
             
-        case MC6821_RS_DATAREGISTERB:
+        case RS_DATA_B:
             if (controlB & MC6821_CR_DATAREGISTER)
             {
                 setControlB(controlB & ~MC6821_CR_IRQFLAGS);
@@ -300,7 +305,7 @@ OEChar MC6821::read(OEAddress address)
             else
                 return ddrB;
             
-        case MC6821_RS_CONTROLREGISTERB:
+        case RS_CONTROL_B:
             return controlB;
     }
     
@@ -311,7 +316,7 @@ void MC6821::write(OEAddress address, OEChar value)
 {
     switch(address & 0x3)
     {
-        case MC6821_RS_DATAREGISTERA:
+        case RS_DATA_A:
             if (controlA & MC6821_CR_DATAREGISTER)
             {
                 dataA = value & ddrA;
@@ -322,7 +327,7 @@ void MC6821::write(OEAddress address, OEChar value)
             
             break;
             
-        case MC6821_RS_CONTROLREGISTERA:
+        case RS_CONTROL_A:
             setControlA(value);
             
             if ((value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
@@ -331,7 +336,7 @@ void MC6821::write(OEAddress address, OEChar value)
             
             break;
             
-        case MC6821_RS_DATAREGISTERB:
+        case RS_DATA_B:
             if (controlB & MC6821_CR_DATAREGISTER)
             {
                 dataB = value & ddrB;
@@ -351,7 +356,7 @@ void MC6821::write(OEAddress address, OEChar value)
             
             break;
             
-        case MC6821_RS_CONTROLREGISTERB:
+        case RS_CONTROL_B:
             setControlB(value);
             
             if ((value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==

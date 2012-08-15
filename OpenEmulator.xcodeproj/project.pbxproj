@@ -472,6 +472,7 @@
 		003B165712EE276E003FB8F6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
 		003B16C712EE2A61003FB8F6 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		003C0D5E15DB3BD200BCA5A4 /* AppleIIIInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIIIInterface.h; sourceTree = "<group>"; };
 		003E2597107075D900185260 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		0040284012B44878001C2F73 /* BackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundView.h; sourceTree = "<group>"; };
 		0040284112B44878001C2F73 /* BackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundView.m; sourceTree = "<group>"; };
@@ -1184,6 +1185,7 @@
 			isa = PBXGroup;
 			children = (
 				00B8886B12A393990052B7A4 /* AppleIIInterface.h */,
+				003C0D5E15DB3BD200BCA5A4 /* AppleIIIInterface.h */,
 			);
 			path = Apple;
 			sourceTree = "<group>";

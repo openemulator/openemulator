@@ -34,6 +34,7 @@ AppleDiskIIInterfaceCard::AppleDiskIIInterfaceCard()
     drive[1] = &dummyDrive;
     drive[2] = &dummyDrive;
     drive[3] = &dummyDrive;
+    drive[4] = &dummyDrive;
     
     phaseControl = 0;
     driveSel = 0;
