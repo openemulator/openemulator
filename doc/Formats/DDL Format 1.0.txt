@@ -28,6 +28,8 @@ The DDL format is licensed under the Creative Commons "attribution CC BY" licens
 
 This specification uses square brackets to denote information that should be replaced.
 
+Real numbers should be specified using the dot '.' as decimal separator.
+
 ==DDL files==
 
 DDL filenames should always end with the extension .ddl.
@@ -53,8 +55,8 @@ The DDL tag is the top-level of the floppy disk description:
 * [LABEL] is a short description of the content stored in this DDL file.
 * [DESCRIPTION] is a longer description of the content stored in this DDL file.
 * [MEDIUM] describes the kind of storage medium. The following storage mediums are valid in DDL 1.0: "8 inch disk", "5.25 inch disk" and "3.5 inch disk".
-* [TRACKSPERINCH] describes the magnetic resolution of the storage medium (this value is usually stated as a label on the storage medium). Usual values are "48", "96" and "100".
-* [WRITEENABLED] may take the value "1" or "0", and determines if the storage medium may be modified (is not write protected).
+* [TRACKSPERINCH] is a real number that describes the magnetic resolution of the storage medium (this value is usually stated as a label on the storage medium). Usual values are "48", "62.5", "96" and "100".
+* [WRITEENABLED] may take the values "0" or "1", and determines if the storage medium may be modified (is not write protected).
 
 ==DDL track tag==
 
@@ -62,11 +64,9 @@ Within the DDL tag a series of track tags may exist, each describing a track's c
 
 <track index="[TRACKINDEX]">
 
-* [TRACKINDEX] describes the track number. It may be a real number, in case the disk drive allows more accurate head positioning than the storage medium was designed for. The decimal part is separated with a dot (i.e. "11.25").
+* [TRACKINDEX] is a real number that describes the track index. A real number is used in order to support disk drives that allow more accurate head positioning than the storage medium was designed for.
 
-An example:
-
-Apple II standard-formatted 5.25" floppy disks should set tracksPerInch to 48 and use the Apple II track numbering from 0 to 34 (for 35 track disks) or 0 to 39 (for 40 track disks). Half- and quarter-track indices should be suffixed with .5 and .25 respectively.
+An example: Apple II standard-formatted 5.25" floppy disks should be imaged using tracksPerInch="48", and its track indices should be numbered from 0 to 34 (for 35 track disks) or 0 to 39 (for 40 track disks). Half- and quarter-track indices should be suffixed with .5 and .25 respectively. For example "11.5", "17.25".
 
 ==DDL side tag==
 
@@ -82,7 +82,7 @@ Every side tag contains one or more bitstream tags. These contain the actual dat
 
 <bitstream cellWidth="[CELLWIDTH]">
 
-* [CELLWIDTH] is optional and specifies the relative duration of each bit cell contained in this tag. This is a real number, the decimal part is separated with a dot. The default bit cell width is "1.0".
+* cellWidth is optional. If used, the real number [CELLWIDTH] specifies the relative duration of each bit cell contained in this tag. The bit cell width is a real number and is by default "1.0".
 
 It is possible to use several bitstream tags in sequence to describe parts of a track with different bit cell widths.
 
