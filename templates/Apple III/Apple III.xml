@@ -34,19 +34,19 @@
     </port>
     <port id="appleIII.slot1" ref="" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
         <inlet ref="appleIII.io" property="refSlot1" outletRef="io"/>
-        <inlet ref="appleIII.addressDecoder" property="slot1" outletRef="memory"/>
+        <inlet ref="appleIII.memoryBus" property="slot1" outletRef="memory"/>
     </port>
     <port id="appleIII.slot2" ref="" type="Apple II Slot" group="expansions" label="Slot 2" image="images/Connectors/Edge50.png">
         <inlet ref="appleIII.io" property="refSlot2" outletRef="io"/>
-        <inlet ref="appleIII.addressDecoder" property="slot2" outletRef="memory"/>
+        <inlet ref="appleIII.memoryBus" property="slot2" outletRef="memory"/>
     </port>
     <port id="appleIII.slot3" ref="" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
         <inlet ref="appleIII.io" property="refSlot3" outletRef="io"/>
-        <inlet ref="appleIII.addressDecoder" property="slot3" outletRef="memory"/>
+        <inlet ref="appleIII.memoryBus" property="slot3" outletRef="memory"/>
     </port>
     <port id="appleIII.slot4" ref="" type="Apple II Slot" group="expansions" label="Slot 4" image="images/Connectors/Edge50.png">
         <inlet ref="appleIII.io" property="refSlot4" outletRef="io"/>
-        <inlet ref="appleIII.addressDecoder" property="slot4" outletRef="memory"/>
+        <inlet ref="appleIII.memoryBus" property="slot4" outletRef="memory"/>
     </port>
     <component id="appleIII.controlBus" class="ControlBus">
         <property name="emulation" ref="emulation"/>
@@ -70,8 +70,8 @@
         <property name="p" value="0x0"/>
         <property name="pc" value="0xf4ee"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="memoryBus" ref="appleIII.memoryBus"/>
-        <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
+        <property name="memoryBus" ref="appleIII.zeroPageSwitcher"/>
+        <property name="extendedMemoryBus" ref="appleIII.extendedZeroPageSwitcher"/>
         <property name="systemControl" ref="appleIII.systemControl"/>
     </component>
     <component id="appleIII.floatingBus" class="FloatingBus">
@@ -110,10 +110,9 @@
     <component id="appleIII.systemControl" class="AppleIIISystemControl">
         <property name="cpu" ref="appleIII.cpu"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="memoryBus" ref="appleIII.memoryBus"/>
-        <property name="addressDecoder" ref="appleIII.addressDecoder"/>
+        <property name="zeroPageSwitcher" ref="appleIII.zeroPageSwitcher"/>
         <property name="bankSwitcher" ref="appleIII.bankSwitcher"/>
-        <property name="extendedMemoryBus" ref="appleIII.extendedMemoryBus"/>
+        <property name="extendedZeroPageSwitcher" ref="appleIII.extendedZeroPageSwitcher"/>
         <property name="extendedBankSwitcher" ref="appleIII.extendedBankSwitcher"/>
         <property name="ram" ref="appleIII.ram"/>
         <property name="video" ref="appleIII.video"/>
@@ -121,12 +120,12 @@
         <property name="eVIA" ref="appleIII.eVIA"/>
         <property name="dac" ref="appleIII.dac"/>
     </component>
-    <component id="appleIII.memoryBus" class="AddressOffset">
+    <component id="appleIII.zeroPageSwitcher" class="AddressOffset">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
-        <property name="memory" ref="appleIII.addressDecoder"/>
+        <property name="memory" ref="appleIII.memoryBus"/>
     </component>
-    <component id="appleIII.addressDecoder" class="AppleIIIAddressDecoder">
+    <component id="appleIII.memoryBus" class="AppleIIIAddressDecoder">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
@@ -147,7 +146,7 @@
         <property name="blockSize" value="0x2000"/>
         <property name="memory" ref="appleIII.ram"/>
     </component>
-    <component id="appleIII.extendedMemoryBus" class="AddressOffset">
+    <component id="appleIII.extendedZeroPageSwitcher" class="AddressOffset">
         <property name="size" value="0x10000"/>
         <property name="blockSize" value="0x100"/>
         <property name="memory" ref="appleIII.extendedBankSwitcher"/>

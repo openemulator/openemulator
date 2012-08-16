@@ -29,7 +29,7 @@
         <property name="videoHorizontalSize" value="1.0"/>
         <property name="videoVerticalCenter" value="0"/>
         <property name="videoVerticalSize" value="1.0"/>
-        <property name="videoBandwidth" value="6000000"/>
+        <property name="videoBandwidth" value="14000000"/>
         <property name="videoLumaBandwidth" value="2000000"/>
         <property name="videoChromaBandwidth" value="600000"/>
         <property name="displayBarrel" value="0"/>

@@ -31,10 +31,9 @@ public:
 private:
     OEComponent *cpu;
     OEComponent *controlBus;
-    OEComponent *memoryBus;
-    OEComponent *addressDecoder;
+    OEComponent *zeroPageSwitcher;
     OEComponent *bankSwitcher;
-    OEComponent *extendedMemoryBus;
+    OEComponent *extendedZeroPageSwitcher;
     OEComponent *extendedBankSwitcher;
     OEComponent *ram;
     OEComponent *video;

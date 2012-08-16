@@ -1,5 +1,7 @@
 ==1.0.4==
-* Fix changes in MC6521
+* Add Videx Videoterm option automatic or manual 40/80 switching
+* Fix adding a CFFA to A///, a .dsk is mounted is Disk ///, and when mounting a .po globally, the .dsk is unmounted. Shouldn't the framework ask canMount?
+* Fix changes in MC6521/Apple-1
 * Implement MOS6522
 * Implement AppleIIVideo VBL
 * Implement AppleIIIVideo+font upload

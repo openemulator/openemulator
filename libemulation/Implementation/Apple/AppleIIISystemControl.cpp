@@ -24,10 +24,9 @@ AppleIIISystemControl::AppleIIISystemControl()
 {
     cpu = NULL;
     controlBus = NULL;
-    memoryBus = NULL;
-    addressDecoder = NULL;
+    zeroPageSwitcher = NULL;
     bankSwitcher = NULL;
-    extendedMemoryBus = NULL;
+    extendedZeroPageSwitcher = NULL;
     ram = NULL;
     video = NULL;
     dVIA = NULL;
@@ -49,21 +48,13 @@ bool AppleIIISystemControl::setRef(string name, OEComponent *ref)
     if (name == "cpu")
         cpu = ref;
     else if (name == "controlBus")
-    {
-        if (controlBus)
-            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
         controlBus = ref;
-        if (controlBus)
-            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
-    }
-    else if (name == "memoryBus")
-        memoryBus = ref;
-    else if (name == "addressDecoder")
-        addressDecoder = ref;
+    else if (name == "zeroPageSwitcher")
+        zeroPageSwitcher = ref;
     else if (name == "bankSwitcher")
         bankSwitcher = ref;
-    else if (name == "extendedMemoryBus")
-        extendedMemoryBus = ref;
+    else if (name == "extendedZeroPageSwitcher")
+        extendedZeroPageSwitcher = ref;
     else if (name == "extendedBankSwitcher")
         extendedBankSwitcher = ref;
     else if (name == "ram")
@@ -104,10 +95,9 @@ bool AppleIIISystemControl::init()
 {
     OECheckComponent(cpu);
     OECheckComponent(controlBus);
-    OECheckComponent(memoryBus);
-    OECheckComponent(addressDecoder);
+    OECheckComponent(zeroPageSwitcher);
     OECheckComponent(bankSwitcher);
-    OECheckComponent(extendedMemoryBus);
+    OECheckComponent(extendedZeroPageSwitcher);
     OECheckComponent(extendedBankSwitcher);
     OECheckComponent(ram);
     OECheckComponent(video);
@@ -176,16 +166,7 @@ bool AppleIIISystemControl::postMessage(OEComponent *sender, int message, void *
 
 void AppleIIISystemControl::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == controlBus)
-    {
-        logMessage("AppleIIISystemControl reset");
-        
-/*        setEnvironment(0);
-        setZeroPage(0);
-        setRAMBank(0);
-        setSound(0);*/
-    }
-    else if (sender == video)
+    if (sender == video)
     {
         bool videoEnabled = OEGetBit(environment, APPLEIII_VIDEOENABLE);
         bool slowSpeed = OEGetBit(environment, APPLEIII_SLOWSPEED);
@@ -292,8 +273,6 @@ void AppleIIISystemControl::setZeroPage(OEChar value)
 
 void AppleIIISystemControl::setRAMBank(OEChar value)
 {
-    logMessage("ramBank: " + getBinString(value, 8));
-    
     if (OEGetBit(ramBank, APPLEIII_NOT_APPLEIIMODE) !=
         OEGetBit(value, APPLEIII_NOT_APPLEIIMODE))
     {
@@ -335,7 +314,7 @@ void AppleIIISystemControl::setSound(OEChar value)
 
 void AppleIIISystemControl::updateEnvironment()
 {
-    logMessage("environment ro:" + getString(OEGetBit(environment, APPLEIII_ROMSEL1)) +
+/*    logMessage("environment ro:" + getString(OEGetBit(environment, APPLEIII_ROMSEL1)) +
                " r2:" + getString(OEGetBit(environment, APPLEIII_ROMSEL2)) +
                " ns:" + getString(OEGetBit(environment, APPLEIII_NORMALSTACK)) +
                " wp:" + getString(OEGetBit(environment, APPLEIII_RAMWP)) +
@@ -343,7 +322,7 @@ void AppleIIISystemControl::updateEnvironment()
                " vi:" + getString(OEGetBit(environment, APPLEIII_VIDEOENABLE)) +
                " io:" + getString(OEGetBit(environment, APPLEIII_IOENABLE)) +
                " ss:" + getString(OEGetBit(environment, APPLEIII_SLOWSPEED))
-               );
+               );*/
     
     /*    if (!videoEnabled && newVideoEnabled)
      video->postMessage(this, APPLEII_RELEASE_MONITOR, NULL);
@@ -372,7 +351,7 @@ void AppleIIISystemControl::updateEnvironment()
 
 void AppleIIISystemControl::updateZeroPage()
 {
-    logMessage("zeroPage: " + getString(zeroPage));
+//    logMessage("zeroPage: " + getString(zeroPage));
     
     AddressOffsetMap offsetMap;
     
@@ -380,8 +359,8 @@ void AppleIIISystemControl::updateZeroPage()
     offsetMap.endAddress = 0x00ff;
     offsetMap.offset = 0x100 * zeroPage;
     
-    memoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
-    extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    zeroPageSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    extendedZeroPageSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     
     cpu->postMessage(this, APPLEIII_SET_ZEROPAGE, &zeroPage);
     
@@ -399,8 +378,8 @@ void AppleIIISystemControl::updateAltStack()
     offsetMap.endAddress = 0x01ff;
     offsetMap.offset = altStack ? (0x100 * (zeroPage ^ 0x01) - 0x100) : 0;
     
-    memoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
-    extendedMemoryBus->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    zeroPageSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    extendedZeroPageSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
 }
 
 void AppleIIISystemControl::updateRAMBank()
@@ -410,7 +389,7 @@ void AppleIIISystemControl::updateRAMBank()
     if (bank == APPLEIII_SYSTEMBANK)
         bank = 0x7;
     
-    logMessage("ramBank: " + getString(bank));
+//    logMessage("ramBank: " + getString(bank));
     
     AddressOffsetMap offsetMap;
     
@@ -423,7 +402,7 @@ void AppleIIISystemControl::updateRAMBank()
 
 void AppleIIISystemControl::updateExtendedRAMBank()
 {
-    logMessage("extendedRAMBank: " + getString(extendedRAMBank));
+//    logMessage("extendedRAMBank: " + getString(extendedRAMBank));
     
     AddressOffsetMap offsetMap;
     

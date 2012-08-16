@@ -12,6 +12,11 @@
 
 #include "AppleIIIInterface.h"
 
+#define DRIVE_EXT0  (1 << 0)
+#define DRIVE_EXT1  (1 << 1)
+#define DRIVE_INT   (1 << 2)
+#define DRIVE_AII   (1 << 3)
+
 AppleIIIDiskIO::AppleIIIDiskIO() : AppleDiskIIInterfaceCard()
 {
     systemControl = NULL;
@@ -111,7 +116,7 @@ inline void AppleIIIDiskIO::updateSwitches(OEAddress address)
             break;
             
         case 0xa: case 0xb:
-            setDriveSelect(3, address & 0x1);
+            setDriveSelect(DRIVE_AII, address & 0x1);
             
             break;
             
@@ -126,17 +131,17 @@ inline void AppleIIIDiskIO::updateSwitches(OEAddress address)
             break;
             
         case 0x10: case 0x11:
-            setDriveSelect(0, address & 0x1);
+            setDriveSelect(DRIVE_EXT0, address & 0x1);
             
             break;
             
         case 0x12: case 0x13:
-            setDriveSelect(1, address & 0x1);
+            setDriveSelect(DRIVE_EXT1, address & 0x1);
             
             break;
             
         case 0x14: case 0x15:
-            setDriveSelect(2, address & 0x1);
+            setDriveSelect(DRIVE_INT, address & 0x1);
             
             break;
             
@@ -168,19 +173,23 @@ inline void AppleIIIDiskIO::updateSwitches(OEAddress address)
 
 void AppleIIIDiskIO::setDriveSelect(OEInt index, bool value)
 {
-    OESetBit(driveSelect, 1 << index, value);
+    OESetBit(driveSelect, index, value);
+    
+    updateDriveSelect();
 }
 
 void AppleIIIDiskIO::updateDriveSelect()
 {
     if (appleIIMode)
-        selectDrive(OEGetBit(driveSelect, (1 << 3)));
+        selectDrive(OEGetBit(driveSelect, DRIVE_AII));
     else
     {
-        if (OEGetBit(driveSelect, (1 << 2)))
-            selectDrive(4);
-        else
+        if (!OEGetBit(driveSelect, DRIVE_INT))
+            selectDrive(0);
+        else if (driveSelect & 0x3)
             selectDrive(driveSelect & 0x3);
+        else
+            selectDrive(4);
     }
 }
 
