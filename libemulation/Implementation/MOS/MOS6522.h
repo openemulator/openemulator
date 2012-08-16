@@ -45,6 +45,8 @@ public:
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
+    void notify(OEComponent *sender, int notification, void *data);
+    
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     

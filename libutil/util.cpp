@@ -40,6 +40,16 @@ string getHexString(long long value)
     return ss.str();
 }
 
+string getBinString(long long value, int bitnum)
+{
+    string s;
+    
+    for (int mask = 1 << (bitnum - 1); mask; mask >>= 1)
+        s += (value & mask) ? '1' : '0';
+    
+    return s;
+}
+
 string rtrim(string value)
 {
     size_t found = value.find_last_not_of(" \n\r\t\f\v");

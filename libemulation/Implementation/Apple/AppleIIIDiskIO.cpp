@@ -10,7 +10,7 @@
 
 #include "AppleIIIDiskIO.h"
 
-#include "AppleIIInterface.h"
+#include "AppleIIIInterface.h"
 
 AppleIIIDiskIO::AppleIIIDiskIO() : AppleDiskIIInterfaceCard()
 {

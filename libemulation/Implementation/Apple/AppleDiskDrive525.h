@@ -10,8 +10,6 @@
 
 #include "OEComponent.h"
 
-#include "DeviceInterface.h"
-
 #include "OESound.h"
 
 #include "diskimage.h"

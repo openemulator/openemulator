@@ -113,7 +113,12 @@ bool RAM::init()
 
 void RAM::update()
 {
+    size_t oldSize = data.size();
+    
     init();
+    
+    if (size != oldSize)
+        postNotification(this, RAM_SIZE_DID_CHANGE, &size);
 }
 
 bool RAM::postMessage(OEComponent *sender, int message, void *data)

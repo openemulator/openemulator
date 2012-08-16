@@ -8,6 +8,9 @@
  * Controls an Apple III Address Decoder
  */
 
+#ifndef _APPLEIIIADDRESSDECODER_H
+#define _APPLEIIIADDRESSDECODER_H
+
 #include "AddressDecoder.h"
 
 class AppleIIIAddressDecoder : public AddressDecoder
@@ -24,7 +27,7 @@ public:
     void notify(OEComponent *sender, int notification, void *data);
     
 private:
-    OEComponent *memory;
+    OEComponent *bankSwitcher;
     OEComponent *io;
     OEComponent *rom;
     OEComponent *memoryFF00;
@@ -56,3 +59,5 @@ private:
     bool setEnvironment(OEChar value);
     bool setAppleIIMode(bool value);
 };
+
+#endif

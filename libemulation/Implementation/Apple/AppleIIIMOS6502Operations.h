@@ -18,7 +18,9 @@ if (extendedMemoryEnabled)                                  \
     int xbyte = memoryBus->read(extendedPageAddress | ZPA); \
     if (xbyte & 0x80)                                       \
     {                                                       \
-        setExtendedMemoryBank(xbyte & 0xf);                 \
+        xbyte &= 0x0f;                                      \
+        systemControl->postMessage(this,                    \
+            APPLEIII_SET_EXTENDEDRAMBANK, &xbyte);          \
         tmp = APPLEIIIRDMEM_ID(EAA);                        \
     }                                                       \
     else                                                    \
@@ -34,7 +36,9 @@ if (extendedMemoryEnabled)                                  \
     int xbyte = memoryBus->read(extendedPageAddress | ZPA); \
     if (xbyte & 0x80)                                       \
     {                                                       \
-        setExtendedMemoryBank(xbyte & 0xf);                 \
+        xbyte &= 0x0f;                                      \
+        systemControl->postMessage(this,                    \
+            APPLEIII_SET_EXTENDEDRAMBANK, &xbyte);          \
         APPLEIIIWRMEM_ID(EAA, tmp);                         \
     }                                                       \
     else                                                    \

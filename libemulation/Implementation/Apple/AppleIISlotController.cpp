@@ -10,8 +10,6 @@
 
 #include "AppleIISlotController.h"
 
-#include "MemoryInterface.h"
-
 #include "AppleIIInterface.h"
 
 AppleIISlotController::AppleIISlotController()

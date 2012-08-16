@@ -9,7 +9,8 @@
  */
 
 #include "DIApple525DiskStorage.h"
-#include "AppleIIInterface.h"
+
+#define APPLEII_CLOCKFREQUENCY   (14318180.0F * 65 / 912)
 
 #define SECTOR_SIZE             0x100
 

@@ -1,14 +1,31 @@
-//
-//  AppleIIIGamePort.h
-//  OpenEmulator
-//
-//  Created by Marc Reßl on 04/08/12.
-//  Copyright (c) 2012 OpenEmulator. All rights reserved.
-//
 
-#ifndef OpenEmulator_AppleIIIGamePort_h
-#define OpenEmulator_AppleIIIGamePort_h
+/**
+ * libemulation
+ * Apple III Game Port
+ * (C) 2012 by Marc S. Ressl (mressl@umich.edu)
+ * Released under the GPL
+ *
+ * Implements an Apple III game port
+ */
 
+#ifndef _APPLEIIIGAMEPORT_H
+#define _APPLEIIIGAMEPORT_H
 
+#include "AppleIIGamePort.h"
+
+class AppleIIIGamePort : public AppleIIGamePort
+{
+public:
+    AppleIIIGamePort();
+    
+    OEChar read(OEAddress address);
+	void write(OEAddress address, OEChar value);
+	
+private:
+    OEInt channelSelect;
+    
+    void setChannelSelect(OEInt index, bool value);
+    bool isTimerPending();
+};
 
 #endif

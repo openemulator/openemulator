@@ -77,6 +77,11 @@ typedef enum
 
 typedef enum
 {
+    RAM_SIZE_DID_CHANGE,
+} RAMNotification;
+
+typedef enum
+{
     VRAM_WILL_CHANGE,
 } VRAMNotification;
 

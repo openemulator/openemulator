@@ -26,6 +26,7 @@ using namespace std;
 
 string getString(float value);
 string getHexString(long long value);
+string getBinString(long long value, int bitnum);
 
 string rtrim(string value);
 wstring rtrim(wstring value);

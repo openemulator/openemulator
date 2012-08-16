@@ -14,6 +14,8 @@
 
 #include "DeviceInterface.h"
 #include "MemoryInterface.h"
+#include "AppleIIInterface.h"
+#include "AppleIIIInterface.h"
 
 #define HORIZ_START     16
 #define HORIZ_BLANK     (9 + HORIZ_START)

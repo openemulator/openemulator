@@ -12,7 +12,6 @@
 
 #include "DeviceInterface.h"
 #include "CanvasInterface.h"
-
 #include "AppleIIInterface.h"
 
 AppleGraphicsTablet::AppleGraphicsTablet()

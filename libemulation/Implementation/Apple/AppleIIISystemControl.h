@@ -21,6 +21,8 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
     void notify(OEComponent *sender, int notification, void *data);
     
     OEChar read(OEAddress address);
@@ -30,9 +32,11 @@ private:
     OEComponent *cpu;
     OEComponent *controlBus;
     OEComponent *memoryBus;
+    OEComponent *addressDecoder;
+    OEComponent *bankSwitcher;
     OEComponent *extendedMemoryBus;
-    OEComponent *memoryAddressDecoder;
-    OEComponent *memory;
+    OEComponent *extendedBankSwitcher;
+    OEComponent *ram;
     OEComponent *video;
     OEComponent *dVIA;
     OEComponent *eVIA;
@@ -41,16 +45,23 @@ private:
     OEChar environment;
     OEChar zeroPage;
     OEChar ramBank;
-    OEChar dacOutput;
+    OEChar sound;
+    
+    OEChar extendedRAMBank;
     
     bool monitorRequested;
     
     void setEnvironment(OEChar value);
     void setZeroPage(OEChar value);
     void setRAMBank(OEChar value);
-    void setDACOutput(OEChar value);
+    void setExtendedRAMBank(OEChar value);
+    void setSound(OEChar value);
     
-    void updateNormalStack();
+    void updateEnvironment();
+    void updateZeroPage();
+    void updateAltStack();
+    void updateRAMBank();
+    void updateExtendedRAMBank();
 };
 
 #endif

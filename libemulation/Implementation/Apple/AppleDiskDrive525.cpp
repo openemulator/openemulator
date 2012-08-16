@@ -22,7 +22,6 @@
 #include "DeviceInterface.h"
 #include "ControlBusInterface.h"
 #include "AudioPlayerInterface.h"
-
 #include "AppleIIInterface.h"
 
 #define DRIVE_TRACKNUM   (40 * 4)

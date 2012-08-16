@@ -7,11 +7,11 @@ Lead Developer
 Previous Developers
 
 Project Contributors
-  Vladimir Ivanoff (accurate CPU and video emulation)
-  Dirk Thierbach (Component framework ideas)
-  Nick Westgate (Disk II emulation, emulation ideas)
-  David Schmidt (Extensive Apple III testing)
-  David Finnegan (Apple II default memory patterns)
+  David Finnigan (testing of default memory patterns on the Apple II)
+  Vladimir Ivanoff (ideas on accurate CPU and video emulation)
+  David Schmidt (extensive testing of Apple III)
+  Dirk Thierbach (ideas for the component framework)
+  Nick Westgate (ideas for the Disk II emulation)
 
 Mac OS X Translators, current release:
 

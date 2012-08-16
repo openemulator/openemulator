@@ -13,8 +13,6 @@
 
 #include "ControlBusInterface.h"
 
-#include "AppleIIInterface.h"
-
 class AppleIIVideo : public OEComponent
 {
 public:

@@ -106,9 +106,11 @@ bool MOS6522::setRef(string name, OEComponent *ref)
 {
     if (name == "controlBus")
     {
-        removeObserver(controlBus, CONTROLBUS_RESET_DID_ASSERT);
+        if (controlBus)
+            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
         controlBus = ref;
-        addObserver(controlBus, CONTROLBUS_RESET_DID_ASSERT);
+        if (controlBus)
+            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
     }
     else if (name == "portA")
         portA = ref;
@@ -140,23 +142,38 @@ bool MOS6522::postMessage(OEComponent *sender, int message, void *data)
     return false;
 }
 
+void MOS6522::notify(OEComponent *sender, int notification, void *data)
+{
+    switch (notification)
+    {
+        case CONTROLBUS_RESET_DID_ASSERT:
+            logMessage("MOS6522 reset");
+            
+            ddrA = 0;
+            dataA = 0;
+            ca1 = false;
+            ca2 = false;
+            portA->write(addressA, 0xff);
+            
+            ddrB = 0;
+            dataB = 0;
+            cb1 = false;
+            cb2 = false;
+            portB->write(addressB, 0xff);
+            
+            break;
+    }
+}
+
 OEChar MOS6522::read(OEAddress address)
 {
     switch (address & 0xf)
     {
         case RS_DATA_B:
-            dataB &= ddrB;
-            if (portB)
-                dataB |= portB->read(addressB) & ~ddrB;
-            
-            return dataB;
+            return (dataB & ddrB) | (portB->read(addressB) & ~ddrB);
             
         case RS_DATA_A:
-            dataA &= ddrA;
-            if (portA)
-                dataA |= portA->read(addressA) & ~ddrA;
-            
-            return dataA;
+            return (dataA & ddrA) | (portA->read(addressA) & ~ddrA);
             
         case RS_DDR_B:
             return ddrB;
@@ -168,11 +185,7 @@ OEChar MOS6522::read(OEAddress address)
             return 0xff;
             
         case RS_DATA_A_NO_HS:
-            dataA &= ddrA;
-            if (portA)
-                dataA |= portA->read(addressA) & ~ddrA;
-            
-            return dataA;
+            return (dataA & ddrA) | (portA->read(addressA) & ~ddrA);
     }
     
     return 0;
@@ -186,7 +199,7 @@ void MOS6522::write(OEAddress address, OEChar value)
             dataB = value;
             
             if (portB)
-                portB->write(addressB, value);
+                portB->write(addressB, (dataB & ddrB) | (~ddrB));
             
             break;
             
@@ -194,17 +207,23 @@ void MOS6522::write(OEAddress address, OEChar value)
             dataA = value;
             
             if (portA)
-                portA->write(addressA, value);
+                portA->write(addressA, (dataA & ddrA) | (~ddrA));
             
             break;
             
         case RS_DDR_B:
             ddrB = value;
             
+            if (portB)
+                portB->write(addressB, (dataB & ddrB) | (~ddrB));
+            
             break;
             
         case RS_DDR_A:
             ddrA = value;
+            
+            if (portA)
+                portA->write(addressA, (dataA & ddrA) | (~ddrA));
             
             break;
             
@@ -212,7 +231,7 @@ void MOS6522::write(OEAddress address, OEChar value)
             dataA = value;
             
             if (portA)
-                portA->write(addressA, value);
+                portA->write(addressA, (dataA & ddrA) | (~ddrA));
             
             break;
     }

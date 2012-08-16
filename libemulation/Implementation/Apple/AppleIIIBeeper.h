@@ -8,6 +8,9 @@
  * Controls an Apple III Beeper
  */
 
+#ifndef _APPLEIIIBEEPER_H
+#define _APPLEIIIBEEPER_H
+
 #include "OEComponent.h"
 
 class AppleIIIBeeper : public OEComponent
@@ -32,3 +35,5 @@ private:
     
     void scheduleNextTimer(OESLong cycles);
 };
+
+#endif

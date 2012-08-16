@@ -10,11 +10,11 @@
 
 #include "AppleIIIAddressDecoder.h"
 
-#include "AppleIIInterface.h"
+#include "AppleIIIInterface.h"
 
 AppleIIIAddressDecoder::AppleIIIAddressDecoder() : AddressDecoder()
 {
-    memory = NULL;
+    bankSwitcher = NULL;
     io = NULL;
     rom = NULL;
     memoryFF00 = NULL;
@@ -29,8 +29,8 @@ AppleIIIAddressDecoder::AppleIIIAddressDecoder() : AddressDecoder()
 
 bool AppleIIIAddressDecoder::setRef(string name, OEComponent *ref)
 {
-    if (name == "memory")
-        memory = ref;
+    if (name == "bankSwitcher")
+        bankSwitcher = ref;
     else if (name == "io")
         io = ref;
     else if (name == "slot1")
@@ -48,10 +48,16 @@ bool AppleIIIAddressDecoder::setRef(string name, OEComponent *ref)
     else if (name == "systemControl")
     {
         if (systemControl)
+        {
+            systemControl->removeObserver(this, APPLEIII_ENVIRONMENT_DID_CHANGE);
             systemControl->removeObserver(this, APPLEIII_APPLEIIMODE_DID_CHANGE);
+        }
         systemControl = ref;
         if (systemControl)
+        {
+            systemControl->addObserver(this, APPLEIII_ENVIRONMENT_DID_CHANGE);
             systemControl->addObserver(this, APPLEIII_APPLEIIMODE_DID_CHANGE);
+        }
     }
     else
         return AddressDecoder::setRef(name, ref);
@@ -61,7 +67,7 @@ bool AppleIIIAddressDecoder::setRef(string name, OEComponent *ref)
 
 bool AppleIIIAddressDecoder::init()
 {
-    OECheckComponent(memory);
+    OECheckComponent(bankSwitcher);
     OECheckComponent(io);
     OECheckComponent(rom);
     OECheckComponent(memoryFF00);
@@ -84,28 +90,28 @@ bool AppleIIIAddressDecoder::init()
     // C500-C7FF
     m.startAddress = 0xc500;
     m.endAddress = 0xc7ff;
-    m.component = memory;
+    m.component = bankSwitcher;
     ioMemoryMaps.push_back(m);
     ioC500Map = &ioMemoryMaps.back();
     
     // C000-CFFF
     m.startAddress = 0xc000;
     m.endAddress = 0xcfff;
-    m.component = memory;
+    m.component = bankSwitcher;
     ramMemoryMaps.push_back(m);
     ramC000Map = &ramMemoryMaps.back();
     
     // D000-EFFF
     m.startAddress = 0xd000;
     m.endAddress = 0xefff;
-    m.component = memory;
+    m.component = bankSwitcher;
     internalMemoryMaps.push_back(m);
     ramD000Map = &internalMemoryMaps.back();
     
     // F000-FEFF
     m.startAddress = 0xf000;
     m.endAddress = 0xfeff;
-    m.component = memory;
+    m.component = bankSwitcher;
     internalMemoryMaps.push_back(m);
     ramF000Map = &internalMemoryMaps.back();
     
@@ -128,7 +134,7 @@ bool AppleIIIAddressDecoder::init()
     ffc0MemoryMap.endAddress = 0xcf;
     ffc0MemoryMap.read = true;
     ffc0MemoryMap.write = true;
-    ffc0MemoryMap.component = memory;
+    ffc0MemoryMap.component = bankSwitcher;
     
     // FFF0-FFFF memory
     fff0MemoryMap.startAddress = 0xf0;
@@ -173,7 +179,18 @@ bool AppleIIIAddressDecoder::postMessage(OEComponent *sender, int message, void 
 
 void AppleIIIAddressDecoder::notify(OEComponent *sender, int notification, void *data)
 {
-    setAppleIIMode(*((bool *)data));
+    switch (notification)
+    {
+        case APPLEIII_ENVIRONMENT_DID_CHANGE:
+            setEnvironment(*((OEChar *)data));
+            
+            return;
+            
+        case APPLEIII_APPLEIIMODE_DID_CHANGE:
+            setAppleIIMode(*((bool *)data));
+            
+            return;
+    }
 }
 
 void AppleIIIAddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddress)
@@ -234,8 +251,8 @@ void AppleIIIAddressDecoder::updateAppleIIIMemoryMaps()
     ramC000Map->write = !ramWP;
     ramD000Map->write = !ramWP;
     ramF000Map->write = !ramWP;
-    ramF000Map->component = romEnabled ? rom : memory;
-    ramFF00Map->component = appleIIMode ? (romEnabled ? rom : memory) : memoryFF00;
+    ramF000Map->component = romEnabled ? rom : bankSwitcher;
+    ramFF00Map->component = appleIIMode ? (romEnabled ? rom : bankSwitcher) : memoryFF00;
     ramFF00Map->write = appleIIMode ? !ramWP : true;
     
     // Map FF00 memory
@@ -243,7 +260,7 @@ void AppleIIIAddressDecoder::updateAppleIIIMemoryMaps()
     memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &ffc0MemoryMap);
     memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &fff0MemoryMap);
     
-    ff00MemoryMap.component = fff0MemoryMap.component = romEnabled ? rom : memory;
+    ff00MemoryMap.component = fff0MemoryMap.component = romEnabled ? rom : bankSwitcher;
     ff00MemoryMap.write = ffc0MemoryMap.write = fff0MemoryMap.write = !ramWP;
     
     memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ff00MemoryMap);

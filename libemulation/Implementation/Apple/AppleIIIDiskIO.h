@@ -8,7 +8,8 @@
  * Implements Apple III Disk I/O
  */
 
-#include "OEComponent.h"
+#ifndef _APPLEIIIDISKIO_H
+#define _APPLEIIIDISKIO_H
 
 #include "AppleDiskIIInterfaceCard.h"
 
@@ -44,3 +45,5 @@ private:
     void setVideoCharacterWrite(bool value);
     void setVideoScroll(bool value);
 };
+
+#endif

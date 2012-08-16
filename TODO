@@ -1,12 +1,14 @@
 ==1.0.4==
-* Implement AppleIIIGamePort
+* Fix changes in MC6521
 * Implement MOS6522
 * Implement AppleIIVideo VBL
 * Implement AppleIIIVideo+font upload
 * Implement AppleIIIKeyboard CTRL+RESET/NMI
+* Unify AppleIIIAddressDecoder with AddressOffset components
 * Disable C0D0 when /AIISW
 * Implement MOS6551 ACIA
 * Implement AppleIIKeyboard key stealing
+* Test JoystickMapper self-centering mouse
 * Implement JoystickMapper keyboard joystick
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity

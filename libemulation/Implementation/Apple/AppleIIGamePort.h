@@ -10,6 +10,9 @@
 
 #include "OEComponent.h"
 
+#define APPLEIIGAMEPORT_MINVALUE    (0 * 11 + 8)
+#define APPLEIIGAMEPORT_MAXVALUE    (255 * 11 + 8)
+
 class AppleIIGamePort : public OEComponent
 {
 public:
@@ -26,7 +29,7 @@ public:
     OEChar read(OEAddress address);
 	void write(OEAddress address, OEChar value);
 	
-private:
+protected:
     OEComponent *controlBus;
 	OEComponent *floatingBus;
     OEComponent *gamePort;

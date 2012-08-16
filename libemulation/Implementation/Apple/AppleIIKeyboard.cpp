@@ -345,9 +345,9 @@ void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
         else if (key == CANVAS_U_DOWN)
             key = 0x8a;
         else if (key == 0x9)
-            key = 0x88;
+            key = 0x89;
         else if (key == 0x1b)
-            key = 0x98;
+            key = 0x9b;
         else if (key == 0x20)
             key = 0xa0;
         else if (key == 0x7f)

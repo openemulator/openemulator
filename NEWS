@@ -1,4 +1,6 @@
 ==Latest==
+* Added LCD Color Composite Monitor
+* Implemented AppleIIIGamePort
 * Fixed CPU speed with VBL 1/2 MHz switching
 * Fixed AppleIIIKeyboard
 * Fixed AppleIIIDiskIO

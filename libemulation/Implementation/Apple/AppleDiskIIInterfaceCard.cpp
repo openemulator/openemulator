@@ -10,8 +10,8 @@
 
 #include "AppleDiskIIInterfaceCard.h"
 
-#include "AppleIIInterface.h"
 #include "ControlBusInterface.h"
+#include "AppleIIInterface.h"
 
 #define SEQUENCER_LOAD          (1 << 0)
 #define SEQUENCER_WRITE         (1 << 1)
