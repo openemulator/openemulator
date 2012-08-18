@@ -345,13 +345,13 @@
         <property name="controlBus" ref="appleIIplus.controlBus"/>
         <property name="memoryBus" ref="appleIIplus.memoryBus"/>
         <property name="floatingBus" ref="appleIIplus.floatingBus"/>
-        <property name="memory" ref="appleLanguageCard.addressOffset"/>
+        <property name="bankSwitcher" ref="appleLanguageCard.bankSwitcher"/>
         <property name="bank1" value="0"/>
         <property name="ramRead" value="0"/>
         <property name="preWrite" value="0"/>
         <property name="ramWrite" value="0"/>
     </component>
-    <component id="appleLanguageCard.addressOffset" class="AddressOffset">
+    <component id="appleLanguageCard.bankSwitcher" class="AddressOffset">
         <property name="memory" ref="appleLanguageCard.ram"/>
         <property name="size" value="0x4000"/>
         <property name="blockSize" value="0x1000"/>
@@ -366,6 +366,7 @@
     <device id="videxVideoterm" label="Videx Videoterm" image="images/Videx/Videx Videoterm.png">
         <setting ref="videxVideoterm.io" name="characterSet1" label="Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
         <setting ref="videxVideoterm.io" name="characterSet2" label="Alt. Character Set" type="select" options="Normal,NormalUppercase|Normal Uppercase,Inverse,French,German,Katakana,Spanish,Symbol,SuperSub|Super and Subscript,APL,Epson"/>
+        <setting ref="videxVideoterm.io" name="videoOutput" label="Video Output" type="select" options="Auto,On,Off"/>
     </device>
     <connector id="videxVideoterm.connector" type="Apple II Slot">
         <inlet ref="videxVideoterm.ram" property="controlBus" outletRef="controlBus"/>
@@ -403,11 +404,12 @@
         <property name="cursorAddress" value="0x0"/>
         <property name="addressRegister" value="0"/>
         <property name="ram" ref="videxVideoterm.ram"/>
-        <property name="addressOffset" ref="videxVideoterm.addressOffset"/>
+        <property name="bankSwitcher" ref="videxVideoterm.bankSwitcher"/>
         <property name="video" ref="appleIIplus.video"/>
         <property name="gamePort" ref="appleIIplus.gamePort"/>
         <property name="characterSet1" value="Normal"/>
         <property name="characterSet2" value="Inverse"/>
+        <property name="videoOutput" value="auto"/>
         <property name="cellWidth" value="9"/>
         <property name="ramBank" value="0"/>
         <property name="fontAPL" data="${resourcePath}/roms/Videx/Videx Videoterm Character ROM APL.bin"/>
@@ -428,7 +430,7 @@
         <property name="memoryBus" ref="appleIIplus.memoryBus"/>
         <property name="refROM" ref="videxVideoterm.rom"/>
         <property name="mapROM" value="0xc800-0xcbff"/>
-        <property name="refRAM" ref="videxVideoterm.addressOffset"/>
+        <property name="refRAM" ref="videxVideoterm.bankSwitcher"/>
         <property name="mapRAM" value="0xcc00-0xcdff"/>
         <property name="refDisableC800" ref="videxVideoterm.disableC800"/>
         <property name="mapDisableC800" value="0xce00-0xcfff"/>
@@ -436,7 +438,7 @@
     <component id="videxVideoterm.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Videx/Videx Videoterm ROM 2.4.bin"/>
     </component>
-    <component id="videxVideoterm.addressOffset" class="AddressOffset">
+    <component id="videxVideoterm.bankSwitcher" class="AddressOffset">
         <property name="memory" ref="videxVideoterm.ram"/>
         <property name="size" value="0x200"/>
         <property name="blockSize" value="0x200"/>

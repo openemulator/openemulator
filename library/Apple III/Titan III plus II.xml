@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Titan III plus II" image="images/Titan/Titan III plus II.png" description="The Titan III plus II is an expansion card for the Apple III that enhances the Apple II emulation mode to a 64 kiB machine. It is usually installed in slot 3.">
+    
+    <device id="titanIIIplusII" label="Titan III plus II" image="images/Titan/Titan III plus II.png">
+    </device>
+    <connector id="titanIIIplusII.connector" type="Apple II Slot">
+        <inlet ref="titanIIIplusII.addressMapper" property="addressDecoder" outletRef="memoryBus"/>
+        <inlet ref="titanIIIplusII.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="titanIIIplusII.io" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="titanIIIplusII.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="titanIIIplusII.io" property="io" outletRef="io"/>
+        <inlet ref="titanIIIplusII.ram" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="titanIIIplusII.io" class="AppleLanguageCard">
+        <property name="controlBus" ref=""/>
+        <property name="memoryBus" ref=""/>
+        <property name="floatingBus" ref=""/>
+        <property name="io" ref=""/>
+        <property name="bankSwitcher" ref="titanIIIplusII.bankSwitcher"/>
+        <property name="bank1" value="0"/>
+        <property name="ramRead" value="0"/>
+        <property name="preWrite" value="0"/>
+        <property name="ramWrite" value="0"/>
+        <property name="titanIII" value="1"/>
+    </component>
+    <component id="titanIIIplusII.bankSwitcher" class="AddressOffset">
+        <property name="memory" ref="titanIIIplusII.ram"/>
+        <property name="size" value="0x4000"/>
+        <property name="blockSize" value="0x1000"/>
+    </component>
+    <component id="titanIIIplusII.ram" class="RAM">
+        <property name="size" value="0x4000"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref=""/>
+        <property name="powerOnPattern" value="0xffff0000"/>
+    </component>
+    
+</edl>

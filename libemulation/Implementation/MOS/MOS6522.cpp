@@ -147,8 +147,6 @@ void MOS6522::notify(OEComponent *sender, int notification, void *data)
     switch (notification)
     {
         case CONTROLBUS_RESET_DID_ASSERT:
-            logMessage("MOS6522 reset");
-            
             ddrA = 0;
             dataA = 0;
             ca1 = false;

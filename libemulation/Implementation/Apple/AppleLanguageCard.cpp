@@ -19,12 +19,14 @@ AppleLanguageCard::AppleLanguageCard()
     controlBus = NULL;
     memoryBus = NULL;
     floatingBus = NULL;
-    memory = NULL;
+    bankSwitcher = NULL;
     
     bank1 = false;
     ramRead = false;
     preWrite = false;
     ramWrite = false;
+    
+    titanIII = false;
 }
 
 bool AppleLanguageCard::setValue(string name, string value)
@@ -37,6 +39,8 @@ bool AppleLanguageCard::setValue(string name, string value)
         preWrite = getOEInt(value);
     else if (name == "ramWrite")
         ramWrite = getOEInt(value);
+    else if (name == "titanIII")
+        titanIII = getOEInt(value);
     else
         return false;
     
@@ -73,8 +77,10 @@ bool AppleLanguageCard::setRef(string name, OEComponent *ref)
         memoryBus = ref;
     else if (name == "floatingBus")
         floatingBus = ref;
-    else if (name == "memory")
-        memory = ref;
+    else if (name == "bankSwitcher")
+        bankSwitcher = ref;
+    else if (name == "io")
+        io = ref;
     else
         return false;
     
@@ -86,22 +92,40 @@ bool AppleLanguageCard::init()
     OECheckComponent(controlBus);
     OECheckComponent(memoryBus);
     OECheckComponent(floatingBus);
-    OECheckComponent(memory);
+    OECheckComponent(bankSwitcher);
     
-    updateBank1();
+    ramMap.component = bankSwitcher;
+    ramMap.startAddress = 0xd000;
+    ramMap.endAddress = 0xffff;
+    ramMap.read = false;
+    ramMap.write = false;
     
-    if (ramRead)
-        updateRAMRead();
-    if (ramWrite)
-        updateRAMWrite();
+    updateBankSwitcher();
+    updateBankOffset();
+    
+    if (titanIII && io)
+    {
+        slot0Map.component = this;
+        slot0Map.startAddress = 0x80;
+        slot0Map.endAddress = 0x8f;
+        slot0Map.read = true;
+        slot0Map.write = true;
+        
+        io->postMessage(this, ADDRESSDECODER_MAP, &slot0Map);
+    }
     
     return true;
 }
 
 void AppleLanguageCard::dispose()
 {
-    setRAMRead(false);
-    setRAMWrite(false);
+    if (titanIII && io)
+        io->postMessage(this, ADDRESSDECODER_UNMAP, &slot0Map);
+    
+    ramRead = false;
+    ramWrite = false;
+    
+    updateBankSwitcher();
 }
 
 void AppleLanguageCard::notify(OEComponent *sender, int notification, void *data)
@@ -110,40 +134,61 @@ void AppleLanguageCard::notify(OEComponent *sender, int notification, void *data
     
     if (powerState == CONTROLBUS_POWERSTATE_OFF)
     {
-        setBank1(false);
-        setRAMRead(false);
+        bank1 = false;
+        ramRead = false;
         preWrite = false;
-        setRAMWrite(false);
+        ramWrite = false;
+        
+        updateBankSwitcher();
+        updateBankOffset();
     }
 }
 
 OEChar AppleLanguageCard::read(OEAddress address)
 {
-    setBank1(address & 0x8);
-	
+    if (titanIII && (address & 0x4))
+    {
+        logMessage("R " + getHexString(address));
+        
+        return floatingBus->read(address);
+    }
+    
 	if (address & 0x1)
     {
 		if (preWrite)
-            setRAMWrite(true);
+            ramWrite = true;
 	}
     else
-        setRAMWrite(false);
+        ramWrite = false;
 	preWrite = address & 0x1;
 	
-    setRAMRead(!(((address >> 1) ^ address) & 1));
+    ramRead = !(((address >> 1) ^ address) & 1);
+    
+    setBank1(address & 0x8);
+    
+    updateBankSwitcher();
     
     return floatingBus->read(address);
 }
 
 void AppleLanguageCard::write(OEAddress address, OEChar value)
 {
-    setBank1(address & 0x8);
-	
+    if (titanIII && (address & 0x4))
+    {
+        logMessage("W " + getHexString(address) + ": " + getHexString(value));
+        
+        return;
+    }
+    
 	if (!(address & 0x1))
-        setRAMWrite(false);
+        ramWrite = false;
 	preWrite = false;
 	
-    setRAMRead(!(((address >> 1) ^ address) & 1));
+    ramRead = !(((address >> 1) ^ address) & 1);
+    
+    setBank1(address & 0x8);
+    
+    updateBankSwitcher();
 }
 
 void AppleLanguageCard::setBank1(bool value)
@@ -153,10 +198,10 @@ void AppleLanguageCard::setBank1(bool value)
     
     bank1 = value;
     
-    updateBank1();
+    updateBankOffset();
 }
 
-void AppleLanguageCard::updateBank1()
+void AppleLanguageCard::updateBankOffset()
 {
     AddressOffsetMap offsetMap;
     
@@ -164,55 +209,21 @@ void AppleLanguageCard::updateBank1()
     offsetMap.endAddress = 0x1fff;
     offsetMap.offset = bank1 ? -0x1000 : 0x0000;
     
-    memory->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    bankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
 }
 
-void AppleLanguageCard::setRAMRead(bool value)
+void AppleLanguageCard::updateBankSwitcher()
 {
-    if (ramRead == value)
+    if ((ramMap.read == ramRead) &&
+        (ramMap.write == ramWrite))
         return;
     
-    ramRead = value;
+    if (ramMap.read || ramMap.write)
+        memoryBus->postMessage(this, ADDRESSDECODER_UNMAP, &ramMap);
     
-    updateRAMRead();
-}
-
-void AppleLanguageCard::updateRAMRead()
-{
-    MemoryMap memoryMap;
+    ramMap.read = ramRead;
+    ramMap.write = ramWrite;
     
-    memoryMap.component = memory;
-    memoryMap.startAddress = 0xd000;
-    memoryMap.endAddress = 0xffff;
-    memoryMap.read = true;
-    memoryMap.write = false;
-    
-    memoryBus->postMessage(this,
-                           (ramRead ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP),
-                           &memoryMap);
-}
-
-void AppleLanguageCard::setRAMWrite(bool value)
-{
-    if (ramWrite == value)
-        return;
-    
-    ramWrite = value;
-    
-    updateRAMWrite();
-}
-
-void AppleLanguageCard::updateRAMWrite()
-{
-    MemoryMap memoryMap;
-    
-    memoryMap.component = memory;
-    memoryMap.startAddress = 0xd000;
-    memoryMap.endAddress = 0xffff;
-    memoryMap.read = false;
-    memoryMap.write = true;
-    
-    memoryBus->postMessage(this,
-                           (ramWrite ? ADDRESSDECODER_MAP : ADDRESSDECODER_UNMAP),
-                           &memoryMap);
+    if (ramMap.read || ramMap.write)
+        memoryBus->postMessage(this, ADDRESSDECODER_MAP, &ramMap);
 }

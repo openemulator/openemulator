@@ -75,6 +75,8 @@ MC6845::MC6845()
     blinkCount = 0;
     
     powerState = CONTROLBUS_POWERSTATE_ON;
+    
+    draw = &MC6845::drawDummy;
 }
 
 bool MC6845::setValue(string name, string value)
@@ -492,4 +494,8 @@ void MC6845::updateVideo()
     }
     
     lastCycles = cycles;
+}
+
+void MC6845::drawDummy(OESInt y, OESInt x0, OESInt x1)
+{
 }

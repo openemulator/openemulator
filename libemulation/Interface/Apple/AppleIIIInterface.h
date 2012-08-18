@@ -13,6 +13,7 @@
 
 #include "AppleIIInterface.h"
 
+#define APPLEIII_BANKSIZE   0x8000
 #define APPLEIII_SYSTEMBANK 2
 
 typedef enum

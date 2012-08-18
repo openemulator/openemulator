@@ -20,15 +20,22 @@ public:
     
     bool setValue(string name, string value);
     bool getValue(string name, string& value);
+    bool setRef(string name, OEComponent *ref);
+    
+    void notify(OEComponent *sender, int notification, void *data);
     
     OEChar read(OEAddress address);
     void write(OEAddress address, OEChar value);
     
 private:
+    OEComponent *controlBus;
+    
     OEChar dataRegister;
     OEChar statusRegister;
     OEChar commandRegister;
     OEChar controlRegister;
+    
+    void initACIA();
 };
 
 #endif

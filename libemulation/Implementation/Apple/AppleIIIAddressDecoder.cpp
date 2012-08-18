@@ -73,9 +73,6 @@ bool AppleIIIAddressDecoder::init()
     OECheckComponent(memoryFF00);
     OECheckComponent(systemControl);
     
-    if (!AddressDecoder::init())
-        return false;
-    
     MemoryMap m;
     
     m.read = true;
@@ -105,22 +102,22 @@ bool AppleIIIAddressDecoder::init()
     m.startAddress = 0xd000;
     m.endAddress = 0xefff;
     m.component = bankSwitcher;
-    internalMemoryMaps.push_back(m);
-    ramD000Map = &internalMemoryMaps.back();
+    appleIIIMemoryMaps.push_back(m);
+    ramD000Map = &appleIIIMemoryMaps.back();
     
     // F000-FEFF
     m.startAddress = 0xf000;
     m.endAddress = 0xfeff;
     m.component = bankSwitcher;
-    internalMemoryMaps.push_back(m);
-    ramF000Map = &internalMemoryMaps.back();
+    appleIIIMemoryMaps.push_back(m);
+    ramF000Map = &appleIIIMemoryMaps.back();
     
     // FF00-FFFF
     m.startAddress = 0xff00;
     m.endAddress = 0xffff;
     m.component = memoryFF00;
-    internalMemoryMaps.push_back(m);
-    ramFF00Map = &internalMemoryMaps.back();
+    appleIIIMemoryMaps.push_back(m);
+    ramFF00Map = &appleIIIMemoryMaps.back();
     
     // FF00-FFBF memory
     ff00MemoryMap.startAddress = 0x00;
@@ -144,17 +141,14 @@ bool AppleIIIAddressDecoder::init()
     fff0MemoryMap.component = NULL;
     
     systemControl->postMessage(this, APPLEIII_GET_ENVIRONMENT, &environment);
-    
     systemControl->postMessage(this, APPLEIII_GET_APPLEIIMODE, &appleIIMode);
     
     updateAppleIIIMemoryMaps();
     
+    if (!AddressDecoder::init())
+        return false;
+    
     return true;
-}
-
-void AppleIIIAddressDecoder::update()
-{
-    updateMemoryMaps(0, mask);
 }
 
 bool AppleIIIAddressDecoder::postMessage(OEComponent *sender, int message, void *data)
@@ -193,13 +187,14 @@ void AppleIIIAddressDecoder::notify(OEComponent *sender, int notification, void 
     }
 }
 
-void AppleIIIAddressDecoder::updateMemoryMaps(OEAddress startAddress, OEAddress endAddress)
+void AppleIIIAddressDecoder::updateReadWriteMap(OEAddress startAddress, OEAddress endAddress)
 {
-    AddressDecoder::updateMemoryMaps(internalMemoryMaps, startAddress, endAddress);
-    AddressDecoder::updateMemoryMaps(OEGetBit(environment, APPLEIII_IOENABLE) ?
-                                     ioMemoryMaps : ramMemoryMaps,
-                                     startAddress, endAddress);
-    AddressDecoder::updateMemoryMaps(externalMemoryMaps, startAddress, endAddress);
+    AddressDecoder::updateReadWriteMap(internalMemoryMaps, startAddress, endAddress);
+    AddressDecoder::updateReadWriteMap(appleIIIMemoryMaps, startAddress, endAddress);
+    AddressDecoder::updateReadWriteMap(OEGetBit(environment, APPLEIII_IOENABLE) ?
+                                       ioMemoryMaps : ramMemoryMaps,
+                                       startAddress, endAddress);
+    AddressDecoder::updateReadWriteMap(externalMemoryMaps, startAddress, endAddress);
 }
 
 void AppleIIIAddressDecoder::setSlot(OEInt index, OEComponent *ref)
@@ -216,6 +211,8 @@ void AppleIIIAddressDecoder::setSlot(OEInt index, OEComponent *ref)
         addMemoryMap(ioMemoryMaps, &m);
     else
         removeMemoryMap(ioMemoryMaps, &m);
+    
+    updateReadWriteMap(m.startAddress, m.endAddress);
 }
 
 bool AppleIIIAddressDecoder::setEnvironment(OEChar value)
@@ -225,6 +222,8 @@ bool AppleIIIAddressDecoder::setEnvironment(OEChar value)
         environment = value;
         
         updateAppleIIIMemoryMaps();
+        
+        updateReadWriteMap(0xc000, 0xffff);
     }
     
     return true;
@@ -237,6 +236,8 @@ bool AppleIIIAddressDecoder::setAppleIIMode(bool value)
         appleIIMode = value;
         
         updateAppleIIIMemoryMaps();
+        
+        updateReadWriteMap(0xff00, 0xffff);
     }
     
     return true;
@@ -266,6 +267,4 @@ void AppleIIIAddressDecoder::updateAppleIIIMemoryMaps()
     memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ff00MemoryMap);
     memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ffc0MemoryMap);
     memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &fff0MemoryMap);
-    
-    updateMemoryMaps(0xc000, 0xffff);
 }

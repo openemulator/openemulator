@@ -1,35 +1,39 @@
 ==1.0.4==
-* Add Videx Videoterm option automatic or manual 40/80 switching
-* Fix adding a CFFA to A///, a .dsk is mounted is Disk ///, and when mounting a .po globally, the .dsk is unmounted. Shouldn't the framework ask canMount?
-* Fix changes in MC6521/Apple-1
+* Fix video when increasing RAM size
+* Connect VBL, KBD, IRQ to VIAs
 * Implement MOS6522
-* Implement AppleIIVideo VBL
+* Separate AppleIIIVideo and AppleIIIKeyboard
 * Implement AppleIIIVideo+font upload
 * Implement AppleIIIKeyboard CTRL+RESET/NMI
-* Unify AppleIIIAddressDecoder with AddressOffset components
+* Implement MOS6551
+* Implement MM58167
+* Implement Apple III Silentype port
 * Disable C0D0 when /AIISW
-* Implement MOS6551 ACIA
-* Implement AppleIIKeyboard key stealing
-* Test JoystickMapper self-centering mouse
-* Implement JoystickMapper keyboard joystick
+* Fix Apple III sometimes crashing because of incorrect video counters
+
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
 * Fix [CanvasView update] problem in paper view
 * Add Apple Silentype sounds
 
-* Implement open disk image when starting with template chooser
-* Add LCD Composite Color Monitor
-* Fix IAC 42 > rapid drive change
-* Fix AppleIIVideo not displaying video when loading emulation in paused state
-* Disk II head player should not play when turning on a drive or changing drives
+* Implement and verify usability of JoystickMapper delta mouse
+* Implement AppleIIKeyboard key stealing
+* Implement JoystickMapper keyboard and delta keyboard support (arrow keys)
 * Implement DDL file format
-* Check Mac OS X 10.5 (Intel) compatibility
 * Add Apple Graphics Tablet sounds
+
+* Fix AppleIIVideo not displaying video when loading emulation in paused state
+* Fix adding a CFFA to A///, a .dsk is mounted is Disk ///, and when mounting a .po globally, the .dsk is unmounted. Shouldn't the framework ask canMount?
+* Fix changes in MC6521/Apple-1
+* Implement open disk image when starting with template chooser
+* Fix IAC 42 > rapid drive change
+* Disk II head player should not play when turning on a drive or changing drives
+* Check Mac OS X 10.5 (Intel) compatibility
 
 * Implement wxWidgets user interface
 
 ==1.0.5==
-* Fix writing to DOS 3.1 or DOS 3.2 NIB files
+* Fix writing to DOS 3.1 or DOS 3.2 NIB files?
 * Fix Disk II sounds
 * Fix Disk II for: Sherwood Forest, IAC 45, Alkemstone, EOS, Last Gladiator, Wasteland
 * Refactorize PAAudio so an emulation is stopped while it is being configured. Increase thread priority

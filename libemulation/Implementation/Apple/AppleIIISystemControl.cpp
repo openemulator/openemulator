@@ -130,7 +130,11 @@ bool AppleIIISystemControl::init()
     
     updateExtendedRAMBank();
     
-    // Get RAM Size
+    OEData *data;
+    
+    ram->postMessage(this, RAM_GET_DATA, &data);
+    
+    ramMask = (data->size() / APPLEIII_BANKSIZE) - 1;
     
     return true;
 }
@@ -185,7 +189,9 @@ void AppleIIISystemControl::notify(OEComponent *sender, int notification, void *
     }
     else if (sender == ram)
     {
-        // To-Do: Update
+        OEAddress size = *((OEAddress *)data);
+        
+        ramMask = (size / APPLEIII_BANKSIZE) - 1;
     }
 }
 
@@ -384,10 +390,10 @@ void AppleIIISystemControl::updateAltStack()
 
 void AppleIIISystemControl::updateRAMBank()
 {
-    OEChar bank = ramBank & 0x7;
+    OEChar bank = ramBank & ramMask;
     
     if (bank == APPLEIII_SYSTEMBANK)
-        bank = 0x7;
+        bank = ramMask;
     
 //    logMessage("ramBank: " + getString(bank));
     
@@ -395,7 +401,7 @@ void AppleIIISystemControl::updateRAMBank()
     
     offsetMap.startAddress = 0x2000;
     offsetMap.endAddress = 0x9fff;
-    offsetMap.offset = 0x8000 * bank - 0x2000;
+    offsetMap.offset = bank * APPLEIII_BANKSIZE - 0x2000;
     
     bankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
 }
@@ -410,7 +416,7 @@ void AppleIIISystemControl::updateExtendedRAMBank()
     {
         offsetMap.startAddress = 0x0000;
         offsetMap.endAddress = 0x1fff;
-        offsetMap.offset = APPLEIII_SYSTEMBANK * 0x8000 - 0x0000;
+        offsetMap.offset = APPLEIII_SYSTEMBANK * APPLEIII_BANKSIZE - 0x0000;
         
         extendedBankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
         
@@ -422,26 +428,26 @@ void AppleIIISystemControl::updateExtendedRAMBank()
         
         offsetMap.startAddress = 0xa000;
         offsetMap.endAddress = 0xffff;
-        offsetMap.offset = APPLEIII_SYSTEMBANK * 0x8000 - 0x8000;
+        offsetMap.offset = APPLEIII_SYSTEMBANK * APPLEIII_BANKSIZE - 0x8000;
         
         extendedBankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     }
     else
     {
-        OEChar bank = extendedRAMBank & 0x7;
+        OEChar bank = extendedRAMBank & ramMask;
         
         if (bank == APPLEIII_SYSTEMBANK)
-            bank = 0x7;
+            bank = ramMask;
         
         offsetMap.startAddress = 0x0000;
         offsetMap.endAddress = 0x7fff;
-        offsetMap.offset = extendedRAMBank * 0x8000 - 0x0000;
+        offsetMap.offset = extendedRAMBank * APPLEIII_BANKSIZE - 0x0000;
         
         extendedBankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
         
         offsetMap.startAddress = 0x8000;
         offsetMap.endAddress = 0xffff;
-        offsetMap.offset = (extendedRAMBank + 1) * 0x8000 - 0x8000;
+        offsetMap.offset = (extendedRAMBank + 1) * APPLEIII_BANKSIZE - 0x8000;
         
         extendedBankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     }

@@ -128,10 +128,10 @@ void AppleIIIMOS6502::execute()
         }
         else
         {
-/*            static bool cap = true;
+/*            static bool cap = false;
             
-            if ((pc.q & 0xffff) == 0x0801)
-                cap = true;
+//            if ((pc.q & 0xffff) == 0xa68c)
+//                cap = true;
             
             if (cap)
             {

@@ -10,6 +10,8 @@
 
 #include "OEComponent.h"
 
+#include "MemoryInterface.h"
+
 class AppleLanguageCard : public OEComponent
 {
 public:
@@ -33,17 +35,19 @@ private:
     OEComponent *controlBus;
     OEComponent *memoryBus;
     OEComponent *floatingBus;
-    OEComponent *memory;
+    OEComponent *bankSwitcher;
+    OEComponent *io;
     
     bool bank1;
     bool ramRead;
     bool preWrite;
     bool ramWrite;
+    MemoryMap ramMap;
+    
+    bool titanIII;
+    MemoryMap slot0Map;
     
     void setBank1(bool value);
-    void updateBank1();
-    void setRAMRead(bool value);
-    void updateRAMRead();
-    void setRAMWrite(bool value);
-    void updateRAMWrite();
+    void updateBankOffset();
+    void updateBankSwitcher();
 };

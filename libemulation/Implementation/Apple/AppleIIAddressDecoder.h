@@ -16,4 +16,9 @@ public:
 	AppleIIAddressDecoder();
     
     bool postMessage(OEComponent *sender, int message, void *data);
+    
+private:
+    MemoryMaps ioMemoryMaps;
+    
+    void updateReadWriteMap(OEAddress startAddress, OEAddress endAddress);
 };

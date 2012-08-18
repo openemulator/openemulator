@@ -26,10 +26,17 @@
 #define FONT_CHARSIZE   (FONT_CHARWIDTH * FONT_CHARHEIGHT)
 #define FONT_SIZE       (FONT_CHARNUM * FONT_CHARSIZE)
 
+enum
+{
+    OUTPUT_AUTO,
+    OUTPUT_ON,
+    OUTPUT_OFF,
+};
+
 VidexVideoterm::VidexVideoterm() : MC6845()
 {
     ram = NULL;
-    addressOffset = NULL;
+    bankSwitcher = NULL;
     video = NULL;
     gamePort = NULL;
     
@@ -43,6 +50,8 @@ VidexVideoterm::VidexVideoterm() : MC6845()
     cellWidth = 9;
     
     image.setFormat(OEIMAGE_LUMINANCE);
+    
+    videoOutput = OUTPUT_AUTO;
 }
 
 bool VidexVideoterm::setValue(string name, string value)
@@ -55,6 +64,15 @@ bool VidexVideoterm::setValue(string name, string value)
         ramBank = getOEInt(value);
     else if (name == "cellWidth")
         cellWidth = getOEInt(value);
+    else if (name == "videoOutput")
+    {
+        if (value == "On")
+            videoOutput = OUTPUT_ON;
+        else if (value == "Off")
+            videoOutput = OUTPUT_OFF;
+        else
+            videoOutput = OUTPUT_AUTO;
+    }
     else
         return MC6845::setValue(name, value);
     
@@ -71,6 +89,15 @@ bool VidexVideoterm::getValue(string name, string &value)
         value = getString(ramBank);
     else if (name == "cellWidth")
         value = getString(cellWidth);
+    else if (name == "videoOutput")
+    {
+        if (videoOutput == OUTPUT_ON)
+            value = "On";
+        else if (videoOutput == OUTPUT_OFF)
+            value = "Off";
+        else
+            value = "Auto";
+    }
     else
         return MC6845::getValue(name, value);
     
@@ -81,8 +108,8 @@ bool VidexVideoterm::setRef(string name, OEComponent *ref)
 {
     if (name == "ram")
         ram = ref;
-    else if (name == "addressOffset")
-        addressOffset = ref;
+    else if (name == "bankSwitcher")
+        bankSwitcher = ref;
     else if (name == "video")
     {
         if (video)
@@ -126,7 +153,7 @@ bool VidexVideoterm::setData(string name, OEData *data)
 bool VidexVideoterm::init()
 {
     OECheckComponent(ram);
-    OECheckComponent(addressOffset);
+    OECheckComponent(bankSwitcher);
     OECheckComponent(video);
     
     if (!MC6845::init())
@@ -181,6 +208,8 @@ void VidexVideoterm::update()
     
     for (OEInt i = 0; i < 2 * FONT_SIZE; i++)
         currentFont[i + 2 * FONT_SIZE] = ~currentFont[i];
+    
+    updateVideoEnabled();
     
     refreshVideo();
 }
@@ -296,7 +325,7 @@ void VidexVideoterm::updateRAMBank()
     offsetMap.endAddress = 0x1ff;
     offsetMap.offset = 0x200 * ramBank - 0x400;
     
-    addressOffset->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
+    bankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
 }
 
 void VidexVideoterm::setCellWidth(OEInt value)
@@ -311,9 +340,15 @@ void VidexVideoterm::setCellWidth(OEInt value)
 
 void VidexVideoterm::updateVideoEnabled()
 {
-    bool newMonitorCaptured = (monitorConnected && 
-                               an0 &&
-                               colorKiller &&
+    bool videoOutputEnabled;
+    
+    if (videoOutput == OUTPUT_AUTO)
+        videoOutputEnabled = (an0 && colorKiller);
+    else
+        videoOutputEnabled = (videoOutput == OUTPUT_ON);
+    
+    bool newMonitorCaptured = (videoOutputEnabled &&
+                               monitorConnected &&
                                (powerState != CONTROLBUS_POWERSTATE_OFF));
     
     bool newVideoEnabled = (newMonitorCaptured &&

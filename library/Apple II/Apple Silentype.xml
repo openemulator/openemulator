@@ -4,7 +4,7 @@
     
     <device id="appleSilentype" label="Apple Silentype" image="images/Apple/Apple Silentype.png">
     </device>
-    <connector id="appleSilentype.connector" type="Apple III Port">
+    <connector id="appleSilentype.connector" type="Apple Silentype Port">
     </connector>
     <component id="appleSilentype.printer" class="AppleSilentype">
         <property name="device" ref="appleSilentype"/>

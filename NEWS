@@ -1,4 +1,8 @@
 ==Latest==
+* Fixed AdressDecoder memory mapping
+* Fix Apple III initial register settings
+* Added Videx Videoterm automatic/manual video output
+* Impemented Titan III plus II
 * Fixed AppleIIIDiskIO drive logic
 * Added LCD Color Composite Monitor
 * Implemented AppleIIIGamePort

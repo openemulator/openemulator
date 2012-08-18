@@ -41,6 +41,8 @@ private:
     OEComponent *eVIA;
     OEComponent *dac;
     
+    OEChar ramMask;
+    
     OEChar environment;
     OEChar zeroPage;
     OEChar ramBank;

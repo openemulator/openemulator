@@ -107,6 +107,8 @@ private:
     void scheduleTimer(OESLong cycles);
     
     void updateVideo();
+    
+    void drawDummy(OESInt y, OESInt x0, OESInt x1);
 };
 
 #endif

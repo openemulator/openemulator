@@ -23,6 +23,7 @@ public:
     bool setValue(string name, string value);
     bool setRef(string name, OEComponent *ref);
     bool init();
+    void update();
     
     bool postMessage(OEComponent *sender, int event, void *data);
     
@@ -42,14 +43,15 @@ protected:
     OEAddress mask;
     OEInt blockBits;
     
-    void updateMemoryMaps(MemoryMaps& value, OEAddress startAddress, OEAddress endAddress);
-    virtual void updateMemoryMaps(OEAddress startAddress, OEAddress endAddress);
+    void updateReadWriteMap(MemoryMaps& value, OEAddress startAddress, OEAddress endAddress);
+    virtual void updateReadWriteMap(OEAddress startAddress, OEAddress endAddress);
     
     bool addMemoryMap(MemoryMaps& maps, MemoryMap *value);
     bool removeMemoryMap(MemoryMaps& maps, MemoryMap *value);
     
 private:
     OEComponent *floatingBus;
+    
     MemoryMapsRef ref;
     MemoryMapsConf conf;
     
@@ -57,7 +59,7 @@ private:
     OEComponents writeMap;
     
     void mapMemory(MemoryMap& value);
-    bool addInternalMemoryMaps();
+    bool updateInternalMemoryMaps();
 };
 
 #endif

@@ -27,11 +27,19 @@ bool AppleIIAddressDecoder::postMessage(OEComponent *sender, int message, void *
             return removeMemoryMap(externalMemoryMaps, (MemoryMap *) data);
             
         case APPLEII_MAP_SLOT:
-            return addMemoryMap(internalMemoryMaps, (MemoryMap *) data);
+            return addMemoryMap(ioMemoryMaps, (MemoryMap *) data);
             
         case APPLEII_UNMAP_SLOT:
-            return removeMemoryMap(internalMemoryMaps, (MemoryMap *) data);
+            return removeMemoryMap(ioMemoryMaps, (MemoryMap *) data);
     }
     
     return false;
 }
+
+void AppleIIAddressDecoder::updateReadWriteMap(OEAddress startAddress, OEAddress endAddress)
+{
+    AddressDecoder::updateReadWriteMap(internalMemoryMaps, startAddress, endAddress);
+    AddressDecoder::updateReadWriteMap(ioMemoryMaps, startAddress, endAddress);
+    AddressDecoder::updateReadWriteMap(externalMemoryMaps, startAddress, endAddress);
+}
+

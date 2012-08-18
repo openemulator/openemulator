@@ -30,7 +30,7 @@ public:
     
 private:
     OEComponent *ram;
-    OEComponent *addressOffset;
+    OEComponent *bankSwitcher;
     OEComponent *video;
     OEComponent *gamePort;
     
@@ -58,6 +58,8 @@ private:
     OEInt imageWidth;
     
     OEChar *drawMemory;
+    
+    OEInt videoOutput;
     
     bool loadFont(string name, OEData *data);
     

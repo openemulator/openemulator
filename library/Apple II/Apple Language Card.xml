@@ -24,13 +24,13 @@
         <property name="controlBus" ref=""/>
         <property name="memoryBus" ref=""/>
         <property name="floatingBus" ref=""/>
-        <property name="memory" ref="appleLanguageCard.addressOffset"/>
+        <property name="bankSwitcher" ref="appleLanguageCard.bankSwitcher"/>
         <property name="bank1" value="0"/>
         <property name="ramRead" value="0"/>
         <property name="preWrite" value="0"/>
         <property name="ramWrite" value="0"/>
     </component>
-    <component id="appleLanguageCard.addressOffset" class="AddressOffset">
+    <component id="appleLanguageCard.bankSwitcher" class="AddressOffset">
         <property name="memory" ref="appleLanguageCard.ram"/>
         <property name="size" value="0x4000"/>
         <property name="blockSize" value="0x1000"/>

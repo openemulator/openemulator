@@ -26,9 +26,10 @@
     <port id="appleIII.drive4" ref="appleDiskIII4.connector" type="Apple Disk Drive Port" group="peripherals" label="Disk Drive Port 3" image="images/Connectors/Header2x10.png">
         <inlet ref="appleIII.diskIO" property="drive4" outletRef="drive"/>
     </port>
-    <port id="appleIII.portA" ref="" type="Apple III Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
+    <port id="appleIII.portA" ref="" type="Apple Silentype Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
     </port>
-    <port id="appleIII.portB" ref="" type="Apple III Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
+    <port id="appleIII.portB" ref="" type="Apple II Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
+        <inlet ref="appleIII.gamePort" property="gamePort" outletRef="io"/>
     </port>
     <port id="appleIII.portC" ref="" type="RS-232 Port" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
     </port>
@@ -82,13 +83,13 @@
         <property name="portA" ref="appleIII.systemControl"/>
         <property name="addressA" value="0x0"/>
         <property name="ddrA" value="0x0"/>
-        <property name="dataA" value="0x0"/>
+        <property name="dataA" value="0xff"/>
         <property name="ca1" value="0"/>
         <property name="ca2" value="0"/>
         <property name="portB" ref="appleIII.systemControl"/>
         <property name="addressB" value="0x1"/>
         <property name="ddrB" value="0x0"/>
-        <property name="dataB" value="0x0"/>
+        <property name="dataB" value="0xff"/>
         <property name="cb1" value="0"/>
         <property name="cb2" value="0"/>
     </component>
@@ -97,13 +98,13 @@
         <property name="portA" ref="appleIII.systemControl"/>
         <property name="addressA" value="0x2"/>
         <property name="ddrA" value="0x0"/>
-        <property name="dataA" value="0x0"/>
+        <property name="dataA" value="0xff"/>
         <property name="ca1" value="0"/>
         <property name="ca2" value="0"/>
         <property name="portB" ref="appleIII.systemControl"/>
         <property name="addressB" value="0x3"/>
         <property name="ddrB" value="0x0"/>
-        <property name="dataB" value="0x0"/>
+        <property name="dataB" value="0xff"/>
         <property name="cb1" value="0"/>
         <property name="cb2" value="0"/>
     </component>
@@ -178,7 +179,7 @@
         <property name="mapBeeper" value="0x40-0x4f"/>
         <property name="refVideo" ref="appleIII.video"/>
         <property name="mapVideo" value="0x50-0x57"/>
-        <property name="refGamePort" ref=""/>
+        <property name="refGamePort" ref="appleIII.gamePort"/>
         <property name="mapGamePort" value="0x58-0x6f"/>
         <property name="refRTC" ref="appleIII.rtc"/>
         <property name="mapRTC" value="0x70-0x7f"/>
@@ -200,6 +201,25 @@
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
+    </component>
+    <component id="appleIII.audioOut" class="AppleIIAudioOut">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="floatingBus" ref="appleIII.floatingBus"/>
+        <property name="audioCodec" ref="appleIII.audioCodec"/>
+        <property name="volume" value="1"/>
+    </component>
+    <component id="appleIII.beeper" class="AppleIIIBeeper">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="floatingBus" ref="appleIII.floatingBus"/>
+        <property name="audioOut" ref="appleIII.audioOut"/>
+    </component>
+    <component id="appleIII.audioCodec" class="AudioCodec">
+        <property name="audio" ref="audio"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="timeAccuracy" value="0.000001"/>
+        <property name="filterSize" value="17"/>
+        <property name="lowFrequency" value="20"/>
+        <property name="highFrequency" value="10000"/>
     </component>
     <component id="appleIII.video" class="AppleIIVideo">
         <property name="model" value="III"/>
@@ -224,24 +244,10 @@
         <property name="systemControl" ref="appleIII.systemControl"/>
         <property name="fontStandard" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
     </component>
-    <component id="appleIII.audioOut" class="AppleIIAudioOut">
+    <component id="appleIII.gamePort" class="AppleIIGamePort">
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="audioCodec" ref="appleIII.audioCodec"/>
-        <property name="volume" value="1"/>
-    </component>
-    <component id="appleIII.beeper" class="AppleIIIBeeper">
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="audioOut" ref="appleIII.audioOut"/>
-    </component>
-    <component id="appleIII.audioCodec" class="AudioCodec">
-        <property name="audio" ref="audio"/>
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="timeAccuracy" value="0.000001"/>
-        <property name="filterSize" value="17"/>
-        <property name="lowFrequency" value="20"/>
-        <property name="highFrequency" value="10000"/>
+        <property name="gamePort" ref=""/>
     </component>
     <component id="appleIII.diskIO" class="AppleIIIDiskIO">
         <property name="controlBus" ref="appleIII.controlBus"/>

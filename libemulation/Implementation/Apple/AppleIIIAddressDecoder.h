@@ -20,7 +20,6 @@ public:
     
     bool setRef(string name, OEComponent *ref);
     bool init();
-    void update();
     
     bool postMessage(OEComponent *sender, int message, void *data);
     
@@ -35,6 +34,7 @@ private:
     
     OEComponent *slot[8];
     
+    MemoryMaps appleIIIMemoryMaps;
     MemoryMaps ioMemoryMaps;
     MemoryMaps ramMemoryMaps;
     MemoryMap *ioC500Map;
@@ -50,7 +50,7 @@ private:
     OEChar environment;
     bool appleIIMode;
     
-    void updateMemoryMaps(OEAddress startAddress, OEAddress endAddress);
+    void updateReadWriteMap(OEAddress startAddress, OEAddress endAddress);
     
     void setSlot(OEInt index, OEComponent *ref);
     

@@ -10,12 +10,11 @@
 
 #include "MOS6551.h"
 
+#include "ControlBusInterface.h"
+
 MOS6551::MOS6551()
 {
-    dataRegister = 0;
-    statusRegister = 0;
-    commandRegister = 0;
-    controlRegister = 0;
+    initACIA();
 }
 
 bool MOS6551::setValue(string name, string value)
@@ -50,6 +49,27 @@ bool MOS6551::getValue(string name, string& value)
     return true;
 }
 
+bool MOS6551::setRef(string name, OEComponent *ref)
+{
+    if (name == "controlBus")
+    {
+        if (controlBus)
+            controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+        controlBus = ref;
+        if (controlBus)
+            controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
+    }
+    else
+        return false;
+    
+    return true;
+}
+
+void MOS6551::notify(OEComponent *sender, int notification, void *data)
+{
+    initACIA();
+}
+
 OEChar MOS6551::read(OEAddress address)
 {
     switch (address & 0x3)
@@ -80,8 +100,6 @@ void MOS6551::write(OEAddress address, OEChar value)
             break;
             
         case 0x1:
-            statusRegister = value;
-            
             break;
             
         case 0x2:
@@ -94,4 +112,12 @@ void MOS6551::write(OEAddress address, OEChar value)
             
             break;
     }
+}
+
+void MOS6551::initACIA()
+{
+    dataRegister = 0;
+    statusRegister = 0x10;
+    commandRegister = 0;
+    controlRegister = 0;
 }
