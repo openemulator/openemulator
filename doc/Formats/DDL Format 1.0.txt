@@ -83,7 +83,7 @@ Every side tag contains one or more bitstream tags. A bitstream tag contains the
 <bitstream cellDuration="[CELLDURATION]" writeEnabled="[WRITEENABLED]">
 
 * cellDuration is optional. If used, the real number [CELLDURATION] specifies the relative duration of each bit cell contained in this tag. The default bit cell duration is "1.0".
-* writeEnabled is optional and can be used to write-protect areas marked with laser holes. If used, the parameter [WRITEENABLED] may take the values "0" or "1". If unspecified, the writeEnabled state is inherited from the ddl tag.
+* writeEnabled is optional and can be used to write-protect the bit cells contained in this tag. This is useful to mark areas produced with a laser hole. If used, the parameter [WRITEENABLED] may take the values "0" or "1". If unspecified, the writeEnabled state is inherited from the ddl tag.
 
 It is possible to use several bitstream tags in sequence to describe parts of a track with different properties.
 
