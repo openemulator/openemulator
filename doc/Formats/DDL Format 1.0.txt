@@ -78,7 +78,7 @@ Every track tag contains one or more side tags, each describing the content of a
 
 ==DDL bitstream tag==
 
-Every side tag contains one or more bitstream tags. A bitstream tag contains the actual data:
+Every side tag contains one or more bitstream tags. These contain the actual data:
 
 <bitstream cellDuration="[CELLDURATION]" writeProtected="[WRITEPROTECTED]">
 
@@ -94,7 +94,7 @@ It is possible to use several bitstream tags in sequence to describe parts of a 
 * A '+' character encodes a 1 bit cell (a magnetic inversion).
 * A '-' character encodes a 0 bit cell (no magnetic inversion).
 * A '?' character encodes a weak bit cell (a 50% chance of magnetic inversion).
-* A sequence of two ASCII characters describing an 8-bit hexadecimal value (characters '0'..'9' and 'a'..'f' or 'A'..'F') encodes a sequence of 8 bit cells. The most significant bit of this value (bit 7) encodes the first bit cell, the least significant bit of this value (bit 0) encodes the last bit cell.
+* Two ASCII characters representing an 8-bit hexadecimal value (characters '0'..'9' and 'a'..'f' or 'A'..'F') encode a sequence of 8 bit cells. The most significant bit of this value (bit 7) encodes the first bit cell, the least significant bit of this value (bit 0) encodes the last bit cell.
 * Data may be formatted with space, tab, newline or linefeed.
 
 Notes:
