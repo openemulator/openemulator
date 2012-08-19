@@ -49,14 +49,14 @@ DDL 1.0 files should begin with the following XML header:
 
 The DDL tag is the top-level of the floppy disk description:
 
-<ddl version="1.0" creator="[CREATOR]" label="[LABEL]" description="[DESCRIPTION]" medium="[MEDIUM]" tracksPerInch="[TRACKSPERINCH]" writeEnabled="[WRITEENABLED]">
+<ddl version="1.0" creator="[CREATOR]" label="[LABEL]" description="[DESCRIPTION]" medium="[MEDIUM]" tracksPerInch="[TRACKSPERINCH]" writeProtected="[WRITEPROTECTED]">
 
 * [CREATOR] is a string that describes the name of the author, or the name and version of the software that created this DDL file.
 * [LABEL] is a short description of the content stored in this DDL file.
 * [DESCRIPTION] is a longer description of the content stored in this DDL file.
 * [MEDIUM] describes the kind of storage medium. Valid storage mediums are: "8 inch disk", "5.25 inch disk" and "3.5 inch disk".
 * [TRACKSPERINCH] is a real number that describes the magnetic resolution of the storage medium (this is sometimes found on a label on the disk). Common values are "48", "62.5", "96" and "100".
-* [WRITEENABLED] may take the values "0" or "1", and determines if the storage medium may be modified (is not write protected).
+* [WRITEPROTECTED] may take the values "0" or "1", and determines if the storage medium is write protected.
 
 ==DDL track tag==
 
@@ -80,10 +80,10 @@ Every track tag contains one or more side tags, each describing the content of a
 
 Every side tag contains one or more bitstream tags. A bitstream tag contains the actual data:
 
-<bitstream cellDuration="[CELLDURATION]" writeEnabled="[WRITEENABLED]">
+<bitstream cellDuration="[CELLDURATION]" writeProtected="[WRITEPROTECTED]">
 
 * cellDuration is optional. If used, the real number [CELLDURATION] specifies the relative duration of each bit cell contained in this tag. The default bit cell duration is "1.0".
-* writeEnabled is optional and can be used to write-protect the bit cells contained in this tag. This is useful to mark areas produced with a laser hole. If used, the parameter [WRITEENABLED] may take the values "0" or "1". If unspecified, the writeEnabled state is inherited from the ddl tag.
+* writeProtected is optional and can be used to write protect the bit cells contained in this tag. This is useful to mark areas produced with a laser hole. If used, the parameter [WRITEPROTECTED] may take the values "0" or "1". If unspecified, the write protected state is inherited from the ddl tag.
 
 It is possible to use several bitstream tags in sequence to describe parts of a track with different properties.
 
