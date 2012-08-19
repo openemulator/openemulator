@@ -14,7 +14,7 @@ The XML DTD is available here:
 
 Notes:
 
-* DDL attempts to describe all known means of copy protection for floppy disk drives. This includes isolated bit cells, bit cells of different duration and weak bit cells. If a new kind of description is needed, request-for-comments shall be initiated.
+* DDL attempts to describe all known means of copy protection for floppy disk drives. This includes isolated bit cells, bit cells of different duration, weak bit cells and laser holes. If a new kind of description is needed, request-for-comments shall be initiated.
 
 * For comments or suggestions, please contact: Marc S. Ressl (mressl at umich . edu)
 
@@ -80,11 +80,12 @@ Every track tag contains one or more side tags, each describing the content of a
 
 Every side tag contains one or more bitstream tags. These contain the actual data:
 
-<bitstream cellDuration="[CELLDURATION]">
+<bitstream cellDuration="[CELLDURATION]" writeEnabled="[WRITEENABLED]">
 
 * cellDuration is optional. If used, the real number [CELLDURATION] specifies the relative duration of each bit cell contained in this tag. The default bit cell duration is "1.0".
+* writeEnabled is optional and may take the values "0" or "1". It indicates that this bitstream cannot be modified because of the presence of laser holes.
 
-It is possible to use several bitstream tags in sequence to describe parts of a track with different bit cell durations.
+It is possible to use several bitstream tags in sequence to describe parts of a track with different properties.
 
 ==DDL bitstream data==
 
