@@ -4,7 +4,7 @@ This is the specification of DDL 1.0, an XML language that describes data stored
 
 The purpose of DDL is to provide an open standard for preserving the digital content of copy-protected floppy disks. The advantages of DDL are accuracy, readability, modifiability, expandability and ease of implementation.
 
-DDL does not describe data from the point of view of the storage medium (floppy disk) but from the perspective of the storage access device (disk drive). It stores necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and associated properties like the type of storage medium, the reference of tracks-per-inch and the state of the write protection tab.
+DDL does not describe data from the point of view of the storage medium (floppy disk) but from the perspective of the storage access device (disk drive). It stores necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and associated properties like the type of storage medium, the tracks per inch reference and the state of the write protection tab.
 
 DDL uses as fundamental unit the bit cell, the area of disk surface in which a single bit is recorded.
 
@@ -78,12 +78,12 @@ Every track tag contains one or more side tags, each describing the content of a
 
 ==DDL bitstream tag==
 
-Every side tag contains one or more bitstream tags. These contain the actual data:
+Every side tag contains one or more bitstream tags. A bitstream tag contains the actual data:
 
 <bitstream cellDuration="[CELLDURATION]" writeEnabled="[WRITEENABLED]">
 
 * cellDuration is optional. If used, the real number [CELLDURATION] specifies the relative duration of each bit cell contained in this tag. The default bit cell duration is "1.0".
-* writeEnabled is optional and may take the values "0" or "1". It indicates that this bitstream cannot be modified because of the presence of laser holes.
+* writeEnabled is optional and can be used to write-protect areas marked with laser holes. If used, the parameter [WRITEENABLED] may take the values "0" or "1". If unspecified, the writeEnabled state is inherited from the ddl tag.
 
 It is possible to use several bitstream tags in sequence to describe parts of a track with different properties.
 
@@ -102,13 +102,13 @@ Notes:
 * A disk is a circular medium. Thus the data of each track/side must be treated circularly as well.
 * The first bit cell of each track/side must be synchronized to the index hole of the storage medium. In case the index hole is not available, synchronization should be relative to some arbitrary position.
 * Every track/side may contain an arbitrary amount of data.
-* The actual duration of a bit cell can be calculated from the relative bit cell duration D, the total bit cell duration sum T and the disk drive rotation speed S as follows: D / T / S. Example: if a disk track contains 50000 bits and the disk spins at 300 RPM, each bit cell takes 1 / 50000 / (300 / 60) = 4 microseconds.
+* The actual duration of a bit cell can be calculated from the relative bit cell duration D, the total bit cell duration sum T and the disk drive rotation speed S as follows: D / T / S. Example: if a disk track contains 50000 bit cells and the disk spins at 300 RPM, each bit cell takes 1 / 50000 / (300 / 60) = 4 microseconds.
 * A track/side with no data or a part of a track/side with no data should be treated as a stream of 0 bit cells (no magnetic inversions).
 * Data should be human-readable. Provisions should exist so that data fields are easy to read, understand and modify (i.e. sectors may be detected and appropriately formatted). Authors of DDL files are encouraged to use XML comments to describe the copy protection within the DDL file.
 
 ==Example==
 
-A short example of the contents of a DDL file:
+A short example of DDL XML:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
@@ -156,7 +156,7 @@ f2 ab eb fd de d7 bc cd f3 bf f9 ab fd 96 96 96
 <bitstream cellDuration="1.05">
 <!-- Here goes the copy protection -->
 
-00 00 00 00 ?+--++-- 00 00 00 00
+ff-- ff-- ff-- ff-- ff-- ?+--++-- 00 00 00 00 00 00 00 00 00
 </bitstream>
 </side>
 </track>
