@@ -4,7 +4,7 @@ This is the specification of DDL 1.0, an XML language that describes data stored
 
 The purpose of DDL is to provide an open standard for preserving the digital content of copy-protected floppy disks. The advantages of DDL are accuracy, readability, modifiability, expandability and ease of implementation.
 
-DDL does not describe data from the point of view of the storage medium (floppy disk) but from the perspective of the storage access device (disk drive). It stores necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and associated properties like the type of storage medium, the tracks per inch reference and the state of the write protection tab.
+DDL does not describe data from the point of view of the storage medium (floppy disk) but from the perspective of the storage access device (disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and associated properties like the type of storage medium, the tracks per inch reference and the state of the write protection tab.
 
 DDL uses as fundamental unit the bit cell, the area of disk surface in which a single bit is recorded.
 
@@ -14,9 +14,9 @@ The XML DTD is available here:
 
 Notes:
 
-* DDL attempts to describe all known means of copy protection for floppy disk drives. This includes isolated bit cells, bit cells of different duration, weak bit cells and laser holes. If a new kind of description is needed, request-for-comments shall be initiated.
+* DDL attempts to describe all known means of copy protection for floppy disk drives. These include isolated bit cells, bit cells of different duration, weak bit cells and laser holes. If a new kind of description is needed, request-for-comments shall be initiated.
 
-* For comments or suggestions, please contact: Marc S. Ressl (mressl at umich . edu)
+* For comments or suggestions please contact: Marc S. Ressl (mressl at umich . edu)
 
 ==Legal==
 
@@ -66,7 +66,7 @@ Within the DDL tag a series of track tags may exist, each describing a track's c
 
 * [TRACKINDEX] is a real number that describes the track's location according to the tracks per inch reference of the storage medium. The fractional part can be used to describe non-standard locations.
 
-An example: An Apple II standard-formatted 5.25" floppy disks should be imaged using tracksPerInch="48". Its track indices should be numbered from 0 to 34 (for 35 track disks) or 0 to 39 (for 40 track disks). If there are half- or quarter- tracks, indices ending in .5, .25 or .75 should be used, for example "3.25".
+An example: An Apple II standard-formatted 5.25" floppy disks should be imaged with tracksPerInch="48". Its track indices should be numbered from 0 to 34 (for 35 track disks) or 0 to 39 (for 40 track disks). If there are half- or quarter- tracks, indices ending in .5, .25 or .75 should be used, for example "3.25".
 
 ==DDL side tag==
 
@@ -94,10 +94,10 @@ It is possible to use several bitstream tags in sequence to describe parts of a 
 * A '+' character encodes a 1 bit cell (a magnetic inversion).
 * A '-' character encodes a 0 bit cell (no magnetic inversion).
 * A '?' character encodes a weak bit cell (a 50% chance of magnetic inversion).
-* Two ASCII characters representing an 8-bit hexadecimal value (characters '0'..'9' and 'a'..'f' or 'A'..'F') encode a sequence of 8 bit cells. The most significant bit of this value (bit 7) encodes the first bit cell, the least significant bit of this value (bit 0) encodes the last bit cell.
+* Two characters representing an 8-bit hexadecimal value (characters '0'..'9' and 'a'..'f' or 'A'..'F') encode a sequence of 8 bit cells. The most significant bit of this value (bit 7) encodes the first bit cell, the least significant bit of this value (bit 0) encodes the last bit cell.
 * Data may be formatted with space, tab, newline or linefeed.
 
-Notes:
+==Observations==
 
 * A disk is a circular medium. Thus the data of each track/side must be treated circularly as well.
 * The first bit cell of each track/side must be synchronized to the index hole of the storage medium. In case the index hole is not available, synchronization should be relative to some arbitrary position.
