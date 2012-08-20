@@ -1,4 +1,4 @@
-==DDL Disk Description Language Specification 1.0 [DRAFT]==
+==DDL Disk Description Language Specification 1.0==
 
 This is the specification of DDL 1.0, an XML language that describes data stored on floppy disks.
 
@@ -78,7 +78,7 @@ Every track tag contains one or more side tags, each describing the content of a
 
 ==DDL data tag==
 
-Every side tag may contain one or more data tags, each containing actual data:
+Every side tag contains one or more data tags, each containing actual data:
 
 <data cellLength="[CELLLENGTH]">
 
