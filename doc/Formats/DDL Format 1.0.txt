@@ -14,7 +14,7 @@ The XML DTD is available here:
 
 Notes:
 
-* DDL attempts to describe all known means of copy protection for floppy disk drives. These include isolated bit cells, bit cells of different duration, weak bit cells and laser holes. If a new kind of description is needed, request-for-comments shall be initiated.
+* DDL attempts to describe all known means of copy protection for floppy disk drives. These include isolated bit cells, bit cells of different duration, weak bit cells and areas with no magnetic coating (laser holes). If a new kind of description is needed, request-for-comments shall be initiated.
 
 * For comments or suggestions please contact: Marc S. Ressl (mressl at umich . edu)
 
@@ -49,14 +49,14 @@ DDL 1.0 files should begin with the following XML header:
 
 The DDL tag is the top-level of the floppy disk description:
 
-<ddl version="1.0" creator="[CREATOR]" label="[LABEL]" description="[DESCRIPTION]" medium="[MEDIUM]" tracksPerInch="[TRACKSPERINCH]" writeProtected="[WRITEPROTECTED]">
+<ddl version="1.0" creator="[CREATOR]" label="[LABEL]" description="[DESCRIPTION]" medium="[MEDIUM]" tracksPerInch="[TRACKSPERINCH]" writeEnabled="[WRITEENABLED]">
 
 * [CREATOR] is a string that describes the name of the author, or the name and version of the software that created this DDL file.
 * [LABEL] is a short description of the content stored in this DDL file.
 * [DESCRIPTION] is a longer description of the content stored in this DDL file.
 * [MEDIUM] describes the kind of storage medium. Valid storage mediums are: "8 inch disk", "5.25 inch disk" and "3.5 inch disk".
 * [TRACKSPERINCH] is a real number that describes the magnetic resolution of the storage medium (this is sometimes found on a label on the disk). Common values are "48", "62.5", "96" and "100".
-* [WRITEPROTECTED] may take the values "0" or "1", and determines if the storage medium is write protected.
+* [WRITEENABLED] may take the values "0" or "1", and determines if the storage medium may be modified (is not write protected).
 
 ==DDL track tag==
 
@@ -66,7 +66,7 @@ Within the DDL tag a series of track tags may exist, each describing a track's c
 
 * [TRACKINDEX] is a real number that describes the track's location according to the tracks per inch reference of the storage medium. The fractional part can be used to describe non-standard locations.
 
-An example: An Apple II standard-formatted 5.25" floppy disks should be imaged with tracksPerInch="48". Its track indices should be numbered from 0 to 34 (for 35 track disks) or 0 to 39 (for 40 track disks). If there are half- or quarter- tracks, indices ending in .5, .25 or .75 should be used, for example "3.25".
+An example: an Apple II standard-formatted 5.25" floppy disks should be imaged with tracksPerInch="48". Its track indices should be numbered from 0 to 34 (for 35 track disks) or 0 to 39 (for 40 track disks). If there are half- or quarter- tracks, indices ending in .5, .25 or .75 should be used, like "3.25" for example.
 
 ==DDL side tag==
 
@@ -76,23 +76,23 @@ Every track tag contains one or more side tags, each describing the content of a
 
 * [SIDEINDEX] describes the side number. It may be "0" or "1".
 
-==DDL bitstream tag==
+==DDL data tag==
 
-Every side tag contains one or more bitstream tags. These contain the actual data:
+Every side tag may contain one or more data tags, each containing actual data:
 
-<bitstream cellDuration="[CELLDURATION]" writeProtected="[WRITEPROTECTED]">
+<data cellLength="[CELLLENGTH]">
 
-* cellDuration is optional. If used, the real number [CELLDURATION] specifies the relative duration of each bit cell contained in this tag. The default bit cell duration is "1.0".
-* writeProtected is optional and can be used to write protect the bit cells contained in this tag. This is useful to mark areas produced with a laser hole. If used, the parameter [WRITEPROTECTED] may take the values "0" or "1". If unspecified, the write protected state is inherited from the ddl tag.
+* cellLength is optional. If used, the real number [CELLLENGTH] specifies the relative length of each bit cell contained in this tag. The default bit cell length is "1.0".
 
-It is possible to use several bitstream tags in sequence to describe parts of a track with different properties.
+It is possible to use several data tags in sequence to describe parts of a track with different cell length.
 
-==DDL bitstream data==
+==DDL data==
 
-"bitstream" data is stored as standard ASCII text, and may be composed of the following symbols:
+Data is stored as standard ASCII text, and may be composed of the following symbols:
 
-* A '+' character encodes a 1 bit cell (a magnetic inversion).
 * A '-' character encodes a 0 bit cell (no magnetic inversion).
+* A '+' character encodes a 1 bit cell (a magnetic inversion).
+* An 'x' character encodes a 0 bit cell on non-magnetic material (no magnetic inversion, i.e. a laser hole).
 * A '?' character encodes a weak bit cell (a 50% chance of magnetic inversion).
 * Two characters representing an 8-bit hexadecimal value (characters '0'..'9' and 'a'..'f' or 'A'..'F') encode a sequence of 8 bit cells. The most significant bit of this value (bit 7) encodes the first bit cell, the least significant bit of this value (bit 0) encodes the last bit cell.
 * Data may be formatted with space, tab, newline or linefeed.
@@ -102,13 +102,14 @@ It is possible to use several bitstream tags in sequence to describe parts of a 
 * A disk is a circular medium. Thus the data of each track/side must be treated circularly as well.
 * The first bit cell of each track/side must be synchronized to the index hole of the storage medium. In case the index hole is not available, synchronization should be relative to some arbitrary position.
 * Every track/side may contain an arbitrary amount of data.
-* The actual duration of a bit cell can be calculated from the relative bit cell duration D, the total bit cell duration sum T and the disk drive rotation speed S as follows: D / T / S. Example: if a disk track contains 50000 bit cells and the disk spins at 300 RPM, each bit cell takes 1 / 50000 / (300 / 60) = 4 microseconds.
+* The actual duration of a bit cell can be calculated from the relative bit cell length L, the total bit cell length sum T and the disk drive rotation speed S as follows: L / T / S. Example: if a disk track contains 50000 bit cells and the disk spins at 300 RPM, each bit cell takes 1 / 50000 / (300 / 60) = 4 microseconds.
 * A track/side with no data or a part of a track/side with no data should be treated as a stream of 0 bit cells (no magnetic inversions).
+* Areas with no magnetic material ('x' bit cells) are read-only, as there is no magnetic material to induce a magnetic inversion.
 * Data should be human-readable. Provisions should exist so that data fields are easy to read, understand and modify (i.e. sectors may be detected and appropriately formatted). Authors of DDL files are encouraged to use XML comments to describe the copy protection within the DDL file.
 
 ==Example==
 
-A short example of DDL XML:
+This example illustrates the features of DDL XML:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
@@ -116,7 +117,7 @@ A short example of DDL XML:
 
 <track index="0">
 <side index="0">
-<bitstream>
+<data>
 ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
 ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
 ff-- ff-- ff-- ff-- ff-- ff-- ff-- ff--
@@ -152,12 +153,16 @@ f2 ab eb fd de d7 bc cd f3 bf f9 ab fd 96 96 96
 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96 96
 96 96 96 96 96 96 96 af b3 9a de aa eb
-</bitstream>
-<bitstream cellDuration="1.05">
-<!-- Here goes the copy protection -->
+</data>
+<data cellLength="1.1">
+<!-- Here goes a weak bit copy protection -->
 
-ff-- ff-- ff-- ff-- ff-- ?+--++-- 00 00 00 00 00 00 00 00 00
-</bitstream>
+ff-- ff-- ff-- ff-- ff-- de aa +?-+++--
+
+<!-- Here goes a laser hole copy protection -->
+
+00 00 00 00 xxxxxxxx xxxxxxxx 00 00 00 00
+</data>
 </side>
 </track>
 </ddl>
