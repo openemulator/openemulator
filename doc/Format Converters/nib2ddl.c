@@ -53,6 +53,9 @@ int convertNIB2DDL(char *source, char *target, int insertSync)
                     
                     int linebreak = TRUE;
                     
+                    int insertSectorInfo = FALSE;
+                    int sectorIndex;
+                    
                     for (i = 0; i < TRACK_SIZE; i++)
                     {
                         /* Detect data markers */
@@ -70,6 +73,15 @@ int convertNIB2DDL(char *source, char *target, int insertSync)
                                 if (horizIndex)
                                     horizIndex = DATA_COLNUM;
                                 linebreak = TRUE;
+                                
+                                // Add sector data
+                                if (data[(i + 2) % TRACK_SIZE] != 0xad)
+                                {
+                                    insertSectorInfo = TRUE;
+                                    
+                                    sectorIndex = (data[(i + 7) % TRACK_SIZE] << 1) | 0x01;
+                                    sectorIndex &= data[(i + 8) % TRACK_SIZE];
+                                }
                             }
                         }
                         else
@@ -102,6 +114,14 @@ int convertNIB2DDL(char *source, char *target, int insertSync)
                             linebreak = FALSE;
                             
                             fprintf(fpo, "\n");
+                        }
+                        
+                        /* Print sector info */
+                        if (insertSectorInfo)
+                        {
+                            insertSectorInfo = FALSE;
+                            
+                            fprintf(fpo, "<!-- Track %d Sector %d -->\n\n", trackIndex, sectorIndex);
                         }
                         
                         /* Print data */
