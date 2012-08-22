@@ -20,10 +20,11 @@
 #import "PAAudio.h"
 #import "HIDJoystick.h"
 
+#define LINK_HELP       @"http://www.openemulator.org/help"
 #define LINK_HOMEPAGE	@"http://www.openemulator.org"
-#define LINK_FORUMSURL	@"http://groups.google.com/group/openemulator"
-#define LINK_DEVURL		@"http://code.google.com/p/openemulator"
-#define LINK_DONATEURL	@"http://www.openemulator.org"
+#define LINK_FORUMSURL	@"http://www.openemulator.org/forums"
+#define LINK_DEVURL		@"http://www.openemulator.org/dev"
+#define LINK_DONATEURL	@"http://www.openemulator.org/donate"
 
 #define DONATION_NAG_TIME	(7 * (24 * (60 * 60)))
 
@@ -638,6 +639,12 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     
     if (disableMenuBarCount == 0)
         SetSystemUIMode(kUIModeNormal, 0);
+}
+
+- (void)openHelp:(id)sender
+{
+    NSURL *url = [NSURL	URLWithString:LINK_HELP];
+    [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
 - (void)openHomepage:(id)sender

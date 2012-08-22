@@ -67,6 +67,16 @@ private:
     OEChar dataB;
 	bool cb1;
 	bool cb2;
+    
+    OEChar shift;
+    
+    OEChar auxControl;
+    OEChar peripheralControl;
+    
+    OEChar interruptFlags;
+    OEChar interruptEnable;
+    
+    void updateIRQ();
 };
 
 #endif

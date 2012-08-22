@@ -10,8 +10,8 @@
 
 #include "AppleIIKeyboard.h"
 
-#include "DeviceInterface.h"
 #include "ControlBusInterface.h"
+
 #include "AppleIIInterface.h"
 
 AppleIIKeyboard::AppleIIKeyboard()
@@ -23,13 +23,11 @@ AppleIIKeyboard::AppleIIKeyboard()
     gamePort = NULL;
     monitor = NULL;
     
-    keyLatch = 0;
-    keyStrobe = false;
+    pressedKeypadKeyCount = 0;
     state = APPLEIIKEYBOARD_STATE_NORMAL;
     
-    // Default value for Apple III key flags
-    appleIIIKeyFlags = 0x7e;
-    keypadCount = 0;
+    keyLatch = 0;
+    keyStrobe = false;
 }
 
 bool AppleIIKeyboard::setValue(string name, string value)
@@ -42,8 +40,6 @@ bool AppleIIKeyboard::setValue(string name, string value)
             type = APPLEIIKEYBOARD_TYPE_SHIFTKEYMOD;
         else if (value == "Full ASCII")
             type = APPLEIIKEYBOARD_TYPE_FULLASCII;
-        else if (value == "Apple III")
-            type = APPLEIIKEYBOARD_TYPE_APPLEIII;
     }
 	else
 		return false;
@@ -61,8 +57,6 @@ bool AppleIIKeyboard::getValue(string name, string& value)
             value = "Shift-Key Mod";
         else if (type == APPLEIIKEYBOARD_TYPE_FULLASCII)
             value = "Full ASCII";
-        else if (type == APPLEIIKEYBOARD_TYPE_APPLEIII)
-            value = "Apple III";
     }
 	else
 		return false;
@@ -137,7 +131,7 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                 if (*((ControlBusPowerState *)data) == CONTROLBUS_POWERSTATE_ON)
                 {
                     keyLatch = 0;
-                    keyStrobe = 0;
+                    setKeyStrobe(false);
                 }
                 
                 break;
@@ -156,6 +150,9 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
         {
             case CANVAS_UNICODECHAR_WAS_SENT:
             {
+                if (state != APPLEIIKEYBOARD_STATE_NORMAL)
+                    break;
+                
                 if (!pasteBuffer.empty())
                     break;
                 
@@ -171,7 +168,7 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                 
                 if ((hidEvent->usageId >= CANVAS_KP_NUMLOCK) &&
                     (hidEvent->usageId <= CANVAS_KP_PERIOD))
-                    keypadCount += hidEvent->value ? 1 : -1;
+                    pressedKeypadKeyCount += hidEvent->value ? 1 : -1;
                 
                 switch (state)
                 {
@@ -196,9 +193,16 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                                 
                                 state = APPLEIIKEYBOARD_STATE_RESTART;
                             }
+                            else if (OEGetBit(flags, CANVAS_KF_CONTROL) &&
+                                     OEGetBit(flags, CANVAS_KF_ALT))
+                            {
+                                setAltReset(true);
+                                
+                                state = APPLEIIKEYBOARD_STATE_ALTRESET;
+                            }
                             else if (OEGetBit(flags, CANVAS_KF_CONTROL))
                             {
-                                controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+                                setReset(true);
                                 
                                 state = APPLEIIKEYBOARD_STATE_RESET;
                             }
@@ -211,16 +215,24 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                             
                             monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
                             
-                            if (OEGetBit(flags, CANVAS_KF_CONTROL))
+                            if (OEGetBit(flags, CANVAS_KF_CONTROL) &&
+                                OEGetBit(flags, CANVAS_KF_GUI))
                             {
                                 ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_OFF;
                                 controlBus->postMessage(this, CONTROLBUS_SET_POWERSTATE, &powerState);
                                 
                                 state = APPLEIIKEYBOARD_STATE_RESTART;
                             }
-                            else
+                            else if (OEGetBit(flags, CANVAS_KF_CONTROL) &&
+                                     OEGetBit(flags, CANVAS_KF_ALT))
                             {
-                                controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+                                setAltReset(true);
+                                
+                                state = APPLEIIKEYBOARD_STATE_ALTRESET;
+                            }
+                            else if (OEGetBit(flags, CANVAS_KF_CONTROL))
+                            {
+                                setReset(true);
                                 
                                 state = APPLEIIKEYBOARD_STATE_RESET;
                             }
@@ -228,9 +240,27 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                         break;
                         
                     case APPLEIIKEYBOARD_STATE_RESET:
+                        // React on key up
+                        if (hidEvent->value)
+                            break;
+                        
                         if (hidEvent->usageId == stateUsageId)
                         {
-                            controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+                            setReset(false);
+                            
+                            state = APPLEIIKEYBOARD_STATE_NORMAL;
+                        }
+                        
+                        break;
+                        
+                    case APPLEIIKEYBOARD_STATE_ALTRESET:
+                        // React on key up
+                        if (hidEvent->value)
+                            break;
+                        
+                        if (hidEvent->usageId == stateUsageId)
+                        {
+                            setAltReset(false);
                             
                             state = APPLEIIKEYBOARD_STATE_NORMAL;
                         }
@@ -238,6 +268,10 @@ void AppleIIKeyboard::notify(OEComponent *sender, int notification, void *data)
                         break;
                         
                     case APPLEIIKEYBOARD_STATE_RESTART:
+                        // React on key up
+                        if (hidEvent->value)
+                            break;
+                        
                         if (hidEvent->usageId == stateUsageId)
                         {
                             ControlBusPowerState powerState = CONTROLBUS_POWERSTATE_ON;
@@ -263,30 +297,19 @@ OEChar AppleIIKeyboard::read(OEAddress address)
 {
     if (address & 0x10)
     {
-        keyStrobe = false;
+        setKeyStrobe(false);
         
         emptyPasteBuffer();
-    }
-    else
-    {
-        if ((type == APPLEIIKEYBOARD_TYPE_APPLEIII) &&
-            (address & 0x08))
-            return (keyLatch & 0x80) | appleIIIKeyFlags;
         
-        return (keyStrobe << 7) | (keyLatch & 0x7f);
+        return floatingBus->read(address);
     }
     
-	return floatingBus->read(address);
+    return (keyStrobe << 7) | (keyLatch & 0x7f);
 }
 
 void AppleIIKeyboard::write(OEAddress address, OEChar value)
 {
-    if (address & 0x10)
-    {
-        keyStrobe = false;
-        
-        emptyPasteBuffer();
-    }
+    read(address);
 }
 
 void AppleIIKeyboard::updateKeyFlags()
@@ -308,25 +331,6 @@ void AppleIIKeyboard::updateKeyFlags()
             
             break;
         }
-        case APPLEIIKEYBOARD_TYPE_APPLEIII:
-        {
-            if (monitor)
-            {
-                bool anyKeyDown;
-                CanvasKeyboardFlags flags;
-                
-                monitor->postMessage(this, CANVAS_GET_KEYBOARD_ANYKEYDOWN, &anyKeyDown);
-                monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
-                
-                OESetBit(appleIIIKeyFlags, (1 << 0), anyKeyDown);
-                OESetBit(appleIIIKeyFlags, (1 << 1), !OEGetBit(flags, CANVAS_KF_SHIFT));
-                OESetBit(appleIIIKeyFlags, (1 << 2), !OEGetBit(flags, CANVAS_KF_CONTROL));
-                OESetBit(appleIIIKeyFlags, (1 << 3), 1);   // Caps Lock
-                OESetBit(appleIIIKeyFlags, (1 << 4), !OEGetBit(flags, CANVAS_KF_LEFTGUI));
-                OESetBit(appleIIIKeyFlags, (1 << 5), !OEGetBit(flags, CANVAS_KF_RIGHTGUI));
-                OESetBit(appleIIIKeyFlags, (1 << 6), 1);   // Keyboard connected
-            }
-        }
         default:
             break;
     }
@@ -334,55 +338,51 @@ void AppleIIKeyboard::updateKeyFlags()
 
 void AppleIIKeyboard::sendKey(CanvasUnicodeChar key)
 {
-    if (type == APPLEIIKEYBOARD_TYPE_APPLEIII)
+    if (key == CANVAS_U_LEFT)
+        key = 0x8;
+    else if (key == CANVAS_U_RIGHT)
+        key = 0x15;
+    else if (key == 0x7f)
+        key = 0x8;
+    else if (key >= 0x80)
+        return;
+    
+    if (type != APPLEIIKEYBOARD_TYPE_FULLASCII)
     {
-        if (key == CANVAS_U_LEFT)
-            key = 0x88;
-        else if (key == CANVAS_U_RIGHT)
-            key = 0x95;
-        else if (key == CANVAS_U_UP)
-            key = 0x8b;
-        else if (key == CANVAS_U_DOWN)
-            key = 0x8a;
-        else if (key == 0x9)
-            key = 0x89;
-        else if (key == 0x1b)
-            key = 0x9b;
-        else if (key == 0x20)
-            key = 0xa0;
-        else if (key == 0x7f)
-            key = 0x88;
-        else if (key >= 0x80)
-            return;
-        
-        if (keypadCount)
-            key |= 0x80;
-        
         if (key >= 'a' && key <= 'z')
             key -= 0x20;
-    }
-    else
-    {
-        if (key == CANVAS_U_LEFT)
-            key = 0x8;
-        else if (key == CANVAS_U_RIGHT)
-            key = 0x15;
-        else if (key == 0x7f)
-            key = 0x8;
-        else if (key >= 0x80)
+        else if (key >= 0x60 && key <= 0x7e)
             return;
-        
-        if (type != APPLEIIKEYBOARD_TYPE_FULLASCII)
-        {
-            if (key >= 'a' && key <= 'z')
-                key -= 0x20;
-            else if (key >= 0x60 && key <= 0x7e)
-                return;
-        }
     }
     
     keyLatch = key;
-    keyStrobe = true;
+    setKeyStrobe(true);
+}
+
+void AppleIIKeyboard::setKeyStrobe(bool value)
+{
+    bool oldKeyStrobe = keyStrobe;
+    
+    keyStrobe = value;
+    
+    if (keyStrobe != oldKeyStrobe)
+        postNotification(this, APPLEII_KEYSTROBE_DID_CHANGE, &keyStrobe);
+}
+
+void AppleIIKeyboard::setReset(bool value)
+{
+    if (value)
+        controlBus->postMessage(this, CONTROLBUS_ASSERT_RESET, NULL);
+    else
+        controlBus->postMessage(this, CONTROLBUS_CLEAR_RESET, NULL);
+}
+
+void AppleIIKeyboard::setAltReset(bool value)
+{
+    if (value)
+        controlBus->postMessage(this, CONTROLBUS_ASSERT_NMI, NULL);
+    else
+        controlBus->postMessage(this, CONTROLBUS_CLEAR_NMI, NULL);
 }
 
 void AppleIIKeyboard::paste(wstring *s)

@@ -28,12 +28,12 @@
     </port>
     <port id="appleIII.portA" ref="" type="Apple Silentype Port" group="peripherals" label="Port A" image="images/Connectors/DE9 Female.png">
     </port>
-    <port id="appleIII.portB" ref="" type="Apple II Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
+    <port id="appleIII.portB" ref="appleHandControllers.connector" type="Apple II Game Port" group="peripherals" label="Port B" image="images/Connectors/DE9 Female.png">
         <inlet ref="appleIII.gamePort" property="gamePort" outletRef="io"/>
     </port>
     <port id="appleIII.portC" ref="" type="RS-232 Port" group="peripherals" label="Port C" image="images/Connectors/DB25 Female.png">
     </port>
-    <port id="appleIII.slot1" ref="" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
+    <port id="appleIII.slot1" ref="rdCFFA.connector" type="Apple II Slot" group="expansions" label="Slot 1" image="images/Connectors/Edge50.png">
         <inlet ref="appleIII.io" property="refSlot1" outletRef="io"/>
         <inlet ref="appleIII.memoryBus" property="slot1" outletRef="memory"/>
     </port>
@@ -41,7 +41,7 @@
         <inlet ref="appleIII.io" property="refSlot2" outletRef="io"/>
         <inlet ref="appleIII.memoryBus" property="slot2" outletRef="memory"/>
     </port>
-    <port id="appleIII.slot3" ref="" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
+    <port id="appleIII.slot3" ref="titanIIIplusII.connector" type="Apple II Slot" group="expansions" label="Slot 3" image="images/Connectors/Edge50.png">
         <inlet ref="appleIII.io" property="refSlot3" outletRef="io"/>
         <inlet ref="appleIII.memoryBus" property="slot3" outletRef="memory"/>
     </port>
@@ -77,6 +77,14 @@
     </component>
     <component id="appleIII.floatingBus" class="FloatingBus">
         <property name="type" value="vcc"/>
+    </component>
+    <component id="appleIII.ram" class="VRAM">
+        <property name="size" value="0x40000"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="videoBlockSize" value="0x400"/>
+        <property name="videoMap" value="0x0000-0x7fff,0x10400-0x10bff"/>
+        <property name="videoObserver" ref="appleIII.video"/>
     </component>
     <component id="appleIII.dVIA" class="MOS6522">
         <property name="controlBus" ref="appleIII.controlBus"/>
@@ -116,7 +124,10 @@
         <property name="extendedZeroPageSwitcher" ref="appleIII.extendedZeroPageSwitcher"/>
         <property name="extendedBankSwitcher" ref="appleIII.extendedBankSwitcher"/>
         <property name="ram" ref="appleIII.ram"/>
+        <property name="keyboard" ref="appleIII.keyboard"/>
         <property name="video" ref="appleIII.video"/>
+        <property name="rtc" ref="appleIII.rtc"/>
+        <property name="silentype" ref=""/>
         <property name="dVIA" ref="appleIII.dVIA"/>
         <property name="eVIA" ref="appleIII.eVIA"/>
         <property name="dac" ref="appleIII.dac"/>
@@ -132,7 +143,7 @@
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="bankSwitcher" ref="appleIII.bankSwitcher"/>
         <property name="io" ref="appleIII.io"/>
-        <property name="slot1" ref=""/>
+        <property name="slot1" ref="rdCFFA.memory"/>
         <property name="slot2" ref=""/>
         <property name="slot3" ref=""/>
         <property name="slot4" ref=""/>
@@ -157,14 +168,6 @@
         <property name="blockSize" value="0x2000"/>
         <property name="memory" ref="appleIII.ram"/>
     </component>
-    <component id="appleIII.ram" class="VRAM">
-        <property name="size" value="0x40000"/>
-        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
-        <property name="controlBus" ref="appleIII.controlBus"/>
-        <property name="videoBlockSize" value="0x400"/>
-        <property name="videoMap" value="0x0000-0x7fff,0x10400-0x10bff"/>
-        <property name="videoObserver" ref="appleIII.video"/>
-    </component>
     <component id="appleIII.io" class="AddressDecoder">
         <property name="size" value="0x100"/>
         <property name="blockSize" value="0x1"/>
@@ -183,11 +186,11 @@
         <property name="mapGamePort" value="0x58-0x6f"/>
         <property name="refRTC" ref="appleIII.rtc"/>
         <property name="mapRTC" value="0x70-0x7f"/>
-        <property name="refSlot1" ref=""/>
+        <property name="refSlot1" ref="rdCFFA.io"/>
         <property name="mapSlot1" value="0x90-0x9f"/>
         <property name="refSlot2" ref=""/>
         <property name="mapSlot2" value="0xa0-0xaf"/>
-        <property name="refSlot3" ref=""/>
+        <property name="refSlot3" ref="titanIIIplusII.io"/>
         <property name="mapSlot3" value="0xb0-0xbf"/>
         <property name="refSlot4" ref=""/>
         <property name="mapSlot4" value="0xc0-0xcf"/>
@@ -196,7 +199,7 @@
         <property name="refACIA" ref="appleIII.acia"/>
         <property name="mapACIA" value="0xf0-0xff"/>
     </component>
-    <component id="appleIII.keyboard" class="AppleIIKeyboard">
+    <component id="appleIII.keyboard" class="AppleIIIKeyboard">
         <property name="type" value="Apple III"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
@@ -247,7 +250,7 @@
     <component id="appleIII.gamePort" class="AppleIIGamePort">
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
-        <property name="gamePort" ref=""/>
+        <property name="gamePort" ref="appleHandControllers.io"/>
     </component>
     <component id="appleIII.diskIO" class="AppleIIIDiskIO">
         <property name="controlBus" ref="appleIII.controlBus"/>
@@ -501,6 +504,156 @@
     <component id="appleDiskIII4.headPlayer" class="AudioPlayer">
         <property name="audio" ref="audio"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
+    </component>
+    
+    <device id="appleHandControllers" label="Apple Hand Controllers" image="images/Apple/Apple Hand Controllers.png">
+        <setting ref="appleHandControllers.io" name="inputDevice" label="Input Device" type="select" options="Mouse,Joystick,None"/>
+        <setting ref="appleHandControllers.io" name="axis0" label="PDL0" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="axis1" label="PDL1" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="axis2" label="PDL2" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="axis3" label="PDL3" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="button0" label="PB0" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="button1" label="PB1" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="button2" label="PB2" type="select" options=""/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis0" label="PDL0 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis1" label="PDL1 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis2" label="PDL2 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="sensitivityAxis3" label="PDL3 Sensitivity" type="slider" options="-10,10"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis0" label="PDL0 Reverse" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis1" label="PDL1 Reverse" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis2" label="PDL2 Reverse" type="checkbox"/>
+        <setting ref="appleHandControllers.io" name="reverseAxis3" label="PDL3 Reverse" type="checkbox"/>
+    </device>
+    <connector id="appleHandControllers.connector" type="Apple II Game Port">
+        <inlet ref="appleHandControllers.io" property="canvas" outletRef="video"/>
+    </connector>
+    <component id="appleHandControllers.io" class="JoystickMapper">
+        <property name="inputDevice" value="Mouse"/>
+        <property name="deviceId" value="0"/>
+        <property name="axis0" value="Mouse X"/>
+        <property name="axis1" value="Mouse Y"/>
+        <property name="axis2" value="Unmapped"/>
+        <property name="axis3" value="Unmapped"/>
+        <property name="button0" value="Mouse Button 1"/>
+        <property name="button1" value="Mouse Button 2"/>
+        <property name="button2" value="Mouse Button 3"/>
+        <property name="sensitivityAxis0" value="0"/>
+        <property name="sensitivityAxis1" value="0"/>
+        <property name="sensitivityAxis2" value="0"/>
+        <property name="sensitivityAxis3" value="0"/>
+        <property name="reverseAxis0" value="0"/>
+        <property name="reverseAxis1" value="0"/>
+        <property name="reverseAxis2" value="0"/>
+        <property name="reverseAxis3" value="0"/>
+        <property name="mapMouse" value="axis0,Mouse X,0,0,axis1,Mouse Y,0,0,axis2,Unmapped,0,0,axis3,Unmapped,0,0,button0,Mouse Button 1,0,0,button1,Mouse Button 2,0,0,button2,Mouse Button 3,0,0"/>
+        <property name="mapJoystick" value="axis0,Joystick 1 X-Axis,0,0,axis1,Joystick 1 Y-Axis,0,0,axis2,Joystick 1 Z-Rotation,0,0,axis3,Joystick 1 Slider,0,0,button0,Joystick 1 Button 1,0,0,button1,Joystick 1 Button 2,0,0,button2,Joystick 1 Button 3,0,0"/>
+        <property name="mapNone" value="axis0,Unmapped,0,0,axis1,Unmapped,0,0,axis2,Unmapped,0,0,axis3,Unmapped,0,0,button0,Unmapped,0,0,button1,Unmapped,0,0,button2,Unmapped,0,0"/>
+        <property name="device" ref="appleHandControllers"/>
+        <property name="canvas" ref="appleIII.video"/>
+        <property name="joystick" ref="joystick"/>
+    </component>
+    
+    <device id="rdCFFA" label="R&amp;D CFFA" image="images/R&amp;D/R&amp;D CFFA.png">
+        <setting ref="rdCFFA.rom" name="sel" label="Firmware" type="select" options="ROM10EE02|ROM 1.0 (Apple II),ROM12EEC02|ROM 1.2 (Apple IIe or newer),ROM20EE02|ROM 2.0 (Apple II),ROM20EEC02|ROM 2.0 (Apple IIe or newer)"/>
+        <setting ref="rdCFFA.ataDevice" name="forceWriteProtected" label="Force Write Protected" type="checkbox"/>
+    </device>
+    <connector id="rdCFFA.connector" type="Apple II Slot">
+        <inlet ref="rdCFFA.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="rdCFFA.memory" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="rdCFFA.memoryC800" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="rdCFFA.disableC800" property="memoryBus" outletRef="memoryBus"/>
+    </connector>
+    <component id="rdCFFA.io" class="RDCFFA">
+        <property name="ataController" ref="rdCFFA.ataController"/>
+    </component>
+    <component id="rdCFFA.ataController" class="ATAController">
+        <property name="drive1" ref="rdCFFA.ataDevice"/>
+    </component>
+    <component id="rdCFFA.ataDevice" class="ATADevice">
+        <property name="device" ref="rdCFFA"/>
+        <property name="diskImage" value=""/>
+        <property name="forceWriteProtected" value="0"/>
+        <property name="maxSize" value="65535"/>
+    </component>
+    <component id="rdCFFA.memory" class="AppleIISlotController">
+        <property name="memory" ref="rdCFFA.rom"/>
+        <property name="en" value="0"/>
+        <property name="memoryBus" ref="appleIII.memoryBus"/>
+        <property name="refC800" ref="rdCFFA.memoryC800"/>
+        <property name="mapC800" value="0xc800-0xcfff"/>
+    </component>
+    <component id="rdCFFA.memoryC800" class="AddressDecoder">
+        <property name="size" value="0x800"/>
+        <property name="blockSize" value="0x1"/>
+        <property name="floatingBus" ref="appleIII.floatingBus"/>
+        <property name="refRAM" ref="rdCFFA.ram"/>
+        <property name="mapRAM" value="0x000-0x01f"/>
+        <property name="refROM" ref="rdCFFA.rom"/>
+        <property name="mapROM" value="0x020-0x7fe"/>
+        <property name="refDisableC800" ref="rdCFFA.disableC800"/>
+        <property name="mapDisableC800" value="0x7ff"/>
+    </component>
+    <component id="rdCFFA.ram" class="RAM">
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="size" value="0x20"/>
+        <property name="powerOnPattern" value="0x040000010000000000DFCD051F64000000000000000000000000000000000001"/>
+    </component>
+    <component id="rdCFFA.rom" class="AddressMux">
+        <property name="refROM20EEC02" ref="rdCFFA.rom20EEC02"/>
+        <property name="refROM20EE02" ref="rdCFFA.rom20EE02"/>
+        <property name="refROM12EEC02" ref="rdCFFA.rom12EEC02"/>
+        <property name="refROM10EE02" ref="rdCFFA.rom10EE02"/>
+        <property name="sel" value="ROM20EE02"/>
+    </component>
+    <component id="rdCFFA.rom20EEC02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EEC02.bin"/>
+    </component>
+    <component id="rdCFFA.rom20EE02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/CFFA20EE02.bin"/>
+    </component>
+    <component id="rdCFFA.rom12EEC02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/FC02V12D4.bin"/>
+    </component>
+    <component id="rdCFFA.rom10EE02" class="ROM">
+        <property name="memoryImage" data="${resourcePath}/roms/R&amp;D/F02V10.bin"/>
+    </component>
+    <component id="rdCFFA.disableC800" class="AppleIIDisableC800">
+        <property name="memory" ref="rdCFFA.memory"/>
+        <property name="memoryBus" ref="appleIII.memoryBus"/>
+    </component>
+    
+    <device id="titanIIIplusII" label="Titan III plus II" image="images/Titan/Titan III plus II.png">
+    </device>
+    <connector id="titanIIIplusII.connector" type="Apple II Slot">
+        <inlet ref="titanIIIplusII.addressMapper" property="addressDecoder" outletRef="memoryBus"/>
+        <inlet ref="titanIIIplusII.io" property="controlBus" outletRef="controlBus"/>
+        <inlet ref="titanIIIplusII.io" property="memoryBus" outletRef="memoryBus"/>
+        <inlet ref="titanIIIplusII.io" property="floatingBus" outletRef="floatingBus"/>
+        <inlet ref="titanIIIplusII.io" property="io" outletRef="io"/>
+        <inlet ref="titanIIIplusII.ram" property="controlBus" outletRef="controlBus"/>
+    </connector>
+    <component id="titanIIIplusII.io" class="AppleLanguageCard">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="memoryBus" ref="appleIII.memoryBus"/>
+        <property name="floatingBus" ref="appleIII.floatingBus"/>
+        <property name="io" ref="appleIII.io"/>
+        <property name="bankSwitcher" ref="titanIIIplusII.bankSwitcher"/>
+        <property name="bank1" value="0"/>
+        <property name="ramRead" value="0"/>
+        <property name="preWrite" value="0"/>
+        <property name="ramWrite" value="0"/>
+        <property name="titanIII" value="1"/>
+    </component>
+    <component id="titanIIIplusII.bankSwitcher" class="AddressOffset">
+        <property name="memory" ref="titanIIIplusII.ram"/>
+        <property name="size" value="0x4000"/>
+        <property name="blockSize" value="0x1000"/>
+    </component>
+    <component id="titanIIIplusII.ram" class="RAM">
+        <property name="size" value="0x4000"/>
+        <property name="memoryImage" data="${packagePath}/${id}.bin"/>
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="powerOnPattern" value="0xffff0000"/>
     </component>
     
 </edl>

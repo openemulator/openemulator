@@ -198,7 +198,10 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_ASSERT_IRQ:
             if (!irqCount)
-                postNotification(this, CONTROLBUS_IRQ_DID_ASSERT, NULL);
+            {
+                bool irq = true;
+                postNotification(this, CONTROLBUS_IRQ_DID_CHANGE, &irq);
+            }
             
             irqCount++;
             
@@ -206,7 +209,10 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
         case CONTROLBUS_CLEAR_IRQ:
             if (!irqCount)
-                postNotification(this, CONTROLBUS_IRQ_DID_CLEAR, NULL);
+            {
+                bool irq = false;
+                postNotification(this, CONTROLBUS_IRQ_DID_CHANGE, &irq);
+            }
             
             irqCount--;
             

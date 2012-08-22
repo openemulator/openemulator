@@ -66,6 +66,7 @@
 - (void)disableMenuBar;
 - (void)enableMenuBar;
 
+- (IBAction)openHelp:(id)sender;
 - (IBAction)openHomepage:(id)sender;
 - (IBAction)openForums:(id)sender;
 - (IBAction)openDevelopment:(id)sender;

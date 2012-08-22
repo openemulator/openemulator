@@ -1,4 +1,9 @@
 ==Latest==
+* Fixed Apple III writes to ROM go to RAM
+* Fixed Ctrl+Alt+Backspace hard reset in Apple III
+* Connected VBL, KBD interrupts and IRQ state to VIAs
+* Implemented AppleIIIKeyboard Ctrl+Backspace for NMI, Ctrl+Alt+Backspace for RESET
+* Split AppleIIKeyboard to AppleIIIKeyboard
 * Fixed AdressDecoder memory mapping
 * Fix Apple III initial register settings
 * Added Videx Videoterm automatic/manual video output

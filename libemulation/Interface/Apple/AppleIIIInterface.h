@@ -21,23 +21,6 @@ typedef enum
     APPLEIII_SET_ZEROPAGE = CPU_END,
 } AppleIIIMOS6502Message;
 
-// Apple III environment register
-#define APPLEIII_ROMSEL1            (1 << 0)
-#define APPLEIII_ROMSEL2            (1 << 1)
-#define APPLEIII_NORMALSTACK        (1 << 2)
-#define APPLEIII_RAMWP              (1 << 3)
-#define APPLEIII_RESETENABLE        (1 << 4)
-#define APPLEIII_VIDEOENABLE        (1 << 5)
-#define APPLEIII_IOENABLE           (1 << 6)
-#define APPLEIII_SLOWSPEED          (1 << 7)
-
-// Apple III ram bank register
-#define APPLEIII_NOT_APPLEIIMODE    (1 << 6)
-
-// Apple III sound register
-#define APPLEIII_BL                 (1 << 6)
-#define APPLEIII_NOT_IONMI          (1 << 7)
-
 typedef enum
 {
     APPLEIII_GET_ENVIRONMENT,
@@ -51,5 +34,35 @@ typedef enum
     APPLEIII_ENVIRONMENT_DID_CHANGE,
     APPLEIII_APPLEIIMODE_DID_CHANGE,
 } AppleIIISystemControlNotification;
+
+// Apple III environment register
+#define APPLEIII_ROMSEL1            (1 << 0)
+#define APPLEIII_ROMSEL2            (1 << 1)
+#define APPLEIII_NORMALSTACK        (1 << 2)
+#define APPLEIII_RAMWP              (1 << 3)
+#define APPLEIII_RESETENABLE        (1 << 4)
+#define APPLEIII_VIDEOENABLE        (1 << 5)
+#define APPLEIII_IOENABLE           (1 << 6)
+#define APPLEIII_SLOWSPEED          (1 << 7)
+
+// Apple III ram bank register
+#define APPLEIII_NOT_IRQ4           (1 << 4)
+#define APPLEIII_NOT_IRQ3           (1 << 5)
+#define APPLEIII_NOT_APPLEIIMODE    (1 << 6)
+#define APPLEIII_NOT_IRQ            (1 << 7)
+
+// Apple III sound register
+#define APPLEIII_BL                 (1 << 6)
+#define APPLEIII_NOT_IONMI          (1 << 7)
+
+// Aplpe III keyboard modifiers
+#define APPLEIII_ANYKEYDOWN         (1 << 0)
+#define APPLEIII_NOT_SHIFT          (1 << 1)
+#define APPLEIII_NOT_CONTROL        (1 << 2)
+#define APPLEIII_NOT_CAPSLOCK       (1 << 3)
+#define APPLEIII_NOT_OPENAPPLE      (1 << 4)
+#define APPLEIII_NOT_CLOSEAPPLE     (1 << 5)
+#define APPLEIII_KEYBOARD_CONNECTED (1 << 6)
+#define APPLEIII_KEY_BIT7           (1 << 7)
 
 #endif

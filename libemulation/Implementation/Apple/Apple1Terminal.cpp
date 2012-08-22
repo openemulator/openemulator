@@ -354,8 +354,11 @@ void Apple1Terminal::scheduleNextTimer(OESLong cycles)
         }
     }
     
-    postNotification(this, RS232_CTS_DID_ASSERT, NULL);
-    postNotification(this, RS232_CTS_DID_CLEAR, NULL);
+    bool cts = true;
+    postNotification(this, RS232_CTS_DID_CHANGE, &cts);
+    
+    cts = false;
+    postNotification(this, RS232_CTS_DID_CHANGE, &cts);
     
     drawFrame();
     

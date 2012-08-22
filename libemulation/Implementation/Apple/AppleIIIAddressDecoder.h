@@ -40,12 +40,16 @@ private:
     MemoryMap *ioC500Map;
     MemoryMap *ramC000Map;
     MemoryMap *ramD000Map;
-    MemoryMap *ramF000Map;
+    MemoryMap *ramF000RMap;
+    MemoryMap *ramF000WMap;
     MemoryMap *ramFF00Map;
     
-    MemoryMap ff00MemoryMap;
+    MemoryMap ff00RMemoryMap;
+    MemoryMap ff00WMemoryMap;
     MemoryMap ffc0MemoryMap;
     MemoryMap fff0MemoryMap;
+    MemoryMap fff0RMemoryMap;
+    MemoryMap fff0WMemoryMap;
     
     OEChar environment;
     bool appleIIMode;

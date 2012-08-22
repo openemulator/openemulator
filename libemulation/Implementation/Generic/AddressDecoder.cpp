@@ -21,6 +21,9 @@ AddressDecoder::AddressDecoder()
     
 	floatingBus = NULL;
 	
+    readMapp = NULL;
+    writeMapp = NULL;
+    
 	mask = 0;
 }
 
@@ -207,7 +210,7 @@ bool AddressDecoder::addMemoryMap(MemoryMaps& maps, MemoryMap *value)
 {
     maps.push_back(*value);
     
-    if (readMap.size())
+    if (readMapp)
         updateReadWriteMap(value->startAddress, value->endAddress);
     
     return true;
@@ -227,7 +230,8 @@ bool AddressDecoder::removeMemoryMap(MemoryMaps& maps, MemoryMap *value)
         {
             i = maps.erase(i);
             
-            updateReadWriteMap(value->startAddress, value->endAddress);
+            if (readMapp)
+                updateReadWriteMap(value->startAddress, value->endAddress);
         }
     }
     

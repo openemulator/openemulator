@@ -80,8 +80,7 @@ bool MOS6502::setRef(string name, OEComponent *ref)
             controlBus->removeObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->removeObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->removeObserver(this, CONTROLBUS_RESET_DID_CLEAR);
-            controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
-            controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_CLEAR);
+            controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_CHANGE);
             controlBus->removeObserver(this, CONTROLBUS_NMI_DID_ASSERT);
         }
         controlBus = ref;
@@ -90,8 +89,7 @@ bool MOS6502::setRef(string name, OEComponent *ref)
             controlBus->addObserver(this, CONTROLBUS_POWERSTATE_DID_CHANGE);
             controlBus->addObserver(this, CONTROLBUS_RESET_DID_ASSERT);
             controlBus->addObserver(this, CONTROLBUS_RESET_DID_CLEAR);
-            controlBus->addObserver(this, CONTROLBUS_IRQ_DID_ASSERT);
-            controlBus->addObserver(this, CONTROLBUS_IRQ_DID_CLEAR);
+            controlBus->addObserver(this, CONTROLBUS_IRQ_DID_CHANGE);
             controlBus->addObserver(this, CONTROLBUS_NMI_DID_ASSERT);
         }
     }
@@ -167,15 +165,8 @@ void MOS6502::notify(OEComponent *sender, int notification, void *data)
             
             return;
             
-        case CONTROLBUS_IRQ_DID_ASSERT:
-            isIRQ = true;
-            
-            updateSpecialCondition();
-            
-            return;
-            
-        case CONTROLBUS_IRQ_DID_CLEAR:
-            isIRQ = false;
+        case CONTROLBUS_IRQ_DID_CHANGE:
+            isIRQ = *((bool *)data);
             
             updateSpecialCondition();
             

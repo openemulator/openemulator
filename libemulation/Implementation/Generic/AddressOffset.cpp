@@ -67,6 +67,8 @@ bool AddressOffset::init()
          i++)
         mapOffset(*i);
     
+    offsetMaps.clear();
+    
     return true;
 }
 

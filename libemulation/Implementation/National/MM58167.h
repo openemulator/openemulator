@@ -13,6 +13,11 @@
 
 #include "OEComponent.h"
 
+typedef enum
+{
+    MM58167_IRQ_DID_CHANGE,
+} MM58167Notification;
+
 class MM58167 : public OEComponent
 {
 public:

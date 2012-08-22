@@ -257,6 +257,7 @@
 		00D844CC0FFF0505005802F0 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00D844C30FFF0505005802F0 /* Preferences.xib */; };
 		00D845830FFF0FD2005802F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D845730FFF0FD2005802F0 /* main.m */; };
 		00D845860FFF0FD2005802F0 /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */; };
+		00D96F4C15E010AD0066EB0C /* AppleIIIKeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D96F4B15E010AD0066EB0C /* AppleIIIKeyboard.cpp */; };
 		00E442921278726B00713A05 /* IconDevices.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442911278726B00713A05 /* IconDevices.png */; };
 		00EA1F0515976F0200079A54 /* ATADevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00EA1F0315976F0200079A54 /* ATADevice.cpp */; };
 		00EA1F0615976F0200079A54 /* ATADevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 00EA1F0415976F0200079A54 /* ATADevice.h */; };
@@ -379,9 +380,6 @@
 		00039FD012B04F6C0025D374 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		00044CA112CE6FD400D26940 /* AppleDiskDrive525.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleDiskDrive525.h; sourceTree = "<group>"; };
 		00044CA212CE6FD400D26940 /* AppleDiskDrive525.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleDiskDrive525.cpp; sourceTree = "<group>"; };
-		0006D7CE15523830001DE1F3 /* FDI Format Specification 1.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FDI Format Specification 1.0.txt"; sourceTree = "<group>"; };
-		0006D7CF15523830001DE1F3 /* FDI Format Specification 2.1.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "FDI Format Specification 2.1.txt"; sourceTree = "<group>"; };
-		0006D7D215523830001DE1F3 /* VMDK Virtual Machine Disk Format 5.0.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "VMDK Virtual Machine Disk Format 5.0.pdf"; sourceTree = "<group>"; };
 		0008FCD80FBA5D72005E876E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = macosx/Info.plist; sourceTree = "<group>"; };
 		0009068D141D2A0300F06D99 /* NSStringAdditions.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NSStringAdditions.mm; sourceTree = "<group>"; };
 		00092E5A156AA9D4007A9E04 /* VRAM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VRAM.cpp; sourceTree = "<group>"; };
@@ -391,7 +389,6 @@
 		000F66370FF8368F00C8AF23 /* DiskImage.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = DiskImage.icns; sourceTree = "<group>"; };
 		000F663A0FF8368F00C8AF23 /* Emulation.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Emulation.icns; sourceTree = "<group>"; };
 		000F66520FF8368F00C8AF23 /* OpenEmulator.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = OpenEmulator.icns; sourceTree = "<group>"; };
-		00118EFD1553A30F00004665 /* VDI Tutorial - All about VDIs.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "VDI Tutorial - All about VDIs.txt"; sourceTree = "<group>"; };
 		00139F83151195E600B0E108 /* AppleIIAddressDecoder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIAddressDecoder.cpp; sourceTree = "<group>"; };
 		00139F85151195EE00B0E108 /* AppleIIAddressDecoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIAddressDecoder.h; sourceTree = "<group>"; };
 		00140DED152D281F00D4795D /* DIApple525DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIApple525DiskStorage.h; sourceTree = "<group>"; };
@@ -410,17 +407,6 @@
 		0014DF13148286A5006A7660 /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
 		001750B013A50A9C0043E2ED /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		001750B113A50A9C0043E2ED /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
-		001750B413A50A9C0043E2ED /* 2IMG Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "2IMG Format.txt"; sourceTree = "<group>"; };
-		001750B513A50A9C0043E2ED /* D64 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D64 Format.txt"; sourceTree = "<group>"; };
-		001750B613A50A9C0043E2ED /* D71 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D71 Format.txt"; sourceTree = "<group>"; };
-		001750B713A50A9C0043E2ED /* D80-D82 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D80-D82 Format.txt"; sourceTree = "<group>"; };
-		001750B813A50A9C0043E2ED /* D81 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "D81 Format.txt"; sourceTree = "<group>"; };
-		001750B913A50A9C0043E2ED /* DiskCopy 4.2 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "DiskCopy 4.2 Format.txt"; sourceTree = "<group>"; };
-		001750BA13A50A9C0043E2ED /* FDI Format Specification 2.0.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "FDI Format Specification 2.0.pdf"; sourceTree = "<group>"; };
-		001750BB13A50A9C0043E2ED /* G64 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "G64 Format.txt"; sourceTree = "<group>"; };
-		001750BD13A50A9C0043E2ED /* UEF Format rev. 0.1.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "UEF Format rev. 0.1.rtf"; sourceTree = "<group>"; };
-		001750BE13A50A9C0043E2ED /* X64 Format.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "X64 Format.txt"; sourceTree = "<group>"; };
-		001750BF13A50A9C0043E2ED /* The libemulation Book.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "The libemulation Book.txt"; sourceTree = "<group>"; };
 		001750C013A50A9C0043E2ED /* INSTALL */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
 		001750C113A50A9C0043E2ED /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		001750C213A50A9C0043E2ED /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
@@ -491,9 +477,6 @@
 		004BD1BF1425AA8500768B80 /* W65C02SOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOperations.h; sourceTree = "<group>"; };
 		004E152915B9041A00FD22AB /* AppleIIISystemControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIISystemControl.cpp; sourceTree = "<group>"; };
 		004E152C15B9042100FD22AB /* AppleIIISystemControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIISystemControl.h; sourceTree = "<group>"; };
-		00520BD71558D70B0000107C /* QCOW Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW Image Format.rtf"; sourceTree = "<group>"; };
-		00520BD81558D70B0000107C /* QCOW2 Image Format.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "QCOW2 Image Format.rtf"; sourceTree = "<group>"; };
-		00520BD91558D7120000107C /* OpenEmulator Icons.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "OpenEmulator Icons.rtf"; sourceTree = "<group>"; };
 		00520BDB1558D73D0000107C /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
 		00520BDC1558D73D0000107C /* configure.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
 		00520BDD1558D73D0000107C /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
@@ -567,7 +550,6 @@
 		00954E981277BB8E00C17203 /* EmulationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmulationWindowController.m; sourceTree = "<group>"; };
 		00954EA51277BC1200C17203 /* AudioControlsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioControlsWindowController.h; sourceTree = "<group>"; };
 		00954EA61277BC1200C17203 /* AudioControlsWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioControlsWindowController.mm; sourceTree = "<group>"; };
-		00A06AE11533009A00A494A7 /* V2D Format.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "V2D Format.txt"; sourceTree = "<group>"; };
 		00A06AE21533055600A494A7 /* DIATABlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DIATABlockStorage.cpp; sourceTree = "<group>"; };
 		00A06AE41533055D00A494A7 /* DIATABlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIATABlockStorage.h; sourceTree = "<group>"; };
 		00A06AE61533EE2700A494A7 /* DIApple35DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DIApple35DiskStorage.h; sourceTree = "<group>"; };
@@ -669,6 +651,7 @@
 		00BB34B312C5C5AE007332B5 /* EmulationItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmulationItem.mm; sourceTree = "<group>"; };
 		00BDB1F513863188004DF2AF /* CanvasPrintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasPrintView.h; sourceTree = "<group>"; };
 		00BDB1F613863188004DF2AF /* CanvasPrintView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasPrintView.m; sourceTree = "<group>"; };
+		00BE6E4415E2DA3C004364E4 /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = SOURCE_ROOT; };
 		00C6C08810602151004D084B /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		00CAD7D812A04C22002B92E5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = macosx/English.lproj/Emulation.xib; sourceTree = "<group>"; };
 		00CF206F15B0D8C600DA8E08 /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = libutil/util.cpp; sourceTree = "<group>"; };
@@ -696,11 +679,12 @@
 		00D845760FFF0FD2005802F0 /* OpenEmulator_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenEmulator_Prefix.pch; sourceTree = "<group>"; };
 		00D845790FFF0FD2005802F0 /* PreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreferencesWindowController.h; sourceTree = "<group>"; };
 		00D8457A0FFF0FD2005802F0 /* PreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindowController.m; sourceTree = "<group>"; };
+		00D96F4A15E010A30066EB0C /* AppleIIIKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppleIIIKeyboard.h; sourceTree = "<group>"; };
+		00D96F4B15E010AD0066EB0C /* AppleIIIKeyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIIKeyboard.cpp; sourceTree = "<group>"; };
 		00DC0E78145DFECD00FF51BD /* MemoryInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryInterface.h; sourceTree = "<group>"; };
 		00E442911278726B00713A05 /* IconDevices.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IconDevices.png; sourceTree = "<group>"; };
 		00E442931278727600713A05 /* EmulationShow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EmulationShow.png; sourceTree = "<group>"; };
 		00E473411475695500F367B7 /* diskimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diskimage.h; sourceTree = "<group>"; };
-		00E873F815CDB7C3001FEE29 /* DDL Format 1.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "DDL Format 1.0.txt"; sourceTree = "<group>"; };
 		00EA1F0315976F0200079A54 /* ATADevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ATADevice.cpp; sourceTree = "<group>"; };
 		00EA1F0415976F0200079A54 /* ATADevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ATADevice.h; sourceTree = "<group>"; };
 		00EA1F08159799C400079A54 /* RDCFFA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RDCFFA.cpp; sourceTree = "<group>"; };
@@ -874,7 +858,7 @@
 		001750AF13A50A690043E2ED /* Docs and Scripts */ = {
 			isa = PBXGroup;
 			children = (
-				001750B213A50A9C0043E2ED /* doc */,
+				00BE6E4415E2DA3C004364E4 /* doc */,
 				001750B013A50A9C0043E2ED /* AUTHORS */,
 				001750B113A50A9C0043E2ED /* COPYING */,
 				001750C013A50A9C0043E2ED /* INSTALL */,
@@ -886,41 +870,6 @@
 				00520BDD1558D73D0000107C /* Makefile.am */,
 			);
 			name = "Docs and Scripts";
-			sourceTree = "<group>";
-		};
-		001750B213A50A9C0043E2ED /* doc */ = {
-			isa = PBXGroup;
-			children = (
-				001750B313A50A9C0043E2ED /* Formats */,
-				001750BF13A50A9C0043E2ED /* The libemulation Book.txt */,
-				00520BD91558D7120000107C /* OpenEmulator Icons.rtf */,
-			);
-			path = doc;
-			sourceTree = "<group>";
-		};
-		001750B313A50A9C0043E2ED /* Formats */ = {
-			isa = PBXGroup;
-			children = (
-				00E873F815CDB7C3001FEE29 /* DDL Format 1.0.txt */,
-				00520BD71558D70B0000107C /* QCOW Image Format.rtf */,
-				00520BD81558D70B0000107C /* QCOW2 Image Format.rtf */,
-				00118EFD1553A30F00004665 /* VDI Tutorial - All about VDIs.txt */,
-				00A06AE11533009A00A494A7 /* V2D Format.txt */,
-				001750B413A50A9C0043E2ED /* 2IMG Format.txt */,
-				001750B913A50A9C0043E2ED /* DiskCopy 4.2 Format.txt */,
-				0006D7CE15523830001DE1F3 /* FDI Format Specification 1.0.txt */,
-				001750BA13A50A9C0043E2ED /* FDI Format Specification 2.0.pdf */,
-				0006D7CF15523830001DE1F3 /* FDI Format Specification 2.1.txt */,
-				001750B513A50A9C0043E2ED /* D64 Format.txt */,
-				001750B613A50A9C0043E2ED /* D71 Format.txt */,
-				001750B713A50A9C0043E2ED /* D80-D82 Format.txt */,
-				001750B813A50A9C0043E2ED /* D81 Format.txt */,
-				001750BB13A50A9C0043E2ED /* G64 Format.txt */,
-				001750BE13A50A9C0043E2ED /* X64 Format.txt */,
-				001750BD13A50A9C0043E2ED /* UEF Format rev. 0.1.rtf */,
-				0006D7D215523830001DE1F3 /* VMDK Virtual Machine Disk Format 5.0.pdf */,
-			);
-			path = Formats;
 			sourceTree = "<group>";
 		};
 		001CC97D13D11E9900B0DDA7 /* Generic */ = {
@@ -1056,6 +1005,8 @@
 				0077271D15D8137F008AB5A2 /* AppleIIIBeeper.h */,
 				008696AC15C8FC93000737EE /* AppleIIIDiskIO.cpp */,
 				008696AB15C8FC89000737EE /* AppleIIIDiskIO.h */,
+				00D96F4B15E010AD0066EB0C /* AppleIIIKeyboard.cpp */,
+				00D96F4A15E010A30066EB0C /* AppleIIIKeyboard.h */,
 				0042498E15B693DE0091ECAB /* AppleIIIMOS6502.cpp */,
 				0042498F15B693DE0091ECAB /* AppleIIIMOS6502.h */,
 				0042499215B694A60091ECAB /* AppleIIIMOS6502Opcodes.h */,
@@ -1870,6 +1821,7 @@
 				007F6C3715CD05370004D4C4 /* AppleIIIAddressDecoder.cpp in Sources */,
 				007F6C3A15CD06520004D4C4 /* MOS6551.cpp in Sources */,
 				007F6C3D15CD06930004D4C4 /* AppleIIIGamePort.cpp in Sources */,
+				00D96F4C15E010AD0066EB0C /* AppleIIIKeyboard.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

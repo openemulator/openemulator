@@ -68,13 +68,14 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
         if (terminal)
         {
             terminal->removeObserver(this, RS232_DID_RECEIVE_DATA);
-            terminal->removeObserver(this, RS232_CTS_DID_ASSERT);
+            terminal->removeObserver(this, RS232_CTS_DID_CHANGE);
         }
         terminal = ref;
         if (terminal)
         {
             terminal->addObserver(this, RS232_DID_RECEIVE_DATA);
-            terminal->addObserver(this, RS232_CTS_DID_ASSERT);
+            terminal->addObserver(this, RS232_CTS_DID_CHANGE);
+            
             terminal->postMessage(this, RS232_ASSERT_RTS, NULL);
         }
     }
@@ -149,14 +150,19 @@ void Apple1IO::notify(OEComponent *sender, int notification, void *data)
                 return;
             }
                 
-            case RS232_CTS_DID_ASSERT:
+            case RS232_CTS_DID_CHANGE:
             {
-                // Signal /RDA
-                bool cb1 = true;
-                pia->postMessage(this, MC6821_SET_CB1, &cb1);
-                // (it should last 3.5 µs, but we'll toggle a bit faster)
-                cb1 = false;
-                pia->postMessage(this, MC6821_SET_CB1, &cb1);
+                bool cts = *((bool *)data);
+                
+                if (cts)
+                {
+                    // Signal /RDA
+                    bool cb1 = true;
+                    pia->postMessage(this, MC6821_SET_CB1, &cb1);
+                    // (it should last 3.5 µs, but we'll toggle a bit faster)
+                    cb1 = false;
+                    pia->postMessage(this, MC6821_SET_CB1, &cb1);
+                }
                 
                 return;
             }

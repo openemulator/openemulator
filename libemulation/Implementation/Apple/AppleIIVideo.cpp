@@ -1083,7 +1083,10 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
     switch (currentTimer)
     {
         case TIMER_DISPLAYMIXED:
-            postNotification(this, APPLEII_VBL_DID_END, NULL);
+        {
+            bool vbl = false;
+            
+            postNotification(this, APPLEII_VBL_DID_CHANGE, &vbl);
             
             if (imageModified)
             {
@@ -1114,7 +1117,7 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
             cycles += (vertStart + VERT_DISPLAY - 32) * HORIZ_TOTAL;
             
             break;
-            
+        }
         case TIMER_DISPLAYEND:
             configureDraw();
             
@@ -1123,11 +1126,15 @@ void AppleIIVideo::scheduleNextTimer(OESLong cycles)
             break;
             
         case TIMER_VSYNC:
-            postNotification(this, APPLEII_VBL_DID_BEGIN, NULL);
+        {
+            bool vbl = true;
+            
+            postNotification(this, APPLEII_VBL_DID_CHANGE, &vbl);
             
             cycles += (vertTotal - (vertStart + VERT_DISPLAY)) * HORIZ_TOTAL;
             
             break;
+        }
     }
     
     ControlBusTimer timer = { cycles, 0 };

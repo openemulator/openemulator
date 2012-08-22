@@ -12,9 +12,11 @@
 
 #include "ControlBusInterface.h"
 #include "MemoryInterface.h"
+
 #include "AppleIIIInterface.h"
 
 #include "MOS6522.h"
+#include "MM58167.h"
 
 #define CPUSPEED_SLOW       1.0F
 #define CPUSPEED_FAST       ((1.0F * 9 + 2.0F * (65 - 9)) / 65)
@@ -28,15 +30,18 @@ AppleIIISystemControl::AppleIIISystemControl()
     bankSwitcher = NULL;
     extendedZeroPageSwitcher = NULL;
     ram = NULL;
+    keyboard = NULL;
     video = NULL;
+    rtc = NULL;
+    silentype = NULL;
     dVIA = NULL;
     eVIA = NULL;
     dac = NULL;
     
-    zeroPage = 0;
-    environment = 0;
-    ramBank = 0;
-    sound = 0;
+    zeroPage = 0xff;
+    environment = 0xff;
+    ramBank = 0xff;
+    sound = 0xff;
     
     extendedRAMBank = 0;
     
@@ -48,7 +53,13 @@ bool AppleIIISystemControl::setRef(string name, OEComponent *ref)
     if (name == "cpu")
         cpu = ref;
     else if (name == "controlBus")
+    {
+        if (controlBus)
+            controlBus->removeObserver(this, CONTROLBUS_IRQ_DID_CHANGE);
         controlBus = ref;
+        if (controlBus)
+            controlBus->addObserver(this, CONTROLBUS_IRQ_DID_CHANGE);
+    }
     else if (name == "zeroPageSwitcher")
         zeroPageSwitcher = ref;
     else if (name == "bankSwitcher")
@@ -65,20 +76,32 @@ bool AppleIIISystemControl::setRef(string name, OEComponent *ref)
         if (ram)
             ram->addObserver(this, RAM_SIZE_DID_CHANGE);
     }
+    else if (name == "keyboard")
+    {
+        if (keyboard)
+            keyboard->removeObserver(this, APPLEII_KEYSTROBE_DID_CHANGE);
+        keyboard = ref;
+        if (keyboard)
+            keyboard->addObserver(this, APPLEII_KEYSTROBE_DID_CHANGE);
+    }
     else if (name == "video")
     {
         if (video)
-        {
-            video->removeObserver(this, APPLEII_VBL_DID_BEGIN);
-            video->removeObserver(this, APPLEII_VBL_DID_END);
-        }
+            video->removeObserver(this, APPLEII_VBL_DID_CHANGE);
         video = ref;
         if (video)
-        {
-            video->addObserver(this, APPLEII_VBL_DID_BEGIN);
-            video->addObserver(this, APPLEII_VBL_DID_END);
-        }
+            video->addObserver(this, APPLEII_VBL_DID_CHANGE);
     }
+    else if (name == "rtc")
+    {
+        if (rtc)
+            rtc->removeObserver(this, MM58167_IRQ_DID_CHANGE);
+        rtc = ref;
+        if (rtc)
+            rtc->addObserver(this, MM58167_IRQ_DID_CHANGE);
+    }
+    else if (name == "silentype")
+        silentype = ref;
     else if (name == "dVIA")
         dVIA = ref;
     else if (name == "eVIA")
@@ -100,7 +123,9 @@ bool AppleIIISystemControl::init()
     OECheckComponent(extendedZeroPageSwitcher);
     OECheckComponent(extendedBankSwitcher);
     OECheckComponent(ram);
+    OECheckComponent(keyboard);
     OECheckComponent(video);
+    OECheckComponent(rtc);
     OECheckComponent(dVIA);
     OECheckComponent(eVIA);
     OECheckComponent(dac);
@@ -170,22 +195,34 @@ bool AppleIIISystemControl::postMessage(OEComponent *sender, int message, void *
 
 void AppleIIISystemControl::notify(OEComponent *sender, int notification, void *data)
 {
-    if (sender == video)
+    if (sender == keyboard)
     {
+        bool notKbdInt = !(*((bool *)data));
+        
+        eVIA->postMessage(this, MOS6522_SET_CA2, &notKbdInt);
+    }
+    else if (sender == video)
+    {
+        bool vbl = *((bool *)data);
+        
+        eVIA->postMessage(this, MOS6522_SET_CB1, &vbl);
+        eVIA->postMessage(this, MOS6522_SET_CB2, &vbl);
+        
         bool videoEnabled = OEGetBit(environment, APPLEIII_VIDEOENABLE);
         bool slowSpeed = OEGetBit(environment, APPLEIII_SLOWSPEED);
         
         if (videoEnabled && !slowSpeed)
         {
-            float clockCPUMultiplier;
-            
-            if (notification == APPLEII_VBL_DID_END)
-                clockCPUMultiplier = CPUSPEED_FAST_VIDEO;
-            else
-                clockCPUMultiplier = CPUSPEED_FAST;
+            float clockCPUMultiplier = vbl ? CPUSPEED_FAST : CPUSPEED_FAST_VIDEO;
             
             controlBus->postMessage(this, CONTROLBUS_SET_CPUCLOCKMULTIPLIER, &clockCPUMultiplier);
         }
+    }
+    else if (sender == rtc)
+    {
+        bool rtcNotIRQ = !(*((bool *)data));
+        
+        eVIA->postMessage(this, MOS6522_SET_CA1, &rtcNotIRQ);
     }
     else if (sender == ram)
     {
@@ -202,23 +239,34 @@ OEChar AppleIIISystemControl::read(OEAddress address)
     switch (address)
     {
         case 0x0:
-            return 0;
+            return 0xff;
             
         case 0x1:
-            return 0;
+            return 0xff;
             
         case 0x2:
-            return 0xb0;    // For now, return IRQ's clear
+        {
+            bool irq;
             
+            eVIA->postMessage(this, MOS6522_GET_CA2, &irq);
+            
+            OEChar value = (APPLEIII_NOT_APPLEIIMODE |
+                            APPLEIII_NOT_IRQ3 |
+                            APPLEIII_NOT_IRQ4);
+            
+            OESetBit(value, APPLEIII_NOT_IRQ, !irq);
+            
+            return value;
+        }
         case 0x3:
         {
-            bool vbl;
+            bool bl;
             
-            video->postMessage(this, APPLEII_IS_VBL, &vbl);
+            video->postMessage(this, APPLEII_IS_VBL, &bl);
             
-            OEChar value = 0;
+            OEChar value = 0xff;
             
-            OESetBit(value, APPLEIII_BL, vbl);
+            OESetBit(value, APPLEIII_BL, bl);
             
             return value;
         }
@@ -337,15 +385,15 @@ void AppleIIISystemControl::updateEnvironment()
     
     bool videoEnabled = OEGetBit(environment, APPLEIII_VIDEOENABLE);
     bool slowSpeed = OEGetBit(environment, APPLEIII_SLOWSPEED);
-    bool isVBL;
+    bool vbl;
     
-    video->postMessage(this, APPLEII_IS_VBL, &isVBL);
+    video->postMessage(this, APPLEII_IS_VBL, &vbl);
     
     float clockCPUMultiplier;
     
     if (slowSpeed)
         clockCPUMultiplier = CPUSPEED_SLOW;
-    else if (videoEnabled && !isVBL)
+    else if (videoEnabled && !vbl)
         clockCPUMultiplier = CPUSPEED_FAST_VIDEO;
     else
         clockCPUMultiplier = CPUSPEED_FAST;
@@ -357,7 +405,7 @@ void AppleIIISystemControl::updateEnvironment()
 
 void AppleIIISystemControl::updateZeroPage()
 {
-//    logMessage("zeroPage: " + getString(zeroPage));
+//    logMessage("zeroPage: " + getHexString(zeroPage));
     
     AddressOffsetMap offsetMap;
     
@@ -395,7 +443,7 @@ void AppleIIISystemControl::updateRAMBank()
     if (bank == APPLEIII_SYSTEMBANK)
         bank = ramMask;
     
-//    logMessage("ramBank: " + getString(bank));
+//    logMessage("ramBank: " + getHexString(bank));
     
     AddressOffsetMap offsetMap;
     
@@ -408,7 +456,7 @@ void AppleIIISystemControl::updateRAMBank()
 
 void AppleIIISystemControl::updateExtendedRAMBank()
 {
-//    logMessage("extendedRAMBank: " + getString(extendedRAMBank));
+//    logMessage("extendedRAMBank: " + getHexString(extendedRAMBank));
     
     AddressOffsetMap offsetMap;
     
@@ -441,13 +489,18 @@ void AppleIIISystemControl::updateExtendedRAMBank()
         
         offsetMap.startAddress = 0x0000;
         offsetMap.endAddress = 0x7fff;
-        offsetMap.offset = extendedRAMBank * APPLEIII_BANKSIZE - 0x0000;
+        offsetMap.offset = bank * APPLEIII_BANKSIZE - 0x0000;
         
         extendedBankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
         
+        bank = ((extendedRAMBank + 1) & ramMask);
+        
+        if (bank == APPLEIII_SYSTEMBANK)
+            bank = ramMask;
+        
         offsetMap.startAddress = 0x8000;
         offsetMap.endAddress = 0xffff;
-        offsetMap.offset = (extendedRAMBank + 1) * APPLEIII_BANKSIZE - 0x8000;
+        offsetMap.offset = bank * APPLEIII_BANKSIZE - 0x8000;
         
         extendedBankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     }

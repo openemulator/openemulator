@@ -1,13 +1,12 @@
 ==1.0.4==
-* Fix video when increasing RAM size
-* Connect VBL, KBD, IRQ to VIAs
 * Implement MOS6522
-* Separate AppleIIIVideo and AppleIIIKeyboard
+* Separate AppleIIIVideo
 * Implement AppleIIIVideo+font upload
-* Implement AppleIIIKeyboard CTRL+RESET/NMI
+* Fix video when increasing RAM size
 * Implement MOS6551
 * Implement MM58167
 * Implement Apple III Silentype port
+* Implement Apple III video blanking
 * Disable C0D0 when /AIISW
 * Fix Apple III sometimes crashing because of incorrect video counters
 
@@ -16,12 +15,15 @@
 * Fix [CanvasView update] problem in paper view
 * Add Apple Silentype sounds
 
+* Refactorize AppleIIVideo video output control
 * Implement and verify usability of JoystickMapper delta mouse
 * Implement AppleIIKeyboard key stealing
 * Implement JoystickMapper keyboard and delta keyboard support (arrow keys)
 * Implement DDL file format
 * Add Apple Graphics Tablet sounds
+* Enable Disk II reading from neighbouring track if track is empty
 
+* Make sure Apple Language Card and Titan III plus II do not add .memory to slot memory (it does not exist)
 * Fix AppleIIVideo not displaying video when loading emulation in paused state
 * Fix adding a CFFA to A///, a .dsk is mounted is Disk ///, and when mounting a .po globally, the .dsk is unmounted. Shouldn't the framework ask canMount?
 * Fix changes in MC6521/Apple-1

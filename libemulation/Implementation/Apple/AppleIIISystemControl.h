@@ -36,7 +36,10 @@ private:
     OEComponent *extendedZeroPageSwitcher;
     OEComponent *extendedBankSwitcher;
     OEComponent *ram;
+    OEComponent *keyboard;
     OEComponent *video;
+    OEComponent *rtc;
+    OEComponent *silentype;
     OEComponent *dVIA;
     OEComponent *eVIA;
     OEComponent *dac;

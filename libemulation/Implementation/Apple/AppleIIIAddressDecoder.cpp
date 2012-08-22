@@ -108,9 +108,22 @@ bool AppleIIIAddressDecoder::init()
     // F000-FEFF
     m.startAddress = 0xf000;
     m.endAddress = 0xfeff;
+    m.read = true;
+    m.write = false;
     m.component = bankSwitcher;
     appleIIIMemoryMaps.push_back(m);
-    ramF000Map = &appleIIIMemoryMaps.back();
+    ramF000RMap = &appleIIIMemoryMaps.back();
+    
+    m.startAddress = 0xf000;
+    m.endAddress = 0xfeff;
+    m.read = false;
+    m.write = true;
+    m.component = bankSwitcher;
+    appleIIIMemoryMaps.push_back(m);
+    ramF000WMap = &appleIIIMemoryMaps.back();
+    
+    m.read = true;
+    m.write = true;
     
     // FF00-FFFF
     m.startAddress = 0xff00;
@@ -120,11 +133,17 @@ bool AppleIIIAddressDecoder::init()
     ramFF00Map = &appleIIIMemoryMaps.back();
     
     // FF00-FFBF memory
-    ff00MemoryMap.startAddress = 0x00;
-    ff00MemoryMap.endAddress = 0xbf;
-    ff00MemoryMap.read = true;
-    ff00MemoryMap.write = true;
-    ff00MemoryMap.component = NULL;
+    ff00RMemoryMap.startAddress = 0x00;
+    ff00RMemoryMap.endAddress = 0xbf;
+    ff00RMemoryMap.read = true;
+    ff00RMemoryMap.write = false;
+    ff00RMemoryMap.component = NULL;
+    
+    ff00WMemoryMap.startAddress = 0x00;
+    ff00WMemoryMap.endAddress = 0xbf;
+    ff00WMemoryMap.read = false;
+    ff00WMemoryMap.write = true;
+    ff00WMemoryMap.component = bankSwitcher;
     
     // FFC0-FFCF memory
     ffc0MemoryMap.startAddress = 0xc0;
@@ -134,11 +153,17 @@ bool AppleIIIAddressDecoder::init()
     ffc0MemoryMap.component = bankSwitcher;
     
     // FFF0-FFFF memory
-    fff0MemoryMap.startAddress = 0xf0;
-    fff0MemoryMap.endAddress = 0xff;
-    fff0MemoryMap.read = true;
-    fff0MemoryMap.write = true;
-    fff0MemoryMap.component = NULL;
+    fff0RMemoryMap.startAddress = 0xf0;
+    fff0RMemoryMap.endAddress = 0xff;
+    fff0RMemoryMap.read = true;
+    fff0RMemoryMap.write = false;
+    fff0RMemoryMap.component = NULL;
+    
+    fff0WMemoryMap.startAddress = 0xf0;
+    fff0WMemoryMap.endAddress = 0xff;
+    fff0WMemoryMap.read = false;
+    fff0WMemoryMap.write = true;
+    fff0WMemoryMap.component = bankSwitcher;
     
     systemControl->postMessage(this, APPLEIII_GET_ENVIRONMENT, &environment);
     systemControl->postMessage(this, APPLEIII_GET_APPLEIIMODE, &appleIIMode);
@@ -212,7 +237,8 @@ void AppleIIIAddressDecoder::setSlot(OEInt index, OEComponent *ref)
     else
         removeMemoryMap(ioMemoryMaps, &m);
     
-    updateReadWriteMap(m.startAddress, m.endAddress);
+    if (readMapp)
+        updateReadWriteMap(m.startAddress, m.endAddress);
 }
 
 bool AppleIIIAddressDecoder::setEnvironment(OEChar value)
@@ -251,20 +277,24 @@ void AppleIIIAddressDecoder::updateAppleIIIMemoryMaps()
     ioC500Map->write = !ramWP;
     ramC000Map->write = !ramWP;
     ramD000Map->write = !ramWP;
-    ramF000Map->write = !ramWP;
-    ramF000Map->component = romEnabled ? rom : bankSwitcher;
+    ramF000RMap->component = romEnabled ? rom : bankSwitcher;
+    ramF000WMap->write = !ramWP;
     ramFF00Map->component = appleIIMode ? (romEnabled ? rom : bankSwitcher) : memoryFF00;
     ramFF00Map->write = appleIIMode ? !ramWP : true;
     
     // Map FF00 memory
-    memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &ff00MemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &ff00RMemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &ff00WMemoryMap);
     memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &ffc0MemoryMap);
-    memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &fff0MemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &fff0RMemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_UNMAP, &fff0WMemoryMap);
     
-    ff00MemoryMap.component = fff0MemoryMap.component = romEnabled ? rom : bankSwitcher;
-    ff00MemoryMap.write = ffc0MemoryMap.write = fff0MemoryMap.write = !ramWP;
+    ff00RMemoryMap.component = fff0RMemoryMap.component = romEnabled ? rom : bankSwitcher;
+    ff00WMemoryMap.write = ffc0MemoryMap.write = fff0WMemoryMap.write = !ramWP;
     
-    memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ff00MemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ff00RMemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ff00WMemoryMap);
     memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &ffc0MemoryMap);
-    memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &fff0MemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &fff0RMemoryMap);
+    memoryFF00->postMessage(this, ADDRESSDECODER_MAP, &fff0WMemoryMap);
 }
