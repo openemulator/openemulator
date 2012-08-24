@@ -21,6 +21,8 @@ public:
     bool init();
     void update();
     
+    bool postMessage(OEComponent *sender, int message, void *data);
+    
     void notify(OEComponent *sender, int notification, void *data);
     
     OEChar read(OEAddress address);
@@ -31,7 +33,7 @@ private:
     bool fullASCIIKeyboard;
     
     OEComponent *pia;
-    OEComponent *terminal;
+    OEComponent *dce;
     
     OEChar terminalKey;
     OEChar terminalChar;

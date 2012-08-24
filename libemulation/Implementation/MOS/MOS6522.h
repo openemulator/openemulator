@@ -16,23 +16,14 @@
 // Messages
 typedef enum
 {
+    MOS6522_GET_PA,
 	MOS6522_SET_CA1,
 	MOS6522_SET_CA2,
-	MOS6522_GET_CA2,
-    MOS6522_GET_PA,
     
+    MOS6522_GET_PB,
 	MOS6522_SET_CB1,
 	MOS6522_SET_CB2,
-	MOS6522_GET_CB2,
-    MOS6522_GET_PB,
 } MOS6522Message;
-
-// Notifications
-typedef enum
-{
-	MOS6522_CA2_DID_CHANGE,
-	MOS6522_CB2_DID_CHANGE,
-} MOS6522Notification;
 
 class MOS6522 : public OEComponent
 {
@@ -54,7 +45,6 @@ private:
     OEComponent *controlBus;
     OEComponent *portA;
     OEComponent *portB;
-    OEComponent *controlBusB;
     
     OEAddress addressA;
     OEChar ddrA;

@@ -32,7 +32,7 @@
         <property name="mapCF00" value="0xcf00-0xcfff"/>
     </component>
     <component id="appleSilentypeInterfaceCard.memoryMasker" class="AddressMasker">
-        <property name="mask" value="0xff"/>
+        <property name="andMask" value="0xff"/>
         <property name="memory" ref="appleSilentypeInterfaceCard.rom"/>
     </component>
     <component id="appleSilentypeInterfaceCard.memoryCF00" class="AddressDecoder">

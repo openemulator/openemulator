@@ -34,16 +34,17 @@ public:
     void notify(OEComponent *sender, int notification, void *data);
     
 private:
+    OEComponent *dte;
+    OEComponent *emulation;
+    OEComponent *controlBus;
+    OEComponent *vram;
+    OEComponent *monitor;
+    
     // Settings
     OEInt cursorX, cursorY;
     bool clearScreenOnCtrlL;
     bool splashScreen;
     bool splashScreenActive;
-    
-    OEComponent *emulation;
-    OEComponent *controlBus;
-    OEComponent *vram;
-    OEComponent *monitor;
     
     // State
     OEChar *vramp;

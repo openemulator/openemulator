@@ -16,13 +16,16 @@ AddressMasker::AddressMasker()
 {
     memory = NULL;
     
-    mask = ~0;
+    andMask = ~0;
+    orMask = 0;
 }
 
 bool AddressMasker::setValue(string name, string value)
 {
-    if (name == "mask")
-        mask = getOELong(value);
+    if (name == "andMask")
+        andMask = getOELong(value);
+    else if (name == "orMask")
+        orMask = getOELong(value);
     else
         return false;
     
@@ -48,8 +51,10 @@ bool AddressMasker::init()
 
 bool AddressMasker::postMessage(OEComponent *sender, int message, void *data)
 {
-    if (message == ADDRESSMASKER_SET_MASK)
-        mask = *((OEAddress *)data);
+    if (message == ADDRESSMASKER_SET_ANDMASK)
+        andMask = *((OEAddress *)data);
+    else if (message == ADDRESSMASKER_SET_ORMASK)
+        orMask = *((OEAddress *)data);
     else
         return false;
     
@@ -58,10 +63,10 @@ bool AddressMasker::postMessage(OEComponent *sender, int message, void *data)
 
 OEChar AddressMasker::read(OEAddress address)
 {
-    return memory->read(address & mask);
+    return memory->read((address & andMask) | orMask);
 }
 
 void AddressMasker::write(OEAddress address, OEChar value)
 {
-    memory->write(address & mask, value);
+    memory->write((address & andMask) | orMask, value);
 }

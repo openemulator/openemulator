@@ -18,6 +18,20 @@
 #define RS_DATA_B       0x02
 #define RS_CONTROL_B    0x03
 
+#define CR_C1ENABLEIRQ  (1 << 0)
+#define CR_C1LOWTOHIGH  (1 << 1)
+#define CR_DATAREGISTER (1 << 2)
+#define CR_C2ENABLEIRQ  (1 << 3)    // If C2OUTPUT is clear
+#define CR_C2LOWTOHIGH  (1 << 4)    // If C2OUTPUT is clear
+#define CR_C2ERESTORE   (1 << 3)    // If C2OUTPUT is set and C2DIRECT is clear
+#define CR_C2SET        (1 << 3)    // If C2OUTPUT is set and C2DIRECT is set
+#define CR_C2DIRECT     (1 << 4)    // If C2OUTPUT is set
+#define CR_C2OUTPUT     (1 << 5)
+#define CR_IRQ2FLAG     (1 << 6)
+#define CR_IRQ1FLAG     (1 << 7)
+
+#define CR_IRQFLAGS		(CR_IRQ1FLAG | CR_IRQ2FLAG)
+
 MC6821::MC6821()
 {
     controlBus = NULL;
@@ -129,19 +143,23 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
+        case MC6821_GET_PA:
+            *((OEChar *) data) = dataA;
+            
+            return true;
+            
         case MC6821_SET_CA1:
         {
             bool value = *((bool *) data);
-            bool isLowToHigh = (controlA & MC6821_CR_C1LOWTOHIGH);
+            bool isLowToHigh = OEGetBit(controlA, CR_C1LOWTOHIGH);
             
             if ((!isLowToHigh && ca1 && !value) ||
                 (isLowToHigh && !ca1 && value))
             {
-                if (controlA & MC6821_CR_C1ENABLEIRQ)
-                    setControlA(controlA | MC6821_CR_IRQ1FLAG);
+                if (OEGetBit(controlA, CR_C1ENABLEIRQ))
+                    setControlA(controlA | CR_IRQ1FLAG);
                 
-                if ((controlA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT | MC6821_CR_C2ERESTORE)) ==
-                    MC6821_CR_C2OUTPUT)
+                if ((controlA & (CR_C2OUTPUT | CR_C2DIRECT | CR_C2ERESTORE)) == CR_C2OUTPUT)
                     setCA2(true);
             }
             
@@ -151,18 +169,15 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
         }
         case MC6821_SET_CA2:
         {
-            if (controlA & MC6821_CR_C2OUTPUT)
-                return false;
-            
             bool value = *((bool *) data);
             
-            if (controlA & MC6821_CR_C2ENABLEIRQ)
+            if (!OEGetBit(controlA, CR_C2OUTPUT) && OEGetBit(controlA, CR_C2ENABLEIRQ))
             {
-                bool isLowToHigh = (controlA & MC6821_CR_C2LOWTOHIGH);
+                bool isLowToHigh = OEGetBit(controlA, CR_C2LOWTOHIGH);
                 
                 if ((!isLowToHigh && ca2 && !value) ||
                     (isLowToHigh && !ca2 && value))
-                    setControlA(controlA | MC6821_CR_IRQ2FLAG);
+                    setControlA(controlA | CR_IRQ2FLAG);
             }
             
             ca2 = value;
@@ -170,32 +185,27 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
             return true;
         }
         case MC6821_GET_CA2:
-        {
-            if (!(controlA & MC6821_CR_C2OUTPUT))
-                return false;
-            
             *((bool *) data) = ca2;
             
             return true;
-        }
-        case MC6821_GET_PA:
-            *((OEChar *) data) = dataA;
+        
+        case MC6821_GET_PB:
+            *((OEChar *) data) = dataB;
             
             return true;
             
         case MC6821_SET_CB1:
         {
             bool value = *((bool *) data);
-            bool isLowToHigh = (controlB & MC6821_CR_C1LOWTOHIGH);
+            bool isLowToHigh = OEGetBit(controlB, CR_C1LOWTOHIGH);
             
             if ((!isLowToHigh && cb1 && !value) ||
                 (isLowToHigh && !cb1 && value))
             {
-                if (controlB & MC6821_CR_C1ENABLEIRQ)
-                    setControlB(controlB | MC6821_CR_IRQ1FLAG);
+                if (OEGetBit(controlB, CR_C1ENABLEIRQ))
+                    setControlB(controlB | CR_IRQ1FLAG);
                 
-                if ((controlB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT | MC6821_CR_C2ERESTORE)) ==
-                    MC6821_CR_C2OUTPUT)
+                if ((controlB & (CR_C2OUTPUT | CR_C2DIRECT | CR_C2ERESTORE)) == CR_C2OUTPUT)
                     setCB2(true);
             }
             
@@ -205,18 +215,15 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
         }
         case MC6821_SET_CB2:
         {
-            if (controlB & MC6821_CR_C2OUTPUT)
-                return false;
-            
             bool value = *((bool *) data);
             
-            if (controlB & MC6821_CR_C2ENABLEIRQ)
+            if (!OEGetBit(controlB, CR_C2OUTPUT) && OEGetBit(controlB, CR_C2ENABLEIRQ))
             {
-                bool isLowToHigh = (controlB & MC6821_CR_C2LOWTOHIGH);
+                bool isLowToHigh = OEGetBit(controlB, CR_C2LOWTOHIGH);
                 
                 if ((!isLowToHigh && cb2 && !value) ||
                     (isLowToHigh && !cb2 && value))
-                    setControlB(controlB | MC6821_CR_IRQ2FLAG);
+                    setControlB(controlB | CR_IRQ2FLAG);
             }
             
             cb2 = value;
@@ -224,16 +231,8 @@ bool MC6821::postMessage(OEComponent *sender, int message, void *data)
             return true;
         }
         case MC6821_GET_CB2:
-        {
-            if (!(controlB & MC6821_CR_C2OUTPUT))
-                return false;
-            
             *((bool *) data) = cb2;
             
-            return true;
-        }
-        case MC6821_GET_PB:
-            *((OEChar *) data) = dataB;
             return true;
     }
     
@@ -250,14 +249,14 @@ void MC6821::notify(OEComponent *component, int notification, void *data)
             dataA = 0;
             ca1 = false;
             ca2 = false;
-            portA->write(addressA, 0xff);
+            portA->write(addressA, 0);
             
             setControlB(0);
             ddrB = 0;
             dataB = 0;
             cb1 = false;
             cb2 = false;
-            portB->write(addressB, 0xff);
+            portB->write(addressB, 0);
             
             break;
     }
@@ -268,16 +267,15 @@ OEChar MC6821::read(OEAddress address)
     switch(address & 0x3)
     {
         case RS_DATA_A:
-            if (controlA & MC6821_CR_DATAREGISTER)
+            if (OEGetBit(controlA, CR_DATAREGISTER))
             {
-                setControlA(controlA & ~MC6821_CR_IRQFLAGS);
+                setControlA(controlA & ~CR_IRQFLAGS);
                 
-                if ((controlA & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
-                    MC6821_CR_C2OUTPUT)
+                if ((controlA & (CR_C2OUTPUT | CR_C2DIRECT)) == CR_C2OUTPUT)
                 {
                     setCA2(false);
                     
-                    if (controlA & MC6821_CR_C2ERESTORE)
+                    if (OEGetBit(controlA, CR_C2ERESTORE))
                         setCA2(true);
                 }
                 
@@ -290,9 +288,9 @@ OEChar MC6821::read(OEAddress address)
             return controlA;
             
         case RS_DATA_B:
-            if (controlB & MC6821_CR_DATAREGISTER)
+            if (OEGetBit(controlB, CR_DATAREGISTER))
             {
-                setControlB(controlB & ~MC6821_CR_IRQFLAGS);
+                setControlB(controlB & ~CR_IRQFLAGS);
                 
                 return (dataB & ddrB) | (portB->read(addressB) & ~ddrB);
             }
@@ -311,7 +309,7 @@ void MC6821::write(OEAddress address, OEChar value)
     switch(address & 0x3)
     {
         case RS_DATA_A:
-            if (controlA & MC6821_CR_DATAREGISTER)
+            if (OEGetBit(controlA, CR_DATAREGISTER))
                 dataA = value;
             else
                 ddrA = value;
@@ -323,24 +321,22 @@ void MC6821::write(OEAddress address, OEChar value)
         case RS_CONTROL_A:
             setControlA(value);
             
-            if ((value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
-                (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
-                setCA2(value & MC6821_CR_C2SET);
+            if ((value & (CR_C2OUTPUT | CR_C2DIRECT)) == (CR_C2OUTPUT | CR_C2DIRECT))
+                setCA2(value & CR_C2SET);
             
             break;
             
         case RS_DATA_B:
-            if (controlB & MC6821_CR_DATAREGISTER)
+            if (OEGetBit(controlB, CR_DATAREGISTER))
             {
                 dataB = value;
                 portB->write(addressB, (dataB & ddrB) | ~ddrB);
                 
-                if ((controlB & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
-                    MC6821_CR_C2OUTPUT)
+                if ((controlB & (CR_C2OUTPUT | CR_C2DIRECT)) == CR_C2OUTPUT)
                 {
                     setCB2(false);
                     
-                    if (controlB & MC6821_CR_C2ERESTORE)
+                    if (OEGetBit(controlB, CR_C2ERESTORE))
                         setCB2(true);
                 }
             }
@@ -355,9 +351,8 @@ void MC6821::write(OEAddress address, OEChar value)
         case RS_CONTROL_B:
             setControlB(value);
             
-            if ((value & (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT)) ==
-                (MC6821_CR_C2OUTPUT | MC6821_CR_C2DIRECT))
-                setCB2(value & MC6821_CR_C2SET);
+            if ((value & (CR_C2OUTPUT | CR_C2DIRECT)) == (CR_C2OUTPUT | CR_C2DIRECT))
+                setCB2(value & CR_C2SET);
             
             break;
     }
@@ -381,9 +376,9 @@ void MC6821::setCB2(bool value)
 
 void MC6821::setControlA(OEChar value)
 {
-    bool wasIRQFlag = controlA & MC6821_CR_IRQFLAGS;
+    bool wasIRQFlag = OEGetBit(controlA, CR_IRQFLAGS);
     controlA = value;
-    bool isIRQFlag = controlA & MC6821_CR_IRQFLAGS;
+    bool isIRQFlag = OEGetBit(controlA, CR_IRQFLAGS);
     
     if (controlBusA)
     {
@@ -396,9 +391,9 @@ void MC6821::setControlA(OEChar value)
 
 void MC6821::setControlB(OEChar value)
 {
-    bool wasIRQFlag = controlB & MC6821_CR_IRQFLAGS;
+    bool wasIRQFlag = OEGetBit(controlB, CR_IRQFLAGS);
     controlB = value;
-    bool isIRQFlag = controlB & MC6821_CR_IRQFLAGS;
+    bool isIRQFlag = OEGetBit(controlB, CR_IRQFLAGS);
     
     if (controlBusB)
     {

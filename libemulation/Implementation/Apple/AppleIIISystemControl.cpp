@@ -248,7 +248,7 @@ OEChar AppleIIISystemControl::read(OEAddress address)
         {
             bool irq;
             
-            eVIA->postMessage(this, MOS6522_GET_CA2, &irq);
+            controlBus->postMessage(this, CONTROLBUS_IS_IRQ_ASSERTED, &irq);
             
             OEChar value = (APPLEIII_NOT_APPLEIIMODE |
                             APPLEIII_NOT_IRQ3 |

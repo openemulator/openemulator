@@ -62,7 +62,8 @@ typedef enum
 
 typedef enum
 {
-    ADDRESSMASKER_SET_MASK,
+    ADDRESSMASKER_SET_ANDMASK,
+    ADDRESSMASKER_SET_ORMASK,
 } AddressMaskerMessage;
 
 typedef enum

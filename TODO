@@ -3,19 +3,19 @@
 * Separate AppleIIIVideo
 * Implement AppleIIIVideo+font upload
 * Fix video when increasing RAM size
-* Implement MOS6551
 * Implement MM58167
 * Implement Apple III Silentype port
 * Implement Apple III video blanking
 * Disable C0D0 when /AIISW
 * Fix Apple III sometimes crashing because of incorrect video counters
+* Convert CTRL-0 to CTRL-9 to CTRL and an isolated ASCII number on Apple III
 
 * Fix Apple Silentype Interface Card spurious data problems
 * Implement Apple Silentype print intensity
 * Fix [CanvasView update] problem in paper view
 * Add Apple Silentype sounds
 
-* Refactorize AppleIIVideo video output control
+* Refactorize AppleIIVideo video disable control
 * Implement and verify usability of JoystickMapper delta mouse
 * Implement AppleIIKeyboard key stealing
 * Implement JoystickMapper keyboard and delta keyboard support (arrow keys)

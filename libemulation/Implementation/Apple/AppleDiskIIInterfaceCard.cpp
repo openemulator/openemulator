@@ -19,6 +19,8 @@
 #define SEQUENCER_READ_SKIP     64
 #define SEQUENCER_WRITE_SKIP    6656
 
+#define PHASE1                  (1 << 1)
+
 typedef enum
 {
     SEQUENCER_READSHIFT,
@@ -244,7 +246,7 @@ void AppleDiskIIInterfaceCard::setPhaseControl(OEInt index, bool value)
 {
     OEInt lastPhaseControl = phaseControl;
     
-    OESetBit(phaseControl, 1 << index, value);
+    OESetBit(phaseControl, (1 << index), value);
     
     if ((lastPhaseControl != phaseControl) && driveEnableControl)
         updatePhaseControl();
@@ -413,7 +415,7 @@ void AppleDiskIIInterfaceCard::updateSequencer()
 		}
         case SEQUENCER_WRITESHIFT:
 		case SEQUENCER_WRITELOAD:
-            if (OEGetBit(phaseControl, (1 << 1)))
+            if (OEGetBit(phaseControl, PHASE1))
                 currentDrive->postMessage(this, APPLEII_SKIP_DATA, &bitNum);
             else
             {

@@ -13,7 +13,7 @@
 
 typedef enum
 {
-    IEEE1284_SEND_DATA,
+    IEEE1284_TRANSMIT_DATA,
     IEEE1284_ASSERT_STROBE,
     IEEE1284_CLEAR_STROBE,
     IEEE1284_ASSERT_LF,
@@ -22,7 +22,7 @@ typedef enum
     IEEE1284_CLEAR_INIT,
     IEEE1284_ASSERT_SELECTIN,
     IEEE1284_CLEAR_SELECTIN,
-} IEEE1284Message;
+} IEEE1284ComputerMessage;
 
 typedef enum
 {
@@ -32,6 +32,7 @@ typedef enum
     IEEE1284_PE_DID_CHANGE,
     IEEE1284_SELECT_DID_CHANGE,
     IEEE1284_FAULT_DID_CHANGE,
-} IEEE1284Notification;
+} IEEE1284PrinterMessage;
+
 
 #endif

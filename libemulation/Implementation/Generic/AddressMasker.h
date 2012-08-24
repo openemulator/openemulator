@@ -27,5 +27,6 @@ public:
 private:
     OEComponent *memory;
     
-    OEAddress mask;
+    OEAddress andMask;
+    OEAddress orMask;
 };

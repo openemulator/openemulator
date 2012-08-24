@@ -23,7 +23,7 @@ Apple1IO::Apple1IO()
     fullASCIIKeyboard = false;
     
     pia = NULL;
-    terminal = NULL;
+    dce = NULL;
     
     terminalKey = 0;
     terminalChar = 0;
@@ -63,22 +63,8 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
         if (pia)
             pia->addObserver(this, MC6821_CB2_DID_CHANGE);
     }
-    else if (name == "terminal")
-    {
-        if (terminal)
-        {
-            terminal->removeObserver(this, RS232_DID_RECEIVE_DATA);
-            terminal->removeObserver(this, RS232_CTS_DID_CHANGE);
-        }
-        terminal = ref;
-        if (terminal)
-        {
-            terminal->addObserver(this, RS232_DID_RECEIVE_DATA);
-            terminal->addObserver(this, RS232_CTS_DID_CHANGE);
-            
-            terminal->postMessage(this, RS232_ASSERT_RTS, NULL);
-        }
-    }
+    else if (name == "dce")
+        dce = ref;
     else
         return false;
     
@@ -88,7 +74,7 @@ bool Apple1IO::setRef(string name, OEComponent *ref)
 bool Apple1IO::init()
 {
     OECheckComponent(pia);
-    OECheckComponent(terminal);
+    OECheckComponent(dce);
     
     pia->postMessage(this, MC6821_GET_PB, &terminalChar);
     
@@ -102,6 +88,59 @@ bool Apple1IO::init()
 void Apple1IO::update()
 {
     sendChar();
+}
+
+bool Apple1IO::postMessage(OEComponent *sender, int message, void *data)
+{
+    switch (message)
+    {
+        case RS232_RECEIVE_DATA:
+        {
+            // Get key
+            OEChar key = *((OEChar *)data);
+            
+            if (!fullASCIIKeyboard)
+            {
+                if (key >= 'a' && key <= 'z')
+                    key -= 0x20;
+                else if (key >= 0x60 && key <= 0x7f)
+                    return true;
+            }
+            
+            terminalKey = key;
+            
+            // Signal Keyboard strobe
+            bool ca1 = true;
+            pia->postMessage(this, MC6821_SET_CA1, &ca1);
+            ca1 = false;
+            pia->postMessage(this, MC6821_SET_CA1, &ca1);
+            
+            bool rts = false;
+            
+            dce->postMessage(this, RS232_SET_RTS, &rts);
+            
+            return true;
+        }
+        case RS232_SET_CTS:
+        {
+            bool cts = *((bool *)data);
+            
+            if (cts)
+            {
+                // Signal /RDA
+                bool cb1 = true;
+                pia->postMessage(this, MC6821_SET_CB1, &cb1);
+                
+                // (it should last 3.5 µs, but we'll toggle a bit faster)
+                cb1 = false;
+                pia->postMessage(this, MC6821_SET_CB1, &cb1);
+            }
+            
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 void Apple1IO::notify(OEComponent *sender, int notification, void *data)
@@ -119,55 +158,6 @@ void Apple1IO::notify(OEComponent *sender, int notification, void *data)
             }
         }
     }
-    else if (sender == terminal)
-    {
-        switch (notification)
-        {
-            case RS232_DID_RECEIVE_DATA:
-            {
-                // Get key
-                OEData *s = (OEData *)data;
-                OEChar key = s->at(0);
-                
-                if (!fullASCIIKeyboard)
-                {
-                    if (key >= 'a' && key <= 'z')
-                        key -= 0x20;
-                    else if (key >= 0x60 && key <= 0x7f)
-                        return;
-                }
-                
-                terminalKey = key;
-                
-                // Signal Keyboard strobe
-                bool ca1 = true;
-                pia->postMessage(this, MC6821_SET_CA1, &ca1);
-                ca1 = false;
-                pia->postMessage(this, MC6821_SET_CA1, &ca1);
-                
-                terminal->postMessage(this, RS232_CLEAR_RTS, NULL);
-                
-                return;
-            }
-                
-            case RS232_CTS_DID_CHANGE:
-            {
-                bool cts = *((bool *)data);
-                
-                if (cts)
-                {
-                    // Signal /RDA
-                    bool cb1 = true;
-                    pia->postMessage(this, MC6821_SET_CB1, &cb1);
-                    // (it should last 3.5 µs, but we'll toggle a bit faster)
-                    cb1 = false;
-                    pia->postMessage(this, MC6821_SET_CB1, &cb1);
-                }
-                
-                return;
-            }
-        }
-    }
 }
 
 OEChar Apple1IO::read(OEAddress address)
@@ -180,7 +170,9 @@ OEChar Apple1IO::read(OEAddress address)
             
             terminalKey = 0;
             
-            terminal->postMessage(this, RS232_ASSERT_RTS, NULL);
+            bool rts = true;
+            
+            dce->postMessage(this, RS232_SET_RTS, &rts);
             
             return value;
         }
@@ -224,9 +216,7 @@ void Apple1IO::sendChar()
     if (!terminalChar)
         return;
     
-    OEData s;
-    s.push_back(terminalChar);
-    terminal->postMessage(this, RS232_SEND_DATA, &s);
+    dce->postMessage(this, RS232_TRANSMIT_DATA, &terminalChar);
     
     terminalChar = 0;
 }

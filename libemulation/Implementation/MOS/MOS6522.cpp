@@ -28,24 +28,36 @@
 #define RS_PERIPHERALCONTROL    0x0c
 #define RS_INTERRUPTFLAGS       0x0d
 #define RS_INTERRUPTENABLE      0x0e
-#define RS_DATA_A_NO_HS         0x0f
+#define RS_DATA_A_NO_HANDSHAKE  0x0f
+
+#define PC_CA1LOWTOHIGH (1 << 0)
+#define PC_CA2OUTPUT    (1 << 3)
+#define PC_CA2LOWTOHIGH (1 << 1)    // If CA2OUTPUT is clear
+#define PC_CA2DATACLEAR (1 << 2)    // If CA2OUTPUT is clear
+#define PC_CA2DIRECT    (1 << 2)    // If CA2OUTPUT is set
+#define PC_CA2PULSE     (1 << 3)    // If CA2OUTPUT is set
+#define PC_CB1LOWTOHIGH (1 << 4)
+#define PC_CB2OUTPUT    (1 << 7)
+#define PC_CB2LOWTOHIGH (1 << 5)    // If CB2OUTPUT is clear
+#define PC_CB2DATACLEAR (1 << 6)    // If CB2OUTPUT is clear
+#define PC_CB2DIRECT    (1 << 6)    // If CB2OUTPUT is set
+#define PC_CB2PULSE     (1 << 7)    // If CB2OUTPUT is set
 
 #define INT_CA2         (1 << 0)
 #define INT_CA1         (1 << 1)
-#define INT_SR          (1 << 2)
+#define INT_SHIFT       (1 << 2)
 #define INT_CB2         (1 << 3)
 #define INT_CB1         (1 << 4)
-#define INT_T2          (1 << 5)
-#define INT_T1          (1 << 6)
-#define INT_SET         (1 << 7)
-#define INT_IRQ         (1 << 7)
+#define INT_TIMER2      (1 << 5)
+#define INT_TIMER1      (1 << 6)
+#define INT_SET         (1 << 7)    // If interruptEnable
+#define INT_IRQ         (1 << 7)    // If interruptFlag
 
 MOS6522::MOS6522()
 {
     controlBus = NULL;
     portA = NULL;
     portB = NULL;
-    controlBusB = NULL;
     
     addressA = 0;
     ddrA = 0;
@@ -134,8 +146,6 @@ bool MOS6522::setRef(string name, OEComponent *ref)
         portA = ref;
     else if (name == "portB")
         portB = ref;
-    else if (name == "controlBusB")
-        controlBusB = ref;
     else
         return false;
     
@@ -151,26 +161,87 @@ bool MOS6522::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
-        case MOS6522_SET_CB1:
-            if (*((bool *)data))
-                OEAssertBit(interruptFlags, INT_CB1);
+        case MOS6522_SET_CA1:
+        {
+            bool value = *((bool *)data);
+            bool isLowToHigh = OEGetBit(peripheralControl, PC_CA1LOWTOHIGH);
             
-            updateIRQ();
+            if ((isLowToHigh && !ca1 && value) ||
+                (!isLowToHigh && ca1 && !value))
+            {
+                OEAssertBit(interruptFlags, INT_CA1);
+                
+                updateIRQ();
+            }
+            
+            ca1 = value;
             
             return true;
+        }
+        case MOS6522_SET_CA2:
+        {
+            bool value = *((bool *)data);
             
-        case MOS6522_SET_CB2:
-            if (*((bool *)data))
-                OEAssertBit(interruptFlags, INT_CB2);
+            if (!OEGetBit(peripheralControl, PC_CA2OUTPUT))
+            {
+                OEInt isLowToHigh = OEGetBit(peripheralControl, PC_CA2LOWTOHIGH);
+                
+                if ((isLowToHigh && !ca2 && value) ||
+                    (!isLowToHigh && ca2 && !value))
+                {
+                    OEAssertBit(interruptFlags, INT_CA2);
+                    
+                    updateIRQ();
+                }
+            }
             
-            updateIRQ();
+            ca2 = value;
             
             return true;
-            
+        }
         case MOS6522_GET_PB:
             *((OEChar *)data) = dataB;
             
             return true;
+            
+        case MOS6522_SET_CB1:
+        {
+            bool value = *((bool *)data);
+            bool isLowToHigh = OEGetBit(peripheralControl, PC_CB1LOWTOHIGH);
+            
+            if ((isLowToHigh && !cb1 && value) ||
+                (!isLowToHigh && cb1 && !value))
+            {
+                OEAssertBit(interruptFlags, INT_CB1);
+                
+                updateIRQ();
+            }
+            
+            cb1 = value;
+            
+            return true;
+        }
+        case MOS6522_SET_CB2:
+        {
+            bool value = *((bool *)data);
+            
+            if (!OEGetBit(peripheralControl, PC_CB2OUTPUT))
+            {
+                OEInt isLowToHigh = OEGetBit(peripheralControl, PC_CB2LOWTOHIGH);
+                
+                if ((isLowToHigh && !cb2 && value) ||
+                    (!isLowToHigh && cb2 && !value))
+                {
+                    OEAssertBit(interruptFlags, INT_CB2);
+                    
+                    updateIRQ();
+                }
+            }
+            
+            cb2 = value;
+            
+            return true;
+        }
     }
     
     return false;
@@ -193,7 +264,8 @@ void MOS6522::notify(OEComponent *sender, int notification, void *data)
             cb2 = false;
             portB->write(addressB, 0xff);
             
-            interruptFlags = 0;
+            interruptEnable = 0;
+            OEClearBit(interruptFlags, ~INT_IRQ);
             
             updateIRQ();
             
@@ -225,7 +297,37 @@ OEChar MOS6522::read(OEAddress address)
         case RS_DDR_A:
             return ddrA;
             
+        case RS_TIMER1_COUNTL:
+            OEClearBit(interruptFlags, INT_TIMER1);
+            
+            updateIRQ();
+            
+            return 0;
+            
+        case RS_TIMER1_COUNTH:
+            return 0;
+            
+        case RS_TIMER1_LATCHL:
+            return 0;
+            
+        case RS_TIMER1_LATCHH:
+            return 0;
+            
+        case RS_TIMER2_COUNTL:
+            OEClearBit(interruptFlags, INT_TIMER2);
+            
+            updateIRQ();
+            
+            return 0;
+            
+        case RS_TIMER2_COUNTH:
+            return 0;
+            
         case RS_SHIFT:
+            OEClearBit(interruptFlags, INT_SHIFT);
+            
+            updateIRQ();
+            
             return shift;
             
         case RS_AUXCONTROL:
@@ -240,11 +342,11 @@ OEChar MOS6522::read(OEAddress address)
             return interruptFlags;
             
         case RS_INTERRUPTENABLE:
-//            logMessage("R " + getHexString(address) + ": " + getHexString(interruptEnable));
+            logMessage("R " + getHexString(address) + ": " + getHexString(interruptEnable));
             
             return interruptEnable;
             
-        case RS_DATA_A_NO_HS:
+        case RS_DATA_A_NO_HANDSHAKE:
             return (dataA & ddrA) | (portA->read(addressA) & ~ddrA);
     }
     
@@ -253,9 +355,9 @@ OEChar MOS6522::read(OEAddress address)
 
 void MOS6522::write(OEAddress address, OEChar value)
 {
-/*    if (((address & 0xf) > 1) &&
+    if (((address & 0xf) > 1) &&
         ((address & 0xf) < 15))
-        logMessage("W " + getHexString(address) + ": " + getHexString(value));*/
+        logMessage("W " + getHexString(address) + ": " + getHexString(value));
     
     switch (address & 0xf)
     {
@@ -299,7 +401,37 @@ void MOS6522::write(OEAddress address, OEChar value)
             
             break;
             
+        case RS_TIMER1_COUNTL:
+            break;
+            
+        case RS_TIMER1_COUNTH:
+            break;
+            
+        case RS_TIMER1_LATCHL:
+            break;
+            
+        case RS_TIMER1_LATCHH:
+            OEClearBit(interruptFlags, INT_TIMER1);
+            
+            updateIRQ();
+            
+            break;
+            
+        case RS_TIMER2_COUNTL:
+            break;
+            
+        case RS_TIMER2_COUNTH:
+            OEClearBit(interruptFlags, INT_TIMER2);
+            
+            updateIRQ();
+            
+            break;
+            
         case RS_SHIFT:
+            OEClearBit(interruptFlags, INT_SHIFT);
+            
+            updateIRQ();
+            
             shift = value;
             
             break;
@@ -328,7 +460,7 @@ void MOS6522::write(OEAddress address, OEChar value)
             
             break;
             
-        case RS_DATA_A_NO_HS:
+        case RS_DATA_A_NO_HANDSHAKE:
             dataA = value;
             
             if (portA)
@@ -340,13 +472,21 @@ void MOS6522::write(OEAddress address, OEChar value)
 
 void MOS6522::updateIRQ()
 {
-    bool wasIRQ = OEGetBit(interruptFlags, INT_IRQ);
-    bool irq = interruptEnable & interruptFlags & 0x7f;
+    bool wasIRQFlag = OEGetBit(interruptFlags, INT_IRQ);
+    bool isIRQFlag = interruptEnable & interruptFlags & 0x7f;
     
-    OESetBit(interruptFlags, INT_IRQ, irq);
+    OESetBit(interruptFlags, INT_IRQ, isIRQFlag);
     
-/*    if (!wasIRQ && irq)
+    if (!wasIRQFlag && isIRQFlag)
+    {
         controlBus->postMessage(this, CONTROLBUS_ASSERT_IRQ, NULL);
-    else if (wasIRQ && !irq)
-        controlBus->postMessage(this, CONTROLBUS_CLEAR_IRQ, NULL);*/
+        
+        logMessage("IRQ +");
+    }
+    else if (wasIRQFlag && !isIRQFlag)
+    {
+        controlBus->postMessage(this, CONTROLBUS_CLEAR_IRQ, NULL);
+        
+        logMessage("IRQ -");
+    }
 }

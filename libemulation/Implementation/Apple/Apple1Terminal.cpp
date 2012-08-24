@@ -35,6 +35,7 @@
 
 Apple1Terminal::Apple1Terminal()
 {
+    dte = NULL;
     emulation = NULL;
     controlBus = NULL;
     vram = NULL;
@@ -90,7 +91,9 @@ bool Apple1Terminal::getValue(string name, string& value)
 
 bool Apple1Terminal::setRef(string name, OEComponent *ref)
 {
-    if (name == "emulation")
+    if (name == "dte")
+        dte = ref;
+    else if (name == "emulation")
     {
         if (emulation)
             emulation->removeObserver(this, EMULATION_WAS_SIGNALED);
@@ -150,6 +153,7 @@ bool Apple1Terminal::setData(string name, OEData *data)
 
 bool Apple1Terminal::init()
 {
+    OECheckComponent(dte);
     OECheckComponent(controlBus);
     OECheckComponent(vram);
     
@@ -196,27 +200,16 @@ bool Apple1Terminal::postMessage(OEComponent *sender, int message, void *data)
 {
     switch (message)
     {
-        case RS232_SEND_DATA:
-        {
-            OEData *theData = (OEData *)data;
-            
-            for (OEData::iterator i = theData->begin();
-                 i != theData->end();
-                 i++)
-                putChar(*i);
-            
-            return true;
-        }
-            
-        case RS232_ASSERT_RTS:
-            isRTS = true;
-            
-            emptyPasteBuffer();
+        case RS232_TRANSMIT_DATA:
+            putChar(*((OEChar *)data));
             
             return true;
             
-        case RS232_CLEAR_RTS:
-            isRTS = false;
+        case RS232_SET_RTS:
+            isRTS = *((bool *)data);
+            
+            if (isRTS)
+                emptyPasteBuffer();
             
             return true;
     }
@@ -355,10 +348,10 @@ void Apple1Terminal::scheduleNextTimer(OESLong cycles)
     }
     
     bool cts = true;
-    postNotification(this, RS232_CTS_DID_CHANGE, &cts);
+    dte->postMessage(this, RS232_SET_CTS, &cts);
     
     cts = false;
-    postNotification(this, RS232_CTS_DID_CHANGE, &cts);
+    dte->postMessage(this, RS232_SET_CTS, &cts);
     
     drawFrame();
     
@@ -480,10 +473,7 @@ void Apple1Terminal::sendKey(CanvasUnicodeChar key)
     else if (key >= 0x80)
         return;
     
-    OEData data;
-    data.push_back(key);
-    
-    postNotification(this, RS232_DID_RECEIVE_DATA, &data);
+    dte->postMessage(this, RS232_RECEIVE_DATA, &key);
 }
 
 void Apple1Terminal::copy(wstring *s)

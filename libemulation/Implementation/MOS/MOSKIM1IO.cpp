@@ -49,11 +49,7 @@ bool MOSKIM1IO::setRef(string name, OEComponent *ref)
 								   &canvas);
 	}
 	else if (name == "serialPort")
-	{
-		removeObserver(serialPort, RS232_DID_RECEIVE_DATA);
 		serialPort = ref;
-		addObserver(serialPort, RS232_DID_RECEIVE_DATA);
-	}
 	else if (name == "audioOut")
 		audioOut = ref;
 	else if (name == "audioIn")

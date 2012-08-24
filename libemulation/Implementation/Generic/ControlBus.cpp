@@ -200,6 +200,7 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             if (!irqCount)
             {
                 bool irq = true;
+                
                 postNotification(this, CONTROLBUS_IRQ_DID_CHANGE, &irq);
             }
             
@@ -208,13 +209,14 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_CLEAR_IRQ:
+            irqCount--;
+            
             if (!irqCount)
             {
                 bool irq = false;
+                
                 postNotification(this, CONTROLBUS_IRQ_DID_CHANGE, &irq);
             }
-            
-            irqCount--;
             
             return true;
             
@@ -227,10 +229,10 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             return true;
             
         case CONTROLBUS_CLEAR_NMI:
+            nmiCount--;
+            
             if (!nmiCount)
                 postNotification(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
-            
-            nmiCount--;
             
             return true;
             

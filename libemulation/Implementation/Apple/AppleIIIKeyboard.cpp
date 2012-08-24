@@ -48,8 +48,8 @@ void AppleIIIKeyboard::updateKeyFlags()
     if (!monitor)
         return;
     
-    bool anyKeyDown;
-    CanvasKeyboardFlags flags;
+    bool anyKeyDown = false;
+    CanvasKeyboardFlags flags = 0;
     
     monitor->postMessage(this, CANVAS_GET_KEYBOARD_ANYKEYDOWN, &anyKeyDown);
     monitor->postMessage(this, CANVAS_GET_KEYBOARD_FLAGS, &flags);
@@ -57,10 +57,8 @@ void AppleIIIKeyboard::updateKeyFlags()
     OESetBit(appleIIIKeyFlags, APPLEIII_ANYKEYDOWN, anyKeyDown);
     OESetBit(appleIIIKeyFlags, APPLEIII_NOT_SHIFT, !OEGetBit(flags, CANVAS_KF_SHIFT));
     OESetBit(appleIIIKeyFlags, APPLEIII_NOT_CONTROL, !OEGetBit(flags, CANVAS_KF_CONTROL));
-    OESetBit(appleIIIKeyFlags, APPLEIII_NOT_CAPSLOCK, true);
     OESetBit(appleIIIKeyFlags, APPLEIII_NOT_OPENAPPLE, !OEGetBit(flags, CANVAS_KF_LEFTGUI));
     OESetBit(appleIIIKeyFlags, APPLEIII_NOT_CLOSEAPPLE, !OEGetBit(flags, CANVAS_KF_RIGHTGUI));
-    OESetBit(appleIIIKeyFlags, APPLEIII_KEYBOARD_CONNECTED, true);
 }
 
 void AppleIIIKeyboard::sendKey(CanvasUnicodeChar key)

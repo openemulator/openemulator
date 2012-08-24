@@ -6,7 +6,9 @@ The purpose of DDL is to provide an open standard for preserving the digital con
 
 DDL does not describe data from the point of view of the storage medium (floppy disk) but from the perspective of the storage access device (disk drive). It stores the necessary instructions for producing a (hopefully accurate) copy of a floppy disk. This includes the data stored on the floppy disk and associated properties like the type of storage medium, the tracks per inch reference and the state of the write protection tab.
 
-DDL uses as fundamental unit the bit cell, the area of disk surface in which a single bit is recorded.
+When dealing with single-sided floppy disks, or double-sided floppy disks where both sides are part of the same filesystem, a single DDL file should be produced. Otherwise separate DDL files should be produced for each side.
+
+DDL uses as fundamental unit the bit cell, the area of disk surface on which a single bit is recorded.
 
 The XML DTD is available here:
 
@@ -20,7 +22,7 @@ Notes:
 
 ==Legal==
 
-The DDL format is licensed under the Creative Commons "attribution CC BY" license 3.0. For more information please refer to:
+The DDL specification is licensed under the Creative Commons "attribution CC BY" license 3.0. For more information please refer to:
 
   http://creativecommons.org/licenses/by/3.0/
 
@@ -40,7 +42,7 @@ The information stored in a DDL file follows the XML specification. For more inf
 
 ==DDL header==
 
-DDL 1.0 files should begin with the following XML header:
+DDL files should begin with the following XML header:
 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE ddl PUBLIC "-//DDL//DTD DDL 1.0//EN" "http://www.openemulator.org/DTD/ddl-1.0.dtd">
@@ -80,11 +82,12 @@ Every track tag contains one or more side tags, each describing the content of a
 
 Every side tag contains one or more data tags, each containing actual data:
 
-<data cellLength="[CELLLENGTH]">
+<data cellLength="[CELLLENGTH]" cellWidth="[CELLWIDTH"]>
 
 * cellLength is optional. If used, the real number [CELLLENGTH] specifies the relative length of each bit cell contained in this tag. The default bit cell length is "1.0".
+* cellWidth is optional. If used, the real number [CELLWIDTH] specifies the width of each bit cell contained in this tag according to the tracks per inch reference. The default bit cell width is "1.0".
 
-It is possible to use several data tags in sequence to describe parts of a track with different cell length.
+It is possible to use several data tags in sequence to describe parts of a track with different cell length and width.
 
 ==DDL data==
 
@@ -92,7 +95,7 @@ Data is stored as standard ASCII text, and may be composed of the following symb
 
 * A '-' character encodes a 0 bit cell (no magnetic inversion).
 * A '+' character encodes a 1 bit cell (a magnetic inversion).
-* An 'x' character encodes a 0 bit cell on non-magnetic material (no magnetic inversion, i.e. a laser hole).
+* An 'x' character encodes a bit cell on non-magnetic material (i.e. a laser hole).
 * A '?' character encodes a weak bit cell (a 50% chance of magnetic inversion).
 * Two characters representing an 8-bit hexadecimal value (characters '0'..'9' and 'a'..'f' or 'A'..'F') encode a sequence of 8 bit cells. The most significant bit of this value (bit 7) encodes the first bit cell, the least significant bit of this value (bit 0) encodes the last bit cell.
 * Data may be formatted with space, tab, newline or linefeed.
@@ -104,7 +107,7 @@ Data is stored as standard ASCII text, and may be composed of the following symb
 * Every track/side may contain an arbitrary amount of data.
 * The actual duration of a bit cell can be calculated from the relative bit cell length L, the total bit cell length sum T and the disk drive rotation speed S as follows: L / T / S. Example: if a disk track contains 50000 bit cells and the disk spins at 300 RPM, each bit cell takes 1 / 50000 / (300 / 60) = 4 microseconds.
 * A track/side with no data or a part of a track/side with no data should be treated as a stream of 0 bit cells (no magnetic inversions).
-* Areas with no magnetic material ('x' bit cells) are read-only, as there is no magnetic material to induce a magnetic inversion.
+* Areas with no magnetic material ('x' bit cells) are read-only, as there is no material to store a magnetic state.
 * Data should be human-readable. Provisions should exist so that data fields are easy to read, understand and modify (i.e. sectors may be detected and appropriately formatted). Authors of DDL files are encouraged to use XML comments to describe the copy protection within the DDL file.
 
 ==Example==

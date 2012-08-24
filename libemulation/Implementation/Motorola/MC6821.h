@@ -19,32 +19,18 @@
 
 #include "OEComponent.h"
 
-#define MC6821_CR_C1ENABLEIRQ		0x01
-#define MC6821_CR_C1LOWTOHIGH		0x02
-#define MC6821_CR_DATAREGISTER		0x04
-#define MC6821_CR_C2ENABLEIRQ		0x08	// If C2OUTPUT is clear
-#define MC6821_CR_C2LOWTOHIGH		0x10	// If C2OUTPUT is clear
-#define MC6821_CR_C2ERESTORE		0x08	// If C2OUTPUT is set and C2DIRECT is clear
-#define MC6821_CR_C2SET				0x08	// If C2OUTPUT is set and C2DIRECT is set
-#define MC6821_CR_C2DIRECT			0x10	// If C2OUTPUT is set
-#define MC6821_CR_C2OUTPUT			0x20
-#define MC6821_CR_IRQ2FLAG			0x40
-#define MC6821_CR_IRQ1FLAG			0x80
-
-#define MC6821_CR_IRQFLAGS			(MC6821_CR_IRQ2FLAG | MC6821_CR_IRQ1FLAG)
-
 // Messages
 typedef enum
 {
+    MC6821_GET_PA,
 	MC6821_SET_CA1,
 	MC6821_SET_CA2,
 	MC6821_GET_CA2,
-    MC6821_GET_PA,
     
+    MC6821_GET_PB,
 	MC6821_SET_CB1,
 	MC6821_SET_CB2,
 	MC6821_GET_CB2,
-    MC6821_GET_PB,
 } MC6821Message;
 
 // Notifications

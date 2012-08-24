@@ -174,7 +174,7 @@
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="refKeyboard" ref="appleIII.keyboard"/>
         <property name="mapKeyboard" value="0x00-0x1f"/>
-        <property name="refDisableC800" ref=""/>
+        <property name="refDisableC800" ref="appleIII.disableC800"/>
         <property name="mapDisableC800" value="0x20-0x2f"/>
         <property name="refAudioOut" ref="appleIII.audioOut"/>
         <property name="mapAudioOut" value="0x30-0x3f"/>
@@ -204,6 +204,10 @@
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
+    </component>
+    <component id="appleIII.disableC800" class="AddressMasker">
+        <property name="orMask" value="0xfff"/>
+        <property name="memory" ref="appleIII.memoryBus"/>
     </component>
     <component id="appleIII.audioOut" class="AppleIIAudioOut">
         <property name="controlBus" ref="appleIII.controlBus"/>
@@ -267,6 +271,8 @@
     <component id="appleIII.rtc" class="MM58167">
     </component>
     <component id="appleIII.acia" class="MOS6551">
+        <property name="controlBus" ref="appleIII.controlBus"/>
+        <property name="dce" ref=""/>
     </component>
     <component id="appleIII.rom" class="ROM">
         <property name="memoryImage" data="${resourcePath}/roms/Apple/341-0031.bin"/>

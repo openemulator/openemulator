@@ -1,4 +1,7 @@
 ==Latest==
+* Refactorized RS-232 interface
+* Implemented MOS6551
+* Redirected Apple III C02x to CFFF for slot C800 disabling
 * Fixed Apple III writes to ROM go to RAM
 * Fixed Ctrl+Alt+Backspace hard reset in Apple III
 * Connected VBL, KBD interrupts and IRQ state to VIAs

@@ -21,6 +21,9 @@ public:
     bool setValue(string name, string value);
     bool getValue(string name, string& value);
     bool setRef(string name, OEComponent *ref);
+    bool init();
+    
+    bool postMessage(OEComponent *sender, int message, void *data);
     
     void notify(OEComponent *sender, int notification, void *data);
     
@@ -29,13 +32,26 @@ public:
     
 private:
     OEComponent *controlBus;
+    OEComponent *dce;
     
-    OEChar dataRegister;
-    OEChar statusRegister;
-    OEChar commandRegister;
-    OEChar controlRegister;
+    OEChar transmitData;
+    OEChar receiveData;
     
-    void initACIA();
+    OEChar control;
+    OEChar command;
+    OEChar status;
+    
+    bool cts;
+    
+    void hardReset();
+    void softReset();
+    
+    void sendData();
+    void setCommand(OEChar value);
+    void setIRQ(bool value);
+    
+    bool isTransmitInt();
+    bool isRTS();
 };
 
 #endif

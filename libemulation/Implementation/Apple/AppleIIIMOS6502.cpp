@@ -128,9 +128,9 @@ void AppleIIIMOS6502::execute()
         }
         else
         {
-/*            static bool cap = true;
+/*            static bool cap = false;
             
-            if (pc.w.l == 0xf635)
+            if (pc.w.l == 0xa000)
                 cap = true;
             
             if (cap)
