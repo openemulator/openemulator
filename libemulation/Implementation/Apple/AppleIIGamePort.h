@@ -8,6 +8,9 @@
  * Implements an Apple II Game Port
  */
 
+#ifndef _APPLEIIGAMEPORT_H
+#define _APPLEIIGAMEPORT_H
+
 #include "OEComponent.h"
 
 #define APPLEIIGAMEPORT_MINVALUE    (0 * 11 + 8)
@@ -46,3 +49,5 @@ protected:
     bool isTimerPending(OELong index);
     void resetTimer();
 };
+
+#endif

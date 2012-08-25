@@ -13,7 +13,7 @@
 #include <fstream>
 #include <iomanip>
 
-#ifdef _WIN32
+#ifdef __WIN32__
 #include <windows.h>
 #else
 #include <sys/stat.h>
@@ -297,7 +297,7 @@ bool writeFile(string path, vector<unsigned char> *data)
 
 bool isPathValid(const string path)
 {
-#ifdef _WIN32
+#ifdef __WIN32__
     return (GetFileAttributes(path.c_str()) != INVALID_FILE_ATTRIBUTES);
 #else
     struct stat statbuf;
@@ -307,7 +307,7 @@ bool isPathValid(const string path)
 
 bool isPathADirectory(const string path)
 {
-#ifdef _WIN32
+#ifdef __WIN32__
     return (GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY);
 #else
     struct stat statbuf;
@@ -320,7 +320,7 @@ bool isPathADirectory(const string path)
 
 bool createDirectory(const string path)
 {
-#ifdef _WIN32
+#ifdef __WIN32__
     return CreateDirectory(path.c_str())
 #else
     return (mkdir(path.c_str(), 0777) == 0);
@@ -329,7 +329,7 @@ bool createDirectory(const string path)
 
 bool removePath(const string path)
 {
-#ifdef _WIN32
+#ifdef __WIN32__
     if (!isDirectory(path))
         return DeleteFile(path.c_str());
     

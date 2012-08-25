@@ -8,6 +8,7 @@
 * Implement Apple III video blanking
 * Disable C0D0 when /AIISW
 * Fix Apple III sometimes crashing because of incorrect video counters
+* Fix Apple III sometimes cold booting into monitor
 * Convert CTRL-0 to CTRL-9 to CTRL and an isolated ASCII number on Apple III
 
 * Fix Apple Silentype Interface Card spurious data problems
@@ -23,10 +24,11 @@
 * Add Apple Graphics Tablet sounds
 * Enable Disk II reading from neighbouring track if track is empty
 
+* Fix backspace in Apple-1
+* Fix pasting in Apple-1 (newlines are not correct)
 * Make sure Apple Language Card and Titan III plus II do not add .memory to slot memory (it does not exist)
 * Fix AppleIIVideo not displaying video when loading emulation in paused state
 * Fix adding a CFFA to A///, a .dsk is mounted is Disk ///, and when mounting a .po globally, the .dsk is unmounted. Shouldn't the framework ask canMount?
-* Fix changes in MC6521/Apple-1
 * Implement open disk image when starting with template chooser
 * Fix IAC 42 > rapid drive change
 * Disk II head player should not play when turning on a drive or changing drives

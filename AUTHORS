@@ -2,20 +2,21 @@ OpenEmulator
 http://www.openemulator.org/
 
 Lead Developer
-  Marc S. Ressl <mressl@gmail.com> (libemulation, Mac OS X UI)
-
-Previous Developers
+  Marc S. Ressl <mressl@gmail.com> (libemulation, libemulation-hal, libdiskimage, Mac OS X GUI)
 
 Project Contributors
+  Tobias Eriksson (cmake build scripts)
   David Finnigan (testing of default memory patterns on the Apple II)
   Vladimir Ivanoff (ideas on accurate CPU and video emulation)
   David Schmidt (extensive testing of Apple III)
   Dirk Thierbach (ideas for the component framework)
   Nick Westgate (ideas for the Disk II emulation)
 
+Previous Developers
+
 Mac OS X Translators, current release:
 
 wx Translators:
 
 Third-Party Resources:
-  The wxWidgets development team for wxWidgets. <http://www.wxwidgets.org/>
+  The wxWidgets development team for wxWidgets <http://www.wxwidgets.org/>.

@@ -11,6 +11,9 @@
 #ifndef _OECOMMON_H
 #define _OECOMMON_H
 
+#include <algorithm>
+#include <cstdio>
+#include <cstring>
 #include <string>
 #include <vector>
 

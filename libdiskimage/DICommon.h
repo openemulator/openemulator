@@ -14,7 +14,7 @@
 #define DI_VERSION "1.0"
 
 #include <vector>
-#include <string>
+#include <cstring>
 
 #include "util.h"
 

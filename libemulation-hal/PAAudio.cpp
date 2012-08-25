@@ -8,6 +8,7 @@
  * Implements a PortAudio audio component
  */
 
+#include <unistd.h>
 #include <iostream>
 
 #include "PAAudio.h"

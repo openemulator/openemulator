@@ -35,6 +35,16 @@
 
 MOS6551::MOS6551()
 {
+    controlBus = NULL;
+    dce = NULL;
+    
+    transmitData = 0;
+    receiveData = 0;
+    
+    control = 0;
+    command = 0;
+    status = 0;
+    
     hardReset();
 }
 

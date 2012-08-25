@@ -11,6 +11,8 @@
 #ifndef _UTIL_H
 #define _UTIL_H
 
+#include <unistd.h>
+#include <cstdlib>
 #include <string>
 #include <vector>
 #include <map>
@@ -18,7 +20,7 @@
 
 using namespace std;
 
-#ifdef _WIN32
+#ifdef __WIN32__
 #define PATH_SEPARATOR "\\"
 #else
 #define PATH_SEPARATOR "/"

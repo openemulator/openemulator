@@ -93,13 +93,7 @@ bool AppleIIISystemControl::setRef(string name, OEComponent *ref)
             video->addObserver(this, APPLEII_VBL_DID_CHANGE);
     }
     else if (name == "rtc")
-    {
-        if (rtc)
-            rtc->removeObserver(this, MM58167_IRQ_DID_CHANGE);
         rtc = ref;
-        if (rtc)
-            rtc->addObserver(this, MM58167_IRQ_DID_CHANGE);
-    }
     else if (name == "silentype")
         silentype = ref;
     else if (name == "dVIA")
@@ -218,12 +212,12 @@ void AppleIIISystemControl::notify(OEComponent *sender, int notification, void *
             controlBus->postMessage(this, CONTROLBUS_SET_CPUCLOCKMULTIPLIER, &clockCPUMultiplier);
         }
     }
-    else if (sender == rtc)
+/*    else if (sender == rtc)
     {
         bool rtcNotIRQ = !(*((bool *)data));
         
         eVIA->postMessage(this, MOS6522_SET_CA1, &rtcNotIRQ);
-    }
+    }*/
     else if (sender == ram)
     {
         OEAddress size = *((OEAddress *)data);

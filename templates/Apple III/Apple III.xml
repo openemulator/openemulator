@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE EDL PUBLIC "-//OPENEMULATOR//DTD EDL 1.0//EN" "http://www.openemulator.org/DTD/edl-1.0.dtd">
-<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple III" image="images/Apple/Apple III.png" description="The Apple III is a business-oriented 8-bit home computer. It has a MOS 6502 microprocessor running at 1 or 2 MHz, up to 512 kiB of RAM, 80-column text and 16 color high-resolution graphics, 6-bit (DAC) audio and a built-in 5.25&quot; floppy disk drive.">
+<edl version="1.0" creator="OpenEmulator" framework="787" label="Apple III" image="images/Apple/Apple III.png" description="The Apple III is a 8-bit business-oriented computer. It has a MOS 6502 microprocessor running at up to 2 MHz, up to 512 kiB of RAM, 80-column text and 16 color high-resolution graphics, 6-bit (DAC) audio and a built-in 5.25&quot; floppy disk drive.">
     
     <device id="appleIII" label="Apple III" image="images/Apple/Apple III.png">
         <setting ref="appleIII.audioOut" name="volume" label="Volume" type="slider" options="0,1"/>
@@ -184,8 +184,8 @@
         <property name="mapVideo" value="0x50-0x57"/>
         <property name="refGamePort" ref="appleIII.gamePort"/>
         <property name="mapGamePort" value="0x58-0x6f"/>
-        <property name="refRTC" ref="appleIII.rtc"/>
-        <property name="mapRTC" value="0x70-0x7f"/>
+        <property name="refRTCControl" ref="appleIII.rtcControl"/>
+        <property name="mapRTCControl" value="0x70-0x7f"/>
         <property name="refSlot1" ref="rdCFFA.io"/>
         <property name="mapSlot1" value="0x90-0x9f"/>
         <property name="refSlot2" ref=""/>
@@ -251,7 +251,7 @@
         <property name="systemControl" ref="appleIII.systemControl"/>
         <property name="fontStandard" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
     </component>
-    <component id="appleIII.gamePort" class="AppleIIGamePort">
+    <component id="appleIII.gamePort" class="AppleIIIGamePort">
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="floatingBus" ref="appleIII.floatingBus"/>
         <property name="gamePort" ref="appleHandControllers.io"/>
@@ -267,6 +267,8 @@
         <property name="drive2" ref="appleDiskIII2.drive"/>
         <property name="drive3" ref="appleDiskIII3.drive"/>
         <property name="drive4" ref="appleDiskIII4.drive"/>
+    </component>
+    <component id="appleIII.rtcControl" class="AppleIIIRTC">
     </component>
     <component id="appleIII.rtc" class="MM58167">
     </component>

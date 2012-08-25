@@ -1,4 +1,5 @@
 ==Latest==
+* Added Tobias Eriksson cmake scripts
 * Refactorized RS-232 interface
 * Implemented MOS6551
 * Redirected Apple III C02x to CFFF for slot C800 disabling

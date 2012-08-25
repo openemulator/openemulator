@@ -13,15 +13,13 @@
 
 #include "OEComponent.h"
 
-typedef enum
-{
-    MM58167_IRQ_DID_CHANGE,
-} MM58167Notification;
-
 class MM58167 : public OEComponent
 {
 public:
     MM58167();
+    
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
 };
 
 #endif
