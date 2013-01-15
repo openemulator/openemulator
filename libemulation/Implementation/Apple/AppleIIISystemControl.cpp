@@ -128,13 +128,13 @@ bool AppleIIISystemControl::init()
     
     offsetMap.startAddress = 0x0000;
     offsetMap.endAddress = 0x1fff;
-    offsetMap.offset = 0x8000 * APPLEIII_SYSTEMBANK - 0x0000;
+    offsetMap.offset = APPLEIII_SYSTEMBANKADDRESS - 0x0000;
     
     bankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     
     offsetMap.startAddress = 0xa000;
     offsetMap.endAddress = 0xffff;
-    offsetMap.offset = 0x8000 * APPLEIII_SYSTEMBANK - 0x8000;
+    offsetMap.offset = APPLEIII_SYSTEMBANKADDRESS - 0x8000;
     
     bankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     
@@ -410,7 +410,7 @@ void AppleIIISystemControl::updateZeroPage()
     zeroPageSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     extendedZeroPageSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     
-    cpu->postMessage(this, APPLEIII_SET_ZEROPAGE, &zeroPage);
+    postNotification(this, APPLEIII_ZEROPAGE_DID_CHANGE, &zeroPage);
     
     if (!OEGetBit(environment, APPLEIII_NORMALSTACK))
         updateAltStack();
@@ -470,7 +470,7 @@ void AppleIIISystemControl::updateExtendedRAMBank()
         
         offsetMap.startAddress = 0xa000;
         offsetMap.endAddress = 0xffff;
-        offsetMap.offset = APPLEIII_SYSTEMBANK * APPLEIII_BANKSIZE - 0x8000;
+        offsetMap.offset = APPLEIII_SYSTEMBANKADDRESS - 0x8000;
         
         extendedBankSwitcher->postMessage(this, ADDRESSOFFSET_MAP, &offsetMap);
     }

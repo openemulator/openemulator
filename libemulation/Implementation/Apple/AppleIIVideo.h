@@ -36,8 +36,7 @@ private:
     OEComponent *controlBus;
     OEComponent *gamePort;
 	OEComponent *monitor;
-    OEComponent *systemControl;
-	
+    
     // Settings
     OEInt model;
     OEInt revision;
@@ -108,9 +107,9 @@ private:
     
     // State
     ControlBusPowerState powerState;
+    bool monitorConnected;
+    OEInt videoInhibitCount;
     bool an2;
-    bool monitorCaptured;
-    bool appleIIMode;
     
     void initOffsets();
     
@@ -123,15 +122,15 @@ private:
     void updateImage();
     void updateClockFrequency();
     
-    void setMode(OEInt mask, bool value);
+    void updateMonitorConnected();
     
+    void setMode(OEInt mask, bool value);
     void configureDraw();
     void drawText40Line(OESInt y, OESInt x0, OESInt x1);
     void drawText80Line(OESInt y, OESInt x0, OESInt x1);
-    void drawLoresLine(OESInt y, OESInt x0, OESInt x1);
+    void drawLores40Line(OESInt y, OESInt x0, OESInt x1);
     void drawHires40Line(OESInt y, OESInt x0, OESInt x1);
     void drawHires80Line(OESInt y, OESInt x0, OESInt x1);
-    
     void updateVideoEnabled();
     void refreshVideo();
     void updateVideo();

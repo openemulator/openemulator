@@ -21,7 +21,7 @@ public:
     bool setRef(string name, OEComponent *ref);
     bool init();
     
-    bool postMessage(OEComponent *sender, int message, void *data);
+    void notify(OEComponent *sender, int notification, void *data);
     
 private:
     OEComponent *extendedMemoryBus;
@@ -32,7 +32,7 @@ private:
     OEInt extendedMemoryBank;
     
     void execute();
-    void setExtendedMemoryBank(OEInt value);
+    void setZeroPage(OEChar value);
 };
 
 #endif

@@ -15,6 +15,22 @@
 
 class AppleIIIRTC : public OEComponent
 {
+public:
+    AppleIIIRTC();
+    
+    bool setRef(string name, OEComponent *ref);
+    bool init();
+    
+    void notify(OEComponent *sender, int notification, void *data);
+    
+    OEChar read(OEAddress address);
+    void write(OEAddress address, OEChar value);
+    
+private:
+    OEComponent *systemControl;
+    OEComponent *mm58167;
+    
+    OEChar zeroPage;
 };
 
 #endif

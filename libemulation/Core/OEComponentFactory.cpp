@@ -133,7 +133,7 @@ OEComponent *OEComponentFactory::construct(const string& className)
     matchComponent(AppleIIIMOS6502);
     matchComponent(AppleIIIRTC);
     matchComponent(AppleIIISystemControl);
-    matchComponent(AppleIIIVideo);
+//    matchComponent(AppleIIIVideo);
     
     matchComponent(MOS6502);
     matchComponent(MOS6522);

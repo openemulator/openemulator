@@ -1,9 +1,6 @@
 ==1.0.4==
 * Implement MOS6522
-* Separate AppleIIIVideo
-* Implement AppleIIIVideo+font upload
 * Fix video when increasing RAM size
-* Implement MM58167
 * Implement Apple III Silentype port
 * Implement Apple III video blanking
 * Disable C0D0 when /AIISW
@@ -16,7 +13,6 @@
 * Fix [CanvasView update] problem in paper view
 * Add Apple Silentype sounds
 
-* Refactorize AppleIIVideo video disable control
 * Implement and verify usability of JoystickMapper delta mouse
 * Implement AppleIIKeyboard key stealing
 * Implement JoystickMapper keyboard and delta keyboard support (arrow keys)
@@ -24,16 +20,14 @@
 * Add Apple Graphics Tablet sounds
 * Enable Disk II reading from neighbouring track if track is empty
 
-* Fix backspace in Apple-1
-* Fix pasting in Apple-1 (newlines are not correct)
 * Make sure Apple Language Card and Titan III plus II do not add .memory to slot memory (it does not exist)
-* Fix AppleIIVideo not displaying video when loading emulation in paused state
 * Fix adding a CFFA to A///, a .dsk is mounted is Disk ///, and when mounting a .po globally, the .dsk is unmounted. Shouldn't the framework ask canMount?
 * Implement open disk image when starting with template chooser
 * Fix IAC 42 > rapid drive change
 * Disk II head player should not play when turning on a drive or changing drives
 * Check Mac OS X 10.5 (Intel) compatibility
 
+==1.0.4 wx==
 * Implement wxWidgets user interface
 
 ==1.0.5==

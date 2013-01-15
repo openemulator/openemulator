@@ -45,6 +45,7 @@ VidexVideoterm::VidexVideoterm() : MC6845()
     an0 = false;
     colorKiller = false;
     
+    videoInhibited = false;
     monitorConnected = false;
     monitorCaptured = false;
     cellWidth = 9;
@@ -174,8 +175,9 @@ bool VidexVideoterm::init()
     
     if (video)
     {
-        video->postMessage(this, APPLEII_IS_MONITOR_CONNECTED, &monitorConnected);
         video->postMessage(this, APPLEII_IS_COLORKILLER_ENABLED, &colorKiller);
+        video->postMessage(this, APPLEII_IS_VIDEO_INHIBITED, &videoInhibited);
+        video->postMessage(this, APPLEII_IS_MONITOR_CONNECTED, &monitorConnected);
     }
     if (gamePort)
         gamePort->postMessage(this, APPLEII_GET_AN0, &an0);
@@ -238,15 +240,22 @@ void VidexVideoterm::notify(OEComponent *sender, int notification, void *data)
                 
                 break;
                 
-            case APPLEII_MONITOR_DID_CHANGE:
-                monitorConnected = *((bool *) data);
+            case APPLEII_COLORKILLER_DID_CHANGE:
+                colorKiller = *((bool *)data);
                 
                 updateVideoEnabled();
                 
                 break;
                 
-            case APPLEII_COLORKILLER_DID_CHANGE:
-                colorKiller = *((bool *)data);
+            case APPLEII_VIDEOINHIBIT_DID_CHANGE:
+                videoInhibited = *((bool *) data);
+                
+                updateVideoEnabled();
+                
+                break;
+                
+            case APPLEII_MONITOR_DID_CHANGE:
+                monitorConnected = *((bool *) data);
                 
                 updateVideoEnabled();
                 
@@ -351,8 +360,17 @@ void VidexVideoterm::updateVideoEnabled()
                                monitorConnected &&
                                (powerState != CONTROLBUS_POWERSTATE_OFF));
     
-    bool newVideoEnabled = (newMonitorCaptured &&
-                            !inReset);
+    if (monitorCaptured != newMonitorCaptured)
+    {
+        monitorCaptured = newMonitorCaptured;
+        
+        if (monitorCaptured)
+            video->postMessage(this, APPLEII_ASSERT_VIDEOINHIBIT, NULL);
+        else
+            video->postMessage(this, APPLEII_CLEAR_VIDEOINHIBIT, NULL);
+    }
+    
+    bool newVideoEnabled = monitorCaptured && !inReset;
     
     if (videoEnabled != newVideoEnabled)
     {
@@ -366,14 +384,6 @@ void VidexVideoterm::updateVideoEnabled()
         }
         else
             refreshVideo();
-    }
-    
-    if (monitorCaptured != newMonitorCaptured)
-    {
-        monitorCaptured = newMonitorCaptured;
-        
-        video->postMessage(this, (monitorCaptured ? APPLEII_REQUEST_MONITOR :
-                                  APPLEII_RELEASE_MONITOR), NULL);
     }
 }
 

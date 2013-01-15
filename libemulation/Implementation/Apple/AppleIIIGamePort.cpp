@@ -14,7 +14,7 @@
 #include "JoystickInterface.h"
 #include "AppleIIInterface.h"
 
-AppleIIIGamePort::AppleIIIGamePort() : AppleIIGamePort()
+AppleIIIGamePort::AppleIIIGamePort()
 {
 }
 

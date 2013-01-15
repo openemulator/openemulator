@@ -84,7 +84,6 @@
 		0054E4A71131BE8A006D32D9 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E4A61131BE8A006D32D9 /* OpenGL.framework */; };
 		0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E6301131BEE7006D32D9 /* Carbon.framework */; };
 		0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0054E66B1131BF58006D32D9 /* Quartz.framework */; };
-		0062F75D15E950D800481ECB /* cmake in Resources */ = {isa = PBXBuildFile; fileRef = 0062F75C15E950D800481ECB /* cmake */; };
 		00651A55155AE23500221A44 /* HIDJoystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A12994147A8E7500DF323F /* HIDJoystick.cpp */; };
 		00651A56155AE23C00221A44 /* OEMatrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D226551350FF8B00FC69B9 /* OEMatrix3.cpp */; };
 		00651A57155AE3DF00221A44 /* MemoryInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00A90FB2150D3A0000BB2999 /* MemoryInterface.cpp */; };
@@ -96,6 +95,7 @@
 		0076FD6512A1ED8C00A3FEC7 /* AudioPause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0076FD6412A1ED8C00A3FEC7 /* AudioPause.png */; };
 		0077272015D81387008AB5A2 /* AppleIIIBeeper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0077271F15D81387008AB5A2 /* AppleIIIBeeper.cpp */; };
 		0078F655127348ED0042577E /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0078F653127348ED0042577E /* AudioControls.xib */; };
+		007A0B0C15EDD16100DFD300 /* AppleIIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008CB9A915E7B0AE00027B7B /* AppleIIIVideo.cpp */; };
 		007DEFAF153FB16800A9CC01 /* DIRAMBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFAE153FB16800A9CC01 /* DIRAMBackingStore.cpp */; };
 		007DEFB1153FB17500A9CC01 /* DIBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFB0153FB17500A9CC01 /* DIBackingStore.cpp */; };
 		007DEFB3153FB5E800A9CC01 /* DIBlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 007DEFB2153FB5E800A9CC01 /* DIBlockStorage.cpp */; };
@@ -118,7 +118,6 @@
 		008696B015CB9048000737EE /* AppleIISystemControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008696AF15CB9047000737EE /* AppleIISystemControl.cpp */; };
 		008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008CA97D147803E500B9F5D0 /* IOKit.framework */; };
 		008CB9A715E7B08A00027B7B /* AppleIIIRTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008CB9A615E7B08A00027B7B /* AppleIIIRTC.cpp */; };
-		008CB9AA15E7B0AE00027B7B /* AppleIIIVideo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 008CB9A915E7B0AE00027B7B /* AppleIIIVideo.cpp */; };
 		008F2FE7138E0AD600409723 /* DocumentController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 00AD746811A2F10E00BAC29C /* DocumentController.mm */; };
 		009085401395D23D00B7D75F /* LibraryItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0090853F1395D23D00B7D75F /* LibraryItem.mm */; };
 		00936E8815170435006B0EAC /* AudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00936E8715170435006B0EAC /* AudioPlayer.cpp */; };
@@ -249,7 +248,6 @@
 		00CF208115B0D92600DA8E08 /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 00CF207015B0D8C600DA8E08 /* util.h */; };
 		00CF208215B0DB5700DA8E08 /* libutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CF207615B0D8D300DA8E08 /* libutil.a */; };
 		00D6729D12C9A256009F0D9E /* EmulationShow.png in Resources */ = {isa = PBXBuildFile; fileRef = 00E442931278727600713A05 /* EmulationShow.png */; };
-		00D6FB7C15B3CCD00063312F /* ddl-1.0.dtd in Resources */ = {isa = PBXBuildFile; fileRef = 00D6FB7B15B3CCD00063312F /* ddl-1.0.dtd */; };
 		00D75C691399FFDB004AA153 /* LibraryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 00D75C681399FFD9004AA153 /* LibraryTableCell.m */; };
 		00D7E410158D1E4B00EBF8FA /* AddressMasker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00D7E40E158D1E4B00EBF8FA /* AddressMasker.cpp */; };
 		00D8448B0FFF04C0005802F0 /* DiskImage.icns in Resources */ = {isa = PBXBuildFile; fileRef = 000F66370FF8368F00C8AF23 /* DiskImage.icns */; };
@@ -480,9 +478,6 @@
 		004BD1BF1425AA8500768B80 /* W65C02SOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = W65C02SOperations.h; sourceTree = "<group>"; };
 		004E152915B9041A00FD22AB /* AppleIIISystemControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleIIISystemControl.cpp; sourceTree = "<group>"; };
 		004E152C15B9042100FD22AB /* AppleIIISystemControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleIIISystemControl.h; sourceTree = "<group>"; };
-		00520BDB1558D73D0000107C /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
-		00520BDC1558D73D0000107C /* configure.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
-		00520BDD1558D73D0000107C /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
 		005316C21596D268007F3C86 /* AppleSilentypeInterfaceCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppleSilentypeInterfaceCard.cpp; sourceTree = "<group>"; };
 		005316C41596D2BF007F3C86 /* Proxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Proxy.h; sourceTree = "<group>"; };
 		005316C61596D2C8007F3C86 /* Proxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Proxy.cpp; sourceTree = "<group>"; };
@@ -867,7 +862,6 @@
 		001750AF13A50A690043E2ED /* Docs and Scripts */ = {
 			isa = PBXGroup;
 			children = (
-				0062F75C15E950D800481ECB /* cmake */,
 				00BE6E4415E2DA3C004364E4 /* doc */,
 				001750B013A50A9C0043E2ED /* AUTHORS */,
 				001750B113A50A9C0043E2ED /* COPYING */,
@@ -876,9 +870,7 @@
 				001750C213A50A9C0043E2ED /* README */,
 				001750C313A50A9C0043E2ED /* TODO */,
 				0062F75315E950BE00481ECB /* CMakeLists.txt */,
-				00520BDB1558D73D0000107C /* autogen.sh */,
-				00520BDC1558D73D0000107C /* configure.in */,
-				00520BDD1558D73D0000107C /* Makefile.am */,
+				0062F75C15E950D800481ECB /* cmake */,
 			);
 			name = "Docs and Scripts";
 			sourceTree = "<group>";
@@ -1708,8 +1700,6 @@
 				001C9B02137FDD0500D1355B /* AudioRecord.png in Resources */,
 				007F08CF1459344600C3308D /* sparkle_dsa_pub.pem in Resources */,
 				007EF9C71570329D0073061E /* IconRevert.png in Resources */,
-				00D6FB7C15B3CCD00063312F /* ddl-1.0.dtd in Resources */,
-				0062F75D15E950D800481ECB /* cmake in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1882,7 +1872,7 @@
 				0044FDD515D3784500F82C28 /* MM58167.cpp in Sources */,
 				0077272015D81387008AB5A2 /* AppleIIIBeeper.cpp in Sources */,
 				008CB9A715E7B08A00027B7B /* AppleIIIRTC.cpp in Sources */,
-				008CB9AA15E7B0AE00027B7B /* AppleIIIVideo.cpp in Sources */,
+				007A0B0C15EDD16100DFD300 /* AppleIIIVideo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

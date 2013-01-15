@@ -29,6 +29,7 @@ public:
     
 private:
     OEComponent *systemControl;
+    OEComponent *video;
     
     bool appleIIMode;
     

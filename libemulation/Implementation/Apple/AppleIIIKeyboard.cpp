@@ -14,7 +14,7 @@
 
 #include "AppleIIIInterface.h"
 
-AppleIIIKeyboard::AppleIIIKeyboard()// : AppleIIKeyboard()
+AppleIIIKeyboard::AppleIIIKeyboard() : AppleIIKeyboard()
 {
     appleIIIKeyFlags = (APPLEIII_NOT_SHIFT |
                         APPLEIII_NOT_CONTROL |

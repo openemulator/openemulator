@@ -468,7 +468,7 @@ void Apple1Terminal::putChar(OEChar c)
 
 void Apple1Terminal::sendKey(CanvasUnicodeChar key)
 {
-    if (key == 0x08)
+    if (key == 0x7f)
         key = '_';
     else if (key >= 0x80)
         return;
@@ -510,7 +510,14 @@ void Apple1Terminal::emptyPasteBuffer()
 {
     while (isRTS && !pasteBuffer.empty())
     {
-        sendKey(pasteBuffer.front());
+        OEInt c = pasteBuffer.front();
+        
+        if (c == '\n')
+            c = '\r';
+        else if (c == '\r')
+            continue;
+        
+        sendKey(c);
         
         pasteBuffer.pop();
     }

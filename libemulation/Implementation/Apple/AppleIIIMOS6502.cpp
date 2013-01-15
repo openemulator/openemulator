@@ -30,7 +30,13 @@ bool AppleIIIMOS6502::setRef(string name, OEComponent *ref)
     if (name == "extendedMemoryBus")
         extendedMemoryBus = ref;
     else if (name == "systemControl")
+    {
+        if (systemControl)
+            systemControl->addObserver(this, APPLEIII_ZEROPAGE_DID_CHANGE);
         systemControl = ref;
+        if (systemControl)
+            systemControl->removeObserver(this, APPLEIII_ZEROPAGE_DID_CHANGE);
+    }
     else
         return MOS6502::setRef(name, ref);
     
@@ -39,25 +45,23 @@ bool AppleIIIMOS6502::setRef(string name, OEComponent *ref)
 
 bool AppleIIIMOS6502::init()
 {
-    OECheckComponent(extendedMemoryBus);
     OECheckComponent(systemControl);
+    OECheckComponent(extendedMemoryBus);
+    
+    OEChar zeroPage;
+    systemControl->postMessage(this, APPLEIII_GET_ZEROPAGE, &zeroPage);
+    
+    setZeroPage(zeroPage);
     
     return MOS6502::init();
 }
 
-bool AppleIIIMOS6502::postMessage(OEComponent *sender, int message, void *data)
+void AppleIIIMOS6502::notify(OEComponent *sender, int notification, void *data)
 {
-    if (message == APPLEIII_SET_ZEROPAGE)
-    {
-        OEChar zeroPage = *((OEChar *)data);
-        
-        extendedMemoryEnabled = ((zeroPage & 0xf8) == 0x18);
-        extendedPageAddress = 0x100 * (0x0c ^ zeroPage);
-    }
-    else
-        return MOS6502::postMessage(sender, message, data);
+    MOS6502::notify(sender, notification, data);
     
-    return true;
+    if (sender == systemControl)
+        setZeroPage(*((OEChar *)data));
 }
 
 void AppleIIIMOS6502::execute()
@@ -443,4 +447,10 @@ void AppleIIIMOS6502::execute()
             }
         }
     };
+}
+
+inline void AppleIIIMOS6502::setZeroPage(OEChar value)
+{
+    extendedMemoryEnabled = ((value & 0xf8) == 0x18);
+    extendedPageAddress = 0x100 * (0x0c ^ value);
 }

@@ -184,8 +184,8 @@
         <property name="mapVideo" value="0x50-0x57"/>
         <property name="refGamePort" ref="appleIII.gamePort"/>
         <property name="mapGamePort" value="0x58-0x6f"/>
-        <property name="refRTCControl" ref="appleIII.rtcControl"/>
-        <property name="mapRTCControl" value="0x70-0x7f"/>
+        <property name="refRTC" ref="appleIII.rtc"/>
+        <property name="mapRTC" value="0x70-0x7f"/>
         <property name="refSlot1" ref="rdCFFA.io"/>
         <property name="mapSlot1" value="0x90-0x9f"/>
         <property name="refSlot2" ref=""/>
@@ -228,9 +228,7 @@
         <property name="lowFrequency" value="20"/>
         <property name="highFrequency" value="10000"/>
     </component>
-    <component id="appleIII.video" class="AppleIIVideo">
-        <property name="model" value="III"/>
-        <property name="revision" value="1"/>
+    <component id="appleIII.video" class="AppleIIIVideo">
         <property name="tvSystem" value="NTSC"/>
         <property name="characterSet" value="Standard"/>
         <property name="flashFrameNum" value="14"/>
@@ -238,16 +236,10 @@
         <property name="mixed" value="0"/>
         <property name="page2" value="0"/>
         <property name="hires" value="0"/>
+        <property name="characterRAM" data="${packagePath}/${id}.bin"/>
         <property name="controlBus" ref="appleIII.controlBus"/>
         <property name="monitor" ref="appleMonitorIII.monitor"/>
-        <property name="vram0000" ref="appleIII.ram"/>
-        <property name="vram0000Offset" value="0x10000"/>
-        <property name="vram1000" ref="appleIII.ram"/>
-        <property name="vram1000Offset" value="0x11000"/>
-        <property name="vram2000" ref="appleIII.ram"/>
-        <property name="vram2000Offset" value="0x0000"/>
-        <property name="vram4000" ref="appleIII.ram"/>
-        <property name="vram4000Offset" value="0x2000"/>
+        <property name="vram" ref="appleIII.ram"/>
         <property name="systemControl" ref="appleIII.systemControl"/>
         <property name="fontStandard" data="${resourcePath}/roms/Videx/Videx Lower Case Chip ROM.bin"/>
     </component>
@@ -263,14 +255,17 @@
         <property name="driveOn" value="0"/>
         <property name="driveSel" value="0"/>
         <property name="systemControl" ref="appleIII.systemControl"/>
+        <property name="video" ref="appleIII.video"/>
         <property name="drive1" ref="appleDiskIII.drive"/>
         <property name="drive2" ref="appleDiskIII2.drive"/>
         <property name="drive3" ref="appleDiskIII3.drive"/>
         <property name="drive4" ref="appleDiskIII4.drive"/>
     </component>
-    <component id="appleIII.rtcControl" class="AppleIIIRTC">
+    <component id="appleIII.rtc" class="AppleIIIRTC">
+        <property name="systemControl" ref="appleIII.systemControl"/>
+        <property name="mm58167" ref="appleIII.mm58167"/>
     </component>
-    <component id="appleIII.rtc" class="MM58167">
+    <component id="appleIII.mm58167" class="MM58167">
     </component>
     <component id="appleIII.acia" class="MOS6551">
         <property name="controlBus" ref="appleIII.controlBus"/>

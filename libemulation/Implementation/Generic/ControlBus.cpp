@@ -181,10 +181,10 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             break;
             
         case CONTROLBUS_ASSERT_RESET:
-            if (!resetCount)
-                postNotification(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
-            
             resetCount++;
+            
+            if (resetCount == 1)
+                postNotification(this, CONTROLBUS_RESET_DID_ASSERT, NULL);
             
             return true;
             
@@ -196,15 +196,20 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
+        case CONTROLBUS_IS_RESET_ASSERTED:
+            *((bool *)data) = (resetCount != 0);
+            
+            return true;
+            
         case CONTROLBUS_ASSERT_IRQ:
-            if (!irqCount)
+            irqCount++;
+            
+            if (irqCount == 1)
             {
                 bool irq = true;
                 
                 postNotification(this, CONTROLBUS_IRQ_DID_CHANGE, &irq);
             }
-            
-            irqCount++;
             
             return true;
             
@@ -220,11 +225,16 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
             return true;
             
-        case CONTROLBUS_ASSERT_NMI:
-            if (!nmiCount)
-                postNotification(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
+        case CONTROLBUS_IS_IRQ_ASSERTED:
+            *((bool *)data) = (irqCount != 0);
             
+            return true;
+            
+        case CONTROLBUS_ASSERT_NMI:
             nmiCount++;
+            
+            if (nmiCount == 1)
+                postNotification(this, CONTROLBUS_NMI_DID_ASSERT, NULL);
             
             return true;
             
@@ -233,16 +243,6 @@ bool ControlBus::postMessage(OEComponent *sender, int message, void *data)
             
             if (!nmiCount)
                 postNotification(this, CONTROLBUS_NMI_DID_CLEAR, NULL);
-            
-            return true;
-            
-        case CONTROLBUS_IS_RESET_ASSERTED:
-            *((bool *)data) = (resetCount != 0);
-            
-            return true;
-            
-        case CONTROLBUS_IS_IRQ_ASSERTED:
-            *((bool *)data) = (irqCount != 0);
             
             return true;
             

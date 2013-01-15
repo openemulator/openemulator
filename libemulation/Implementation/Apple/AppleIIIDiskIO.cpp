@@ -20,6 +20,7 @@
 AppleIIIDiskIO::AppleIIIDiskIO() : AppleDiskIIInterfaceCard()
 {
     systemControl = NULL;
+    video = NULL;
     
     appleIIMode = false;
     
@@ -36,6 +37,8 @@ bool AppleIIIDiskIO::setRef(string name, OEComponent *ref)
         if (systemControl)
             systemControl->addObserver(this, APPLEIII_APPLEIIMODE_DID_CHANGE);
     }
+    else if (name == "video")
+        video = ref;
     else
         return AppleDiskIIInterfaceCard::setRef(name, ref);
     
@@ -45,6 +48,7 @@ bool AppleIIIDiskIO::setRef(string name, OEComponent *ref)
 bool AppleIIIDiskIO::init()
 {
     OECheckComponent(systemControl);
+    OECheckComponent(video);
     
     if (!AppleDiskIIInterfaceCard::init())
         return false;
@@ -151,21 +155,21 @@ inline void AppleIIIDiskIO::updateSwitches(OEAddress address)
             break;
             
         case 0x18: case 0x19:
-            setENSIO(address & 0x1);
+            setVideoScroll(address & 0x1);
             
             break;
         case 0x1a: case 0x1b:
-            setENSEL(address & 0x1);
-            
-            break;
-            
-        case 0x1c: case 0x1d:
             setVideoCharacterWrite(address & 0x1);
             
             break;
             
+        case 0x1c: case 0x1d:
+            setENSEL(address & 0x1);
+            
+            break;
+            
         case 0x1e: case 0x1f:
-            setVideoScroll(address & 0x1);
+            setENSIO(address & 0x1);
             
             break;
     }
@@ -207,6 +211,8 @@ void AppleIIIDiskIO::setENSEL(bool value)
 
 void AppleIIIDiskIO::setVideoCharacterWrite(bool value)
 {
+    if (value)
+        video->postMessage(this, APPLEIII_UPDATE_CHARACTERSET, NULL);
 }
 
 void AppleIIIDiskIO::setVideoScroll(bool value)

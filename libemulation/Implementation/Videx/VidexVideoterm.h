@@ -41,9 +41,9 @@ private:
     bool an0;
     bool colorKiller;
     
+    bool videoInhibited;
     bool monitorConnected;
     bool monitorCaptured;
-    
     OESInt cellWidth;
     
     map<string, OEData> font;

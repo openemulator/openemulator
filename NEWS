@@ -1,4 +1,10 @@
 ==Latest==
+* Fixed backspace in Apple-1
+* Fixed pasting in Apple-1 (newlines are not correct)
+* Separated AppleIIIVideo
+* Implemented AppleIIIVideo font upload
+* Refactorized AppleIIVideo inhibit control
+* Implemented MM58167
 * Added Tobias Eriksson cmake scripts
 * Refactorized RS-232 interface
 * Implemented MOS6551
