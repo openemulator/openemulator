@@ -8,3 +8,5 @@ add_library(emulation-hal
 set(LIBEMULATION_HAL_INCLUDE_DIRS
   ${LIBEMULATION_HAL_DIR}
 )
+
+set(LIBEMULATION_HAL emulation-hal)

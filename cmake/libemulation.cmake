@@ -1,5 +1,7 @@
 # libemulation/definitions.cmake - Definitions of source files and include directories.
 add_library(emulation
+  ${LIBEMULATION_DIR}/Interface/Generic/MemoryInterface.cpp
+  ${LIBEMULATION_DIR}/Interface/Host/AudioInterface.cpp
   ${LIBEMULATION_DIR}/Core/OECommon.cpp
   ${LIBEMULATION_DIR}/Core/OEComponent.cpp
   ${LIBEMULATION_DIR}/Core/OEComponentFactory.cpp
@@ -22,10 +24,6 @@ add_library(emulation
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIDisableC800.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIFloatingBus.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIGamePort.cpp
-  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIKeyboard.cpp
-  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIISlotController.cpp
-  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIISystemControl.cpp
-  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIVideo.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIIAddressDecoder.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIIBeeper.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIIDiskIO.cpp
@@ -35,6 +33,11 @@ add_library(emulation
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIIRTC.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIISystemControl.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIIVideo.cpp
+  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIKeyboard.cpp
+  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIISlotController.cpp
+  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIISystemControl.cpp
+  ${LIBEMULATION_DIR}/Implementation/Apple/AppleIIVideo.cpp
+  ${LIBEMULATION_DIR}/Implementation/Apple/AppleLanguageCard.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleSilentype.cpp
   ${LIBEMULATION_DIR}/Implementation/Apple/AppleSilentypeInterfaceCard.cpp
   ${LIBEMULATION_DIR}/Implementation/Generic/AddressDecoder.cpp
@@ -56,20 +59,21 @@ add_library(emulation
   ${LIBEMULATION_DIR}/Implementation/Generic/ROM.cpp
   ${LIBEMULATION_DIR}/Implementation/Generic/VRAM.cpp
   ${LIBEMULATION_DIR}/Implementation/MOS/MOS6502.cpp
-  #${LIBEMULATION_DIR}/Implementation/MOS/MOS6509.cpp
+#  ${LIBEMULATION_DIR}/Implementation/MOS/MOS6509.cpp
   ${LIBEMULATION_DIR}/Implementation/MOS/MOS6522.cpp
   ${LIBEMULATION_DIR}/Implementation/MOS/MOS6530.cpp
+  ${LIBEMULATION_DIR}/Implementation/MOS/MOS6551.cpp
   ${LIBEMULATION_DIR}/Implementation/MOS/MOSKIM1IO.cpp
   ${LIBEMULATION_DIR}/Implementation/MOS/MOSKIM1PLL.cpp
   ${LIBEMULATION_DIR}/Implementation/Motorola/MC6821.cpp
   ${LIBEMULATION_DIR}/Implementation/Motorola/MC6845.cpp
   ${LIBEMULATION_DIR}/Implementation/National/MM58167.cpp
   ${LIBEMULATION_DIR}/Implementation/RD/RDCFFA.cpp
-  #${LIBEMULATION_DIR}/Implementation/Ricoh/RP2A03.cpp
+#  ${LIBEMULATION_DIR}/Implementation/Ricoh/RP2A03.cpp
   ${LIBEMULATION_DIR}/Implementation/Videx/VidexVideoterm.cpp
   ${LIBEMULATION_DIR}/Implementation/WDC/W65C02S.cpp
   ${LIBEMULATION_DIR}/Implementation/WDC/W65C816S.cpp
-  #${LIBEMULATION_DIR}/Implementation/Zilog/Z80.cpp
+#  ${LIBEMULATION_DIR}/Implementation/Zilog/Z80.cpp
 )
 
 set(LIBEMULATION_INCLUDE_DIRS
@@ -90,3 +94,5 @@ set(LIBEMULATION_INCLUDE_DIRS
   ${LIBEMULATION_DIR}/Implementation/Videx
   ${LIBEMULATION_DIR}/Implementation/WDC
   ${LIBEMULATION_DIR}/Implementation/Zilog)
+
+set(LIBEMULATION emulation)

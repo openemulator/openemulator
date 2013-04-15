@@ -21,3 +21,5 @@ add_library(diskimage
 )
 set(LIBDISKIMAGE_INCLUDE_DIRS
   ${LIBDISKIMAGE_DIR})
+
+set(LIBDISKIMAGE diskimage)
