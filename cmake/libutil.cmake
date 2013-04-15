@@ -4,3 +4,5 @@ add_library(util
 
 set(LIBUTIL_INCLUDE_DIRS
   ${LIBUTIL_DIR})
+
+set(LIBUTIL util)
