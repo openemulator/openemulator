@@ -1,8 +1,7 @@
 OpenEmulator
 http://www.openemulator.org/
 
-Lead Developer
-  Marc S. Ressl <mressl@gmail.com> (libemulation, libemulation-hal, libdiskimage, Mac OS X GUI)
+Lead Developers
 
 Project Contributors
   Tobias Eriksson (cmake build scripts)
@@ -13,10 +12,4 @@ Project Contributors
   Nick Westgate (ideas for the Disk II emulation)
 
 Previous Developers
-
-Mac OS X Translators, current release:
-
-wx Translators:
-
-Third-Party Resources:
-  The wxWidgets development team for wxWidgets <http://www.wxwidgets.org/>.
+  Marc S. Ressl <mressl@gmail.com> (lead developer, libemulation, libemulation-hal, libdiskimage, Mac OS X GUI)
