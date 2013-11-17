@@ -28,7 +28,11 @@ commands:
 	sudo apt-get install libpng12-dev
 	sudo apt-get install portaudio19-dev
 	sudo apt-get install libsndfile1-dev
-	sudo apt-get install libsamplerate1-dev
+	sudo apt-get install libsamplerate-dev
+	sudo apt-get install freeglut3-dev
+	sudo apt-get install libwxgtk2.8-dev
+	sudo apt-get install libxmu-dev
+	sudo apt-get install libxi-dev
 
 You'll also need CMake to build the emulation libraries. Enter the following
 in the terminal:
