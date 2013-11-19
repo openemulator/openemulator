@@ -11,18 +11,18 @@ project(${OE_PROJECT_NAME} C CXX)
 # PREREQUISITES                                    #
 ####################################################
 # Set up convenient directory variables
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR})
-set(OE_LIBRARY_CMAKES ${SOURCE_DIR}/cmake)
 
 # Make sure we find any custom CMake modules
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${OE_LIBRARY_CMAKES} )
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake )
 
 # Set up OE library paths
-set(LIBDISKIMAGE_DIR ${SOURCE_DIR}/libdiskimage)
-set(LIBEMULATION_DIR ${SOURCE_DIR}/libemulation)
-set(LIBEMULATION_HAL_DIR ${SOURCE_DIR}/libemulation-hal)
-set(LIBUTIL_DIR ${SOURCE_DIR}/libutil)
+set(LIBDISKIMAGE_DIR ${LIB_DIR}/libdiskimage)
+set(LIBEMULATION_DIR ${LIB_DIR}/libemulation)
+set(LIBEMULATION_HAL_DIR ${LIB_DIR}/libemulation-hal)
+set(LIBUTIL_DIR ${LIB_DIR}/libutil)
 
 ####################################################
 # DEPENDENCIES                                     #
@@ -54,10 +54,10 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 # SOURCES                                          #
 ####################################################
 # Get sources and headers for the OE libraries
-include(${OE_LIBRARY_CMAKES}/libdiskimage.cmake)
-include(${OE_LIBRARY_CMAKES}/libemulation.cmake)
-include(${OE_LIBRARY_CMAKES}/libemulation-hal.cmake)
-include(${OE_LIBRARY_CMAKES}/libutil.cmake)
+include(${LIB_DIR}/libdiskimage.cmake)
+include(${LIB_DIR}/libemulation.cmake)
+include(${LIB_DIR}/libemulation-hal.cmake)
+include(${LIB_DIR}/libutil.cmake)
 
 # Add the sources for the GUI application
 set(OE_SRCS
