@@ -6,13 +6,6 @@ systems.
 
 For more information, take a look at the included documentation.
 
-If you make a binary distribution, include a pointer to the official
-distribution site:
-
-	http://www.openemulator.org/
-
-The latest version can always be found there.
-
 ### Linux
 
 Important: the user-interface has not yet been implemented. For now
@@ -37,18 +30,17 @@ commands:
 You'll also need CMake to build the emulation libraries. Enter the following
 in the terminal:
 
-	cd /path/to/openemulator/source/files/build
+	cd /path/to/build/directory
 
 followed by:
 
-	cmake ..
+	cmake /path/to/openemulator/source/files
 
 followed by:
 
 	make
 
 ### Mac OS X
-
 
 To compile OpenEmulator for Mac OS X you need Xcode and several
 external libraries not available by default. The easiest way to install
