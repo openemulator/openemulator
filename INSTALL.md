@@ -6,8 +6,9 @@ systems.
 ## Mac OS X
 
 To compile OpenEmulator for Mac OS X you need Xcode and several
-external libraries not available by default. The easiest way to install
-them is through MacPorts:
+external libraries not available by default. The simplest way to install them is through MacPorts or Homebrew.
+
+### MacPorts
 
 	http://www.macports.org/
 
@@ -35,6 +36,36 @@ Then try the following commands:
 If you can't compile because of this error: "'zipconf.h' file not found", try:
 
 	sudo ln -s /opt/local/lib/libzip/include/zipconf.h /opt/local/include/zipconf.h 
+
+### Homebrew
+
+	http://brew.sh/
+
+#### Install dependencies
+
+**Note:** if I missed any, follow my procedure: try to build, see which header file or library is
+missing, and search for it on Google to find out what package to install.
+
+_Interesting note: my homebrew config was initially out-of-date, so it installed libpng 1.5.
+This caused the headers to be found, but the build failed because of the `-lpng16` library param.
+`brew update && brew upgrade libpng` fixed it._
+
+	brew update
+	brew install libpng libsamplerate libsndfile libzip portaudio
+
+#### Link any headers that homebrew doesn’t link
+
+	HOMEBREW_PREFIX=$(brew config | awk ' /HOMEBREW_PREFIX/ {print $2}')
+	ln -s $HOMEBREW_PREFIX/Cellar/libzip/0.11.2/lib/libzip/include/zipconf.h $HOMEBREW_PREFIX/include/zipconf.h
+
+**Note:** If you're installing into a non-standard location, you'll need to configure
+xcode to find the headers and libraries:
+- Type command-shift-o then type xcodeproj to open the file `OpenEmulator.xcodeproj`.
+- At the top, make sure the OpenEmulator project, not a target, is selected.
+- Add the include dir to Header Search Paths (eg. `/Users/joe/homebrew/include`).
+- Add the lib dir to Library Search Paths (eg. `/Users/joe/homebrew/lib`).
+        
+        
 
 ## Linux
 
