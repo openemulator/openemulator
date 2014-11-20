@@ -88,6 +88,20 @@ commands:
 	sudo apt-get install libxmu-dev
 	sudo apt-get install libxi-dev
 
+If you have a Fedora-compatible distribution, try the following
+commands:
+
+sudo yum install libxml2-devel
+sudo yum install libzip-devel
+sudo yum install libpng12-devel
+sudo yum install portaudio-devel
+sudo yum install libsndfile-devel
+sudo yum install libsamplerate-devel
+sudo yum install freeglut-devel
+sudo yum install wxGTK-devel
+sudo yum install libXmu-devel
+sudo yum install libXi-devel
+
 You'll also need CMake to build the emulation libraries. Enter the following
 in the terminal:
 
