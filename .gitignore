@@ -33,3 +33,6 @@ install_manifest.txt
 
 # Project specific
 openemulator
+
+# Mac OS X
+.DS_Store

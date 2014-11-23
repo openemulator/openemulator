@@ -31,11 +31,9 @@
 		008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 008CA97D147803E500B9F5D0 /* IOKit.framework */; };
 		00CF208215B0DB5700DA8E08 /* libutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CF207615B0D8D300DA8E08 /* libutil.a */; };
 		00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */; };
-		496AF1DB18C677B600B35159 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1D718C677B600B35159 /* images */; };
 		496AF1DC18C677B600B35159 /* library in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1D818C677B600B35159 /* library */; };
 		496AF1DD18C677B600B35159 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1D918C677B600B35159 /* sounds */; };
 		496AF1DE18C677B600B35159 /* templates in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1DA18C677B600B35159 /* templates */; };
-		496AF1E018C746F300B35159 /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1DF18C746F300B35159 /* roms */; };
 		49EB4C4318C63B1800AD682A /* libFLAC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EB4C4218C63B1800AD682A /* libFLAC.dylib */; };
 		49EB4CB218C63BE500AD682A /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4C4B18C63BE500AD682A /* Application.m */; };
 		49EB4CB318C63BE500AD682A /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4C4D18C63BE500AD682A /* AudioControlsWindowController.mm */; };
@@ -397,10 +395,9 @@
 		00039FD012B04F6C0025D374 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		001750B013A50A9C0043E2ED /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		001750B113A50A9C0043E2ED /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
-		001750C013A50A9C0043E2ED /* INSTALL */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
+		001750C013A50A9C0043E2ED /* INSTALL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = INSTALL.md; sourceTree = "<group>"; };
 		001750C113A50A9C0043E2ED /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
-		001750C213A50A9C0043E2ED /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
-		001750C313A50A9C0043E2ED /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		001750C213A50A9C0043E2ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		002F57E515CDF4AC00C19659 /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = /opt/local/lib/libz.a; sourceTree = "<absolute>"; };
 		002F57E715CDF4B400C19659 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = /opt/local/lib/libvorbis.a; sourceTree = "<absolute>"; };
 		002F57E915CDF4B900C19659 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /opt/local/lib/libzip.a; sourceTree = "<absolute>"; };
@@ -419,17 +416,13 @@
 		0054E4A61131BE8A006D32D9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0054E6301131BEE7006D32D9 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		0054E66B1131BF58006D32D9 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
-		0062F75315E950BE00481ECB /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		0062F75C15E950D800481ECB /* cmake */ = {isa = PBXFileReference; lastKnownFileType = folder; path = cmake; sourceTree = "<group>"; };
 		008CA97D147803E500B9F5D0 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		00BE6E4415E2DA3C004364E4 /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; path = doc; sourceTree = SOURCE_ROOT; };
+		00BE6E4415E2DA3C004364E4 /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = doc; path = modules/libemulation/doc; sourceTree = SOURCE_ROOT; };
 		00CF207615B0D8D300DA8E08 /* libutil.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libutil.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
-		496AF1D718C677B600B35159 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = res/images; sourceTree = "<group>"; };
-		496AF1D818C677B600B35159 /* library */ = {isa = PBXFileReference; lastKnownFileType = folder; name = library; path = res/library; sourceTree = "<group>"; };
-		496AF1D918C677B600B35159 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = res/sounds; sourceTree = "<group>"; };
-		496AF1DA18C677B600B35159 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; name = templates; path = res/templates; sourceTree = "<group>"; };
-		496AF1DF18C746F300B35159 /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; name = roms; path = res/roms; sourceTree = "<group>"; };
+		496AF1D818C677B600B35159 /* library */ = {isa = PBXFileReference; lastKnownFileType = folder; name = library; path = modules/libemulation/res/library; sourceTree = "<group>"; };
+		496AF1D918C677B600B35159 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = modules/libemulation/res/sounds; sourceTree = "<group>"; };
+		496AF1DA18C677B600B35159 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; name = templates; path = modules/libemulation/res/templates; sourceTree = "<group>"; };
 		49EB4C4218C63B1800AD682A /* libFLAC.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libFLAC.dylib; path = ../../../../opt/local/lib/libFLAC.dylib; sourceTree = "<group>"; };
 		49EB4C4A18C63BE500AD682A /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		49EB4C4B18C63BE500AD682A /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
@@ -531,43 +524,43 @@
 		49EB4D0418C6536100AD682A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TemplateChooser.xib; sourceTree = "<group>"; };
 		49EB4D0618C6536100AD682A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TemplateChooserView.xib; sourceTree = "<group>"; };
 		49EB4D1318C65CD500AD682A /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = /opt/local/lib/libpng16.a; sourceTree = "<absolute>"; };
-		49EB4D2618C66FDD00AD682A /* DI2IMGBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DI2IMGBackingStore.cpp; path = lib/libdiskimage/DI2IMGBackingStore.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D2718C66FDD00AD682A /* DI2IMGBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DI2IMGBackingStore.h; path = lib/libdiskimage/DI2IMGBackingStore.h; sourceTree = SOURCE_ROOT; };
-		49EB4D2818C66FDD00AD682A /* DIApple35DiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIApple35DiskStorage.cpp; path = lib/libdiskimage/DIApple35DiskStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D2918C66FDD00AD682A /* DIApple35DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIApple35DiskStorage.h; path = lib/libdiskimage/DIApple35DiskStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D2A18C66FDD00AD682A /* DIApple525DiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIApple525DiskStorage.cpp; path = lib/libdiskimage/DIApple525DiskStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D2B18C66FDD00AD682A /* DIApple525DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIApple525DiskStorage.h; path = lib/libdiskimage/DIApple525DiskStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D2C18C66FDD00AD682A /* DIATABlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIATABlockStorage.cpp; path = lib/libdiskimage/DIATABlockStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D2D18C66FDD00AD682A /* DIATABlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIATABlockStorage.h; path = lib/libdiskimage/DIATABlockStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D2E18C66FDD00AD682A /* DIBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIBackingStore.cpp; path = lib/libdiskimage/DIBackingStore.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D2F18C66FDD00AD682A /* DIBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIBackingStore.h; path = lib/libdiskimage/DIBackingStore.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3018C66FDD00AD682A /* DIBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIBlockStorage.cpp; path = lib/libdiskimage/DIBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3118C66FDD00AD682A /* DIBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIBlockStorage.h; path = lib/libdiskimage/DIBlockStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3218C66FDD00AD682A /* DICommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DICommon.cpp; path = lib/libdiskimage/DICommon.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3318C66FDD00AD682A /* DICommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DICommon.h; path = lib/libdiskimage/DICommon.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3418C66FDD00AD682A /* DIDC42BackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIDC42BackingStore.cpp; path = lib/libdiskimage/DIDC42BackingStore.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3518C66FDD00AD682A /* DIDC42BackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIDC42BackingStore.h; path = lib/libdiskimage/DIDC42BackingStore.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3618C66FDD00AD682A /* DIDDLDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIDDLDiskStorage.cpp; path = lib/libdiskimage/DIDDLDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3718C66FDD00AD682A /* DIDDLDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIDDLDiskStorage.h; path = lib/libdiskimage/DIDDLDiskStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3818C66FDD00AD682A /* DIDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIDiskStorage.cpp; path = lib/libdiskimage/DIDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3918C66FDD00AD682A /* DIDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIDiskStorage.h; path = lib/libdiskimage/DIDiskStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3A18C66FDD00AD682A /* DIFDIDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIFDIDiskStorage.cpp; path = lib/libdiskimage/DIFDIDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3B18C66FDD00AD682A /* DIFDIDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIFDIDiskStorage.h; path = lib/libdiskimage/DIFDIDiskStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3C18C66FDD00AD682A /* DIFileBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIFileBackingStore.cpp; path = lib/libdiskimage/DIFileBackingStore.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3D18C66FDD00AD682A /* DIFileBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIFileBackingStore.h; path = lib/libdiskimage/DIFileBackingStore.h; sourceTree = SOURCE_ROOT; };
-		49EB4D3E18C66FDD00AD682A /* DILogicalDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DILogicalDiskStorage.cpp; path = lib/libdiskimage/DILogicalDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D3F18C66FDD00AD682A /* DILogicalDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DILogicalDiskStorage.h; path = lib/libdiskimage/DILogicalDiskStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D4018C66FDD00AD682A /* DIRAMBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIRAMBackingStore.cpp; path = lib/libdiskimage/DIRAMBackingStore.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D4118C66FDD00AD682A /* DIRAMBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIRAMBackingStore.h; path = lib/libdiskimage/DIRAMBackingStore.h; sourceTree = SOURCE_ROOT; };
-		49EB4D4218C66FDD00AD682A /* DIRAWBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIRAWBlockStorage.cpp; path = lib/libdiskimage/DIRAWBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D4318C66FDD00AD682A /* DIRAWBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIRAWBlockStorage.h; path = lib/libdiskimage/DIRAWBlockStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D4418C66FDD00AD682A /* diskimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = diskimage.h; path = lib/libdiskimage/diskimage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D4518C66FDD00AD682A /* DIV2DDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIV2DDiskStorage.cpp; path = lib/libdiskimage/DIV2DDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D4618C66FDD00AD682A /* DIV2DDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIV2DDiskStorage.h; path = lib/libdiskimage/DIV2DDiskStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D4718C66FDD00AD682A /* DIVDIBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIVDIBlockStorage.cpp; path = lib/libdiskimage/DIVDIBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D4818C66FDD00AD682A /* DIVDIBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIVDIBlockStorage.h; path = lib/libdiskimage/DIVDIBlockStorage.h; sourceTree = SOURCE_ROOT; };
-		49EB4D4918C66FDD00AD682A /* DIVMDKBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIVMDKBlockStorage.cpp; path = lib/libdiskimage/DIVMDKBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
-		49EB4D4A18C66FDD00AD682A /* DIVMDKBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIVMDKBlockStorage.h; path = lib/libdiskimage/DIVMDKBlockStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D2618C66FDD00AD682A /* DI2IMGBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DI2IMGBackingStore.cpp; path = modules/libemulation/lib/libdiskimage/DI2IMGBackingStore.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D2718C66FDD00AD682A /* DI2IMGBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DI2IMGBackingStore.h; path = modules/libemulation/lib/libdiskimage/DI2IMGBackingStore.h; sourceTree = SOURCE_ROOT; };
+		49EB4D2818C66FDD00AD682A /* DIApple35DiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIApple35DiskStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIApple35DiskStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D2918C66FDD00AD682A /* DIApple35DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIApple35DiskStorage.h; path = modules/libemulation/lib/libdiskimage/DIApple35DiskStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D2A18C66FDD00AD682A /* DIApple525DiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIApple525DiskStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIApple525DiskStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D2B18C66FDD00AD682A /* DIApple525DiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIApple525DiskStorage.h; path = modules/libemulation/lib/libdiskimage/DIApple525DiskStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D2C18C66FDD00AD682A /* DIATABlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIATABlockStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIATABlockStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D2D18C66FDD00AD682A /* DIATABlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIATABlockStorage.h; path = modules/libemulation/lib/libdiskimage/DIATABlockStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D2E18C66FDD00AD682A /* DIBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIBackingStore.cpp; path = modules/libemulation/lib/libdiskimage/DIBackingStore.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D2F18C66FDD00AD682A /* DIBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIBackingStore.h; path = modules/libemulation/lib/libdiskimage/DIBackingStore.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3018C66FDD00AD682A /* DIBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIBlockStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3118C66FDD00AD682A /* DIBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIBlockStorage.h; path = modules/libemulation/lib/libdiskimage/DIBlockStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3218C66FDD00AD682A /* DICommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DICommon.cpp; path = modules/libemulation/lib/libdiskimage/DICommon.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3318C66FDD00AD682A /* DICommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DICommon.h; path = modules/libemulation/lib/libdiskimage/DICommon.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3418C66FDD00AD682A /* DIDC42BackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIDC42BackingStore.cpp; path = modules/libemulation/lib/libdiskimage/DIDC42BackingStore.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3518C66FDD00AD682A /* DIDC42BackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIDC42BackingStore.h; path = modules/libemulation/lib/libdiskimage/DIDC42BackingStore.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3618C66FDD00AD682A /* DIDDLDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIDDLDiskStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIDDLDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3718C66FDD00AD682A /* DIDDLDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIDDLDiskStorage.h; path = modules/libemulation/lib/libdiskimage/DIDDLDiskStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3818C66FDD00AD682A /* DIDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIDiskStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3918C66FDD00AD682A /* DIDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIDiskStorage.h; path = modules/libemulation/lib/libdiskimage/DIDiskStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3A18C66FDD00AD682A /* DIFDIDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIFDIDiskStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIFDIDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3B18C66FDD00AD682A /* DIFDIDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIFDIDiskStorage.h; path = modules/libemulation/lib/libdiskimage/DIFDIDiskStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3C18C66FDD00AD682A /* DIFileBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIFileBackingStore.cpp; path = modules/libemulation/lib/libdiskimage/DIFileBackingStore.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3D18C66FDD00AD682A /* DIFileBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIFileBackingStore.h; path = modules/libemulation/lib/libdiskimage/DIFileBackingStore.h; sourceTree = SOURCE_ROOT; };
+		49EB4D3E18C66FDD00AD682A /* DILogicalDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DILogicalDiskStorage.cpp; path = modules/libemulation/lib/libdiskimage/DILogicalDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D3F18C66FDD00AD682A /* DILogicalDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DILogicalDiskStorage.h; path = modules/libemulation/lib/libdiskimage/DILogicalDiskStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D4018C66FDD00AD682A /* DIRAMBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIRAMBackingStore.cpp; path = modules/libemulation/lib/libdiskimage/DIRAMBackingStore.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D4118C66FDD00AD682A /* DIRAMBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIRAMBackingStore.h; path = modules/libemulation/lib/libdiskimage/DIRAMBackingStore.h; sourceTree = SOURCE_ROOT; };
+		49EB4D4218C66FDD00AD682A /* DIRAWBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIRAWBlockStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIRAWBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D4318C66FDD00AD682A /* DIRAWBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIRAWBlockStorage.h; path = modules/libemulation/lib/libdiskimage/DIRAWBlockStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D4418C66FDD00AD682A /* diskimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = diskimage.h; path = modules/libemulation/lib/libdiskimage/diskimage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D4518C66FDD00AD682A /* DIV2DDiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIV2DDiskStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIV2DDiskStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D4618C66FDD00AD682A /* DIV2DDiskStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIV2DDiskStorage.h; path = modules/libemulation/lib/libdiskimage/DIV2DDiskStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D4718C66FDD00AD682A /* DIVDIBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIVDIBlockStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIVDIBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D4818C66FDD00AD682A /* DIVDIBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIVDIBlockStorage.h; path = modules/libemulation/lib/libdiskimage/DIVDIBlockStorage.h; sourceTree = SOURCE_ROOT; };
+		49EB4D4918C66FDD00AD682A /* DIVMDKBlockStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIVMDKBlockStorage.cpp; path = modules/libemulation/lib/libdiskimage/DIVMDKBlockStorage.cpp; sourceTree = SOURCE_ROOT; };
+		49EB4D4A18C66FDD00AD682A /* DIVMDKBlockStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DIVMDKBlockStorage.h; path = modules/libemulation/lib/libdiskimage/DIVMDKBlockStorage.h; sourceTree = SOURCE_ROOT; };
 		49EB4D7118C6702100AD682A /* OECommon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OECommon.cpp; sourceTree = "<group>"; };
 		49EB4D7218C6702100AD682A /* OECommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OECommon.h; sourceTree = "<group>"; };
 		49EB4D7318C6702100AD682A /* OEComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OEComponent.cpp; sourceTree = "<group>"; };
@@ -586,8 +579,8 @@
 		49EB4D8018C6702100AD682A /* OEPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OEPackage.h; sourceTree = "<group>"; };
 		49EB4D8118C6702100AD682A /* OESound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OESound.cpp; sourceTree = "<group>"; };
 		49EB4D8218C6702100AD682A /* OESound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OESound.h; sourceTree = "<group>"; };
-		49EB4D8318C6702100AD682A /* ddl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "ddl-1.0.dtd"; path = "lib/libemulation/ddl-1.0.dtd"; sourceTree = SOURCE_ROOT; };
-		49EB4D8418C6702100AD682A /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "edl-1.0.dtd"; path = "lib/libemulation/edl-1.0.dtd"; sourceTree = SOURCE_ROOT; };
+		49EB4D8318C6702100AD682A /* ddl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "ddl-1.0.dtd"; path = "modules/libemulation/lib/libemulation/ddl-1.0.dtd"; sourceTree = SOURCE_ROOT; };
+		49EB4D8418C6702100AD682A /* edl-1.0.dtd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "edl-1.0.dtd"; path = "modules/libemulation/lib/libemulation/edl-1.0.dtd"; sourceTree = SOURCE_ROOT; };
 		49EB4D8718C6702100AD682A /* Apple1ACI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1ACI.cpp; sourceTree = "<group>"; };
 		49EB4D8818C6702100AD682A /* Apple1ACI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Apple1ACI.h; sourceTree = "<group>"; };
 		49EB4D8918C6702100AD682A /* Apple1IO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Apple1IO.cpp; sourceTree = "<group>"; };
@@ -738,18 +731,18 @@
 		49EB4E3618C6702200AD682A /* IEEE1284Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1284Interface.h; sourceTree = "<group>"; };
 		49EB4E3718C6702200AD682A /* IEEE1394Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE1394Interface.h; sourceTree = "<group>"; };
 		49EB4E3818C6702200AD682A /* IEEE488Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEEE488Interface.h; sourceTree = "<group>"; };
-		49EB4EEE18C6709F00AD682A /* HIDJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HIDJoystick.cpp; path = "lib/libemulation-hal/HIDJoystick.cpp"; sourceTree = SOURCE_ROOT; };
-		49EB4EEF18C6709F00AD682A /* HIDJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HIDJoystick.h; path = "lib/libemulation-hal/HIDJoystick.h"; sourceTree = SOURCE_ROOT; };
-		49EB4EF018C6709F00AD682A /* OEMatrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEMatrix3.cpp; path = "lib/libemulation-hal/OEMatrix3.cpp"; sourceTree = SOURCE_ROOT; };
-		49EB4EF118C6709F00AD682A /* OEMatrix3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEMatrix3.h; path = "lib/libemulation-hal/OEMatrix3.h"; sourceTree = SOURCE_ROOT; };
-		49EB4EF218C6709F00AD682A /* OEVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEVector.cpp; path = "lib/libemulation-hal/OEVector.cpp"; sourceTree = SOURCE_ROOT; };
-		49EB4EF318C6709F00AD682A /* OEVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEVector.h; path = "lib/libemulation-hal/OEVector.h"; sourceTree = SOURCE_ROOT; };
-		49EB4EF418C6709F00AD682A /* OpenGLCanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLCanvas.cpp; path = "lib/libemulation-hal/OpenGLCanvas.cpp"; sourceTree = SOURCE_ROOT; };
-		49EB4EF518C6709F00AD682A /* OpenGLCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLCanvas.h; path = "lib/libemulation-hal/OpenGLCanvas.h"; sourceTree = SOURCE_ROOT; };
-		49EB4EF618C6709F00AD682A /* PAAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PAAudio.cpp; path = "lib/libemulation-hal/PAAudio.cpp"; sourceTree = SOURCE_ROOT; };
-		49EB4EF718C6709F00AD682A /* PAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAAudio.h; path = "lib/libemulation-hal/PAAudio.h"; sourceTree = SOURCE_ROOT; };
-		49EB4F0618C6737700AD682A /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = lib/libutil/util.cpp; sourceTree = "<group>"; };
-		49EB4F0718C6737700AD682A /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = lib/libutil/util.h; sourceTree = "<group>"; };
+		49EB4EEE18C6709F00AD682A /* HIDJoystick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HIDJoystick.cpp; path = "modules/libemulation/lib/libemulation-hal/HIDJoystick.cpp"; sourceTree = SOURCE_ROOT; };
+		49EB4EEF18C6709F00AD682A /* HIDJoystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HIDJoystick.h; path = "modules/libemulation/lib/libemulation-hal/HIDJoystick.h"; sourceTree = SOURCE_ROOT; };
+		49EB4EF018C6709F00AD682A /* OEMatrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEMatrix3.cpp; path = "modules/libemulation/lib/libemulation-hal/OEMatrix3.cpp"; sourceTree = SOURCE_ROOT; };
+		49EB4EF118C6709F00AD682A /* OEMatrix3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEMatrix3.h; path = "modules/libemulation/lib/libemulation-hal/OEMatrix3.h"; sourceTree = SOURCE_ROOT; };
+		49EB4EF218C6709F00AD682A /* OEVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OEVector.cpp; path = "modules/libemulation/lib/libemulation-hal/OEVector.cpp"; sourceTree = SOURCE_ROOT; };
+		49EB4EF318C6709F00AD682A /* OEVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OEVector.h; path = "modules/libemulation/lib/libemulation-hal/OEVector.h"; sourceTree = SOURCE_ROOT; };
+		49EB4EF418C6709F00AD682A /* OpenGLCanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OpenGLCanvas.cpp; path = "modules/libemulation/lib/libemulation-hal/OpenGLCanvas.cpp"; sourceTree = SOURCE_ROOT; };
+		49EB4EF518C6709F00AD682A /* OpenGLCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenGLCanvas.h; path = "modules/libemulation/lib/libemulation-hal/OpenGLCanvas.h"; sourceTree = SOURCE_ROOT; };
+		49EB4EF618C6709F00AD682A /* PAAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PAAudio.cpp; path = "modules/libemulation/lib/libemulation-hal/PAAudio.cpp"; sourceTree = SOURCE_ROOT; };
+		49EB4EF718C6709F00AD682A /* PAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAAudio.h; path = "modules/libemulation/lib/libemulation-hal/PAAudio.h"; sourceTree = SOURCE_ROOT; };
+		49EB4F0618C6737700AD682A /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = modules/libemulation/lib/libutil/util.cpp; sourceTree = "<group>"; };
+		49EB4F0718C6737700AD682A /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = modules/libemulation/lib/libutil/util.h; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -846,20 +839,17 @@
 			name = OpenEmulator.app;
 			sourceTree = "<group>";
 		};
-		001750AF13A50A690043E2ED /* Docs and Scripts */ = {
+		001750AF13A50A690043E2ED /* Docs */ = {
 			isa = PBXGroup;
 			children = (
 				00BE6E4415E2DA3C004364E4 /* doc */,
 				001750B013A50A9C0043E2ED /* AUTHORS */,
 				001750B113A50A9C0043E2ED /* COPYING */,
-				001750C013A50A9C0043E2ED /* INSTALL */,
+				001750C013A50A9C0043E2ED /* INSTALL.md */,
 				001750C113A50A9C0043E2ED /* NEWS */,
-				001750C213A50A9C0043E2ED /* README */,
-				001750C313A50A9C0043E2ED /* TODO */,
-				0062F75315E950BE00481ECB /* CMakeLists.txt */,
-				0062F75C15E950D800481ECB /* cmake */,
+				001750C213A50A9C0043E2ED /* README.md */,
 			);
-			name = "Docs and Scripts";
+			name = Docs;
 			sourceTree = "<group>";
 		};
 		00B8864512A3923D0052B7A4 /* emulation */ = {
@@ -926,7 +916,7 @@
 				49EB4D4A18C66FDD00AD682A /* DIVMDKBlockStorage.h */,
 			);
 			name = diskimage;
-			path = libdiskimage;
+			path = modules/libemulation/lib/libdiskimage;
 			sourceTree = "<group>";
 		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
@@ -944,8 +934,6 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
-				496AF1DF18C746F300B35159 /* roms */,
-				496AF1D718C677B600B35159 /* images */,
 				496AF1D818C677B600B35159 /* library */,
 				496AF1D918C677B600B35159 /* sounds */,
 				496AF1DA18C677B600B35159 /* templates */,
@@ -954,7 +942,7 @@
 				00B8864512A3923D0052B7A4 /* emulation */,
 				00E473201475689C00F367B7 /* diskimage */,
 				00CF206D15B0D8B400DA8E08 /* util */,
-				001750AF13A50A690043E2ED /* Docs and Scripts */,
+				001750AF13A50A690043E2ED /* Docs */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
 			);
 			name = OpenEmulator;
@@ -1142,7 +1130,7 @@
 				49EB4D8218C6702100AD682A /* OESound.h */,
 			);
 			name = Core;
-			path = lib/libemulation/Core;
+			path = modules/libemulation/lib/libemulation/Core;
 			sourceTree = SOURCE_ROOT;
 		};
 		49EB4D8518C6702100AD682A /* Implementation */ = {
@@ -1158,7 +1146,7 @@
 				49EB4E1018C6702200AD682A /* WDC */,
 			);
 			name = Implementation;
-			path = lib/libemulation/Implementation;
+			path = modules/libemulation/lib/libemulation/Implementation;
 			sourceTree = SOURCE_ROOT;
 		};
 		49EB4D8618C6702100AD682A /* Apple */ = {
@@ -1354,7 +1342,7 @@
 				49EB4E3518C6702200AD682A /* IEEE */,
 			);
 			name = Interface;
-			path = lib/libemulation/Interface;
+			path = modules/libemulation/lib/libemulation/Interface;
 			sourceTree = SOURCE_ROOT;
 		};
 		49EB4E1D18C6702200AD682A /* Apple */ = {
@@ -1722,7 +1710,6 @@
 				49EB4D0818C6536100AD682A /* Canvas.xib in Resources */,
 				49EB4CD018C63BE500AD682A /* EmulationShow.png in Resources */,
 				49EB4CD518C63BE500AD682A /* EmulationUnmountPressed.png in Resources */,
-				496AF1E018C746F300B35159 /* roms in Resources */,
 				496AF1DE18C677B600B35159 /* templates in Resources */,
 				49EB4CD618C63BE500AD682A /* EmulationUnmountRollover.png in Resources */,
 				49EB4CDD18C63BE500AD682A /* IconInspector.png in Resources */,
@@ -1738,7 +1725,6 @@
 				49EB4CC818C63BE500AD682A /* AudioMax.png in Resources */,
 				49EB4CC718C63BE500AD682A /* TemplateChooserView.xib in Resources */,
 				49EB4CE618C63BE500AD682A /* ToolbarBackground.png in Resources */,
-				496AF1DB18C677B600B35159 /* images in Resources */,
 				49EB4CC118C63BE500AD682A /* Canvas.xib in Resources */,
 				49EB4CC018C63BE500AD682A /* AudioControls.xib in Resources */,
 				49EB4CD918C63BE500AD682A /* IconColdRestart.png in Resources */,
