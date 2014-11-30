@@ -20,11 +20,10 @@
 #import "PAAudio.h"
 #import "HIDJoystick.h"
 
-#define LINK_HELP       @"http://www.openemulator.org/help"
-#define LINK_HOMEPAGE	@"http://www.openemulator.org"
-#define LINK_FORUMSURL	@"http://www.openemulator.org/forums"
-#define LINK_DEVURL		@"http://www.openemulator.org/dev"
-#define LINK_DONATEURL	@"http://www.openemulator.org/donate"
+#define LINK_HELP       @"https://github.com/OpenEmulatorProject/OpenEmulator-OSX/wiki"
+#define LINK_HOMEPAGE	@"http://openemulatorproject.github.io/"
+#define LINK_GROUPURL	@"http://www.openemulator.org/forums"
+#define LINK_DEVURL		@"https://github.com/OpenEmulatorProject"
 
 #define DONATION_NAG_TIME	(7 * (24 * (60 * 60)))
 
@@ -654,21 +653,15 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
-- (void)openForums:(id)sender
+- (void)openGroup:(id)sender
 {
-    NSURL *url = [NSURL	URLWithString:LINK_FORUMSURL];
+    NSURL *url = [NSURL	URLWithString:LINK_GROUPURL];
     [[NSWorkspace sharedWorkspace] openURL:url];
 }
 
 - (void)openDevelopment:(id)sender
 {
     NSURL *url = [NSURL	URLWithString:LINK_DEVURL];
-    [[NSWorkspace sharedWorkspace] openURL:url];
-}
-
-- (void)openDonate:(id)sender
-{
-    NSURL *url = [NSURL	URLWithString:LINK_DONATEURL];
     [[NSWorkspace sharedWorkspace] openURL:url];
 }
 

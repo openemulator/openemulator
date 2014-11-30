@@ -312,7 +312,8 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>10.5</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2009-2012, Marc S. Reßl</string>
+	<string>Copyright © 2009-2012, Marc S. Reßl
+Copyright © 2014, The OpenEmulator Project</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
