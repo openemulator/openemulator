@@ -208,9 +208,9 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
     
     ((PAAudio *)paAudio)->open();
 }
-
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+/*
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     
     // Shamelessly ask for donations
@@ -272,6 +272,7 @@ void hidDeviceEventOcurred(void *inContext, IOReturn inResult, void *inSender, I
                              forKey:@"OEDonationDate"];
         }
     }
+*/
 }
 
 - (void)applicationWillTerminate:(NSNotification *)sender
