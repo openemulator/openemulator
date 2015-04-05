@@ -327,6 +327,7 @@
 		49EB4F0118C6709F00AD682A /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4EF718C6709F00AD682A /* PAAudio.h */; };
 		49EB4F0818C6737700AD682A /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4F0618C6737700AD682A /* util.cpp */; };
 		49EB4F0918C6737700AD682A /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4F0718C6737700AD682A /* util.h */; };
+		B32914241AD16C4400EB7046 /* images in Resources */ = {isa = PBXBuildFile; fileRef = B32914231AD16C4400EB7046 /* images */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -744,6 +745,7 @@
 		49EB4F0618C6737700AD682A /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = modules/libemulation/src/libutil/util.cpp; sourceTree = "<group>"; };
 		49EB4F0718C6737700AD682A /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = modules/libemulation/src/libutil/util.h; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B32914231AD16C4400EB7046 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = modules/libemulation/res/images; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -934,6 +936,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
+				B32914231AD16C4400EB7046 /* images */,
 				496AF1D818C677B600B35159 /* library */,
 				496AF1D918C677B600B35159 /* sounds */,
 				496AF1DA18C677B600B35159 /* templates */,
@@ -1741,6 +1744,7 @@
 				49EB4CD418C63BE500AD682A /* EmulationUnmount.png in Resources */,
 				49EB4CCD18C63BE500AD682A /* AudioStop.png in Resources */,
 				49EB4CC218C63BE500AD682A /* Emulation.xib in Resources */,
+				B32914241AD16C4400EB7046 /* images in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
