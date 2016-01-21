@@ -11,12 +11,8 @@
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
 		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		002F57E615CDF4AC00C19659 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57E515CDF4AC00C19659 /* libz.a */; };
-		002F57E815CDF4B400C19659 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57E715CDF4B400C19659 /* libvorbis.a */; };
-		002F57EA15CDF4B900C19659 /* libzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57E915CDF4B900C19659 /* libzip.a */; };
 		002F57EC15CDF4C000C19659 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57EB15CDF4C000C19659 /* libsndfile.a */; };
 		002F57EE15CDF4C600C19659 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57ED15CDF4C600C19659 /* libsamplerate.a */; };
-		002F57F015CDF4CB00C19659 /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57EF15CDF4CB00C19659 /* libportaudio.a */; };
-		002F57F415CDF66B00C19659 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57F315CDF66B00C19659 /* libogg.a */; };
 		002F57F815CDF6F800C19659 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57F715CDF6F800C19659 /* libvorbisenc.a */; };
 		00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00365CF51516F3D800978DF6 /* libdiskimage.a */; };
 		003B167C12EE27ED003FB8F6 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */; };
@@ -108,8 +104,6 @@
 		49EB4D0C18C6536100AD682A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4D0118C6536000AD682A /* Preferences.xib */; };
 		49EB4D0D18C6536100AD682A /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4D0318C6536100AD682A /* TemplateChooser.xib */; };
 		49EB4D0E18C6536100AD682A /* TemplateChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4D0518C6536100AD682A /* TemplateChooserView.xib */; };
-		49EB4D1418C65CD500AD682A /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EB4D1318C65CD500AD682A /* libpng16.a */; };
-		49EB4D1518C65CD500AD682A /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EB4D1318C65CD500AD682A /* libpng16.a */; };
 		49EB4D4B18C66FDD00AD682A /* DI2IMGBackingStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4D2618C66FDD00AD682A /* DI2IMGBackingStore.cpp */; };
 		49EB4D4C18C66FDD00AD682A /* DI2IMGBackingStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4D2718C66FDD00AD682A /* DI2IMGBackingStore.h */; };
 		49EB4D4D18C66FDD00AD682A /* DIApple35DiskStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4D2818C66FDD00AD682A /* DIApple35DiskStorage.cpp */; };
@@ -327,6 +321,11 @@
 		49EB4F0118C6709F00AD682A /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4EF718C6709F00AD682A /* PAAudio.h */; };
 		49EB4F0818C6737700AD682A /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4F0618C6737700AD682A /* util.cpp */; };
 		49EB4F0918C6737700AD682A /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4F0718C6737700AD682A /* util.h */; };
+		4E5D100C1C514FD400AEDE6D /* PortAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D100B1C514FD400AEDE6D /* PortAudio.framework */; };
+		4E5D100F1C51501500AEDE6D /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D100D1C51501500AEDE6D /* libpng.framework */; };
+		4E5D10101C51501500AEDE6D /* libzip Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D100E1C51501500AEDE6D /* libzip Mac.framework */; };
+		4E5D10121C51531100AEDE6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10111C51531100AEDE6D /* Ogg.framework */; };
+		4E5D10161C5153E300AEDE6D /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10151C5153E300AEDE6D /* Vorbis.framework */; };
 		B32914241AD16C4400EB7046 /* images in Resources */ = {isa = PBXBuildFile; fileRef = B32914231AD16C4400EB7046 /* images */; };
 /* End PBXBuildFile section */
 
@@ -401,11 +400,8 @@
 		001750C213A50A9C0043E2ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		002F57E515CDF4AC00C19659 /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = /opt/local/lib/libz.a; sourceTree = "<absolute>"; };
 		002F57E715CDF4B400C19659 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = /opt/local/lib/libvorbis.a; sourceTree = "<absolute>"; };
-		002F57E915CDF4B900C19659 /* libzip.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzip.a; path = /opt/local/lib/libzip.a; sourceTree = "<absolute>"; };
 		002F57EB15CDF4C000C19659 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
 		002F57ED15CDF4C600C19659 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
-		002F57EF15CDF4CB00C19659 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = /opt/local/lib/libportaudio.a; sourceTree = "<absolute>"; };
-		002F57F315CDF66B00C19659 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = /opt/local/lib/libogg.a; sourceTree = "<absolute>"; };
 		002F57F715CDF6F800C19659 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = /opt/local/lib/libvorbisenc.a; sourceTree = "<absolute>"; };
 		00365CF51516F3D800978DF6 /* libdiskimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libdiskimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		003B158312EE26BA003FB8F6 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -524,7 +520,6 @@
 		49EB4D0218C6536100AD682A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Preferences.xib; sourceTree = "<group>"; };
 		49EB4D0418C6536100AD682A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TemplateChooser.xib; sourceTree = "<group>"; };
 		49EB4D0618C6536100AD682A /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TemplateChooserView.xib; sourceTree = "<group>"; };
-		49EB4D1318C65CD500AD682A /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = /opt/local/lib/libpng16.a; sourceTree = "<absolute>"; };
 		49EB4D2618C66FDD00AD682A /* DI2IMGBackingStore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DI2IMGBackingStore.cpp; path = modules/libemulation/src/libdiskimage/DI2IMGBackingStore.cpp; sourceTree = SOURCE_ROOT; };
 		49EB4D2718C66FDD00AD682A /* DI2IMGBackingStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DI2IMGBackingStore.h; path = modules/libemulation/src/libdiskimage/DI2IMGBackingStore.h; sourceTree = SOURCE_ROOT; };
 		49EB4D2818C66FDD00AD682A /* DIApple35DiskStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DIApple35DiskStorage.cpp; path = modules/libemulation/src/libdiskimage/DIApple35DiskStorage.cpp; sourceTree = SOURCE_ROOT; };
@@ -744,6 +739,11 @@
 		49EB4EF718C6709F00AD682A /* PAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PAAudio.h; path = "modules/libemulation/src/libemulation-hal/PAAudio.h"; sourceTree = SOURCE_ROOT; };
 		49EB4F0618C6737700AD682A /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = modules/libemulation/src/libutil/util.cpp; sourceTree = "<group>"; };
 		49EB4F0718C6737700AD682A /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = modules/libemulation/src/libutil/util.h; sourceTree = "<group>"; };
+		4E5D100B1C514FD400AEDE6D /* PortAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PortAudio.framework; path = ../../../../Library/Frameworks/PortAudio.framework; sourceTree = "<group>"; };
+		4E5D100D1C51501500AEDE6D /* libpng.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libpng.framework; path = ../../../../Library/Frameworks/libpng.framework; sourceTree = "<group>"; };
+		4E5D100E1C51501500AEDE6D /* libzip Mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "libzip Mac.framework"; path = "../../../../Library/Frameworks/libzip Mac.framework"; sourceTree = "<group>"; };
+		4E5D10111C51531100AEDE6D /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = ../../../../Library/Frameworks/Ogg.framework; sourceTree = "<group>"; };
+		4E5D10151C5153E300AEDE6D /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = ../../../../Library/Frameworks/Vorbis.framework; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B32914231AD16C4400EB7046 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = modules/libemulation/res/images; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -767,7 +767,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49EB4D1518C65CD500AD682A /* libpng16.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -782,6 +781,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E5D10161C5153E300AEDE6D /* Vorbis.framework in Frameworks */,
+				4E5D10121C51531100AEDE6D /* Ogg.framework in Frameworks */,
+				4E5D100F1C51501500AEDE6D /* libpng.framework in Frameworks */,
+				4E5D10101C51501500AEDE6D /* libzip Mac.framework in Frameworks */,
+				4E5D100C1C514FD400AEDE6D /* PortAudio.framework in Frameworks */,
 				00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */,
 				00039E9B12B042210025D374 /* libemulation-hal.a in Frameworks */,
 				00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */,
@@ -800,13 +804,8 @@
 				008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */,
 				00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */,
 				002F57E615CDF4AC00C19659 /* libz.a in Frameworks */,
-				49EB4D1418C65CD500AD682A /* libpng16.a in Frameworks */,
-				002F57E815CDF4B400C19659 /* libvorbis.a in Frameworks */,
-				002F57EA15CDF4B900C19659 /* libzip.a in Frameworks */,
 				002F57EC15CDF4C000C19659 /* libsndfile.a in Frameworks */,
 				002F57EE15CDF4C600C19659 /* libsamplerate.a in Frameworks */,
-				002F57F015CDF4CB00C19659 /* libportaudio.a in Frameworks */,
-				002F57F415CDF66B00C19659 /* libogg.a in Frameworks */,
 				002F57F815CDF6F800C19659 /* libvorbisenc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -936,6 +935,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
+				4E5D10151C5153E300AEDE6D /* Vorbis.framework */,
 				B32914231AD16C4400EB7046 /* images */,
 				496AF1D818C677B600B35159 /* library */,
 				496AF1D918C677B600B35159 /* sounds */,
@@ -954,16 +954,16 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				49EB4D1318C65CD500AD682A /* libpng16.a */,
+				4E5D10111C51531100AEDE6D /* Ogg.framework */,
+				4E5D100D1C51501500AEDE6D /* libpng.framework */,
+				4E5D100E1C51501500AEDE6D /* libzip Mac.framework */,
+				4E5D100B1C514FD400AEDE6D /* PortAudio.framework */,
 				49EB4C4218C63B1800AD682A /* libFLAC.dylib */,
-				002F57F315CDF66B00C19659 /* libogg.a */,
-				002F57EF15CDF4CB00C19659 /* libportaudio.a */,
 				002F57ED15CDF4C600C19659 /* libsamplerate.a */,
 				002F57EB15CDF4C000C19659 /* libsndfile.a */,
 				002F57E715CDF4B400C19659 /* libvorbis.a */,
 				002F57F715CDF6F800C19659 /* libvorbisenc.a */,
 				002F57E515CDF4AC00C19659 /* libz.a */,
-				002F57E915CDF4B900C19659 /* libzip.a */,
 				00039FD012B04F6C0025D374 /* libxml2.dylib */,
 				00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */,
 				003B165712EE276E003FB8F6 /* AudioToolbox.framework */,
@@ -1662,7 +1662,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = OpenEmulator;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
@@ -2179,10 +2179,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/raw/devel/OpenEmulator/src/macosx,
+					"$(USER_LIBRARY_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
 				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Debug;
@@ -2194,10 +2196,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/raw/devel/OpenEmulator/src/macosx,
+					"$(USER_LIBRARY_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
 				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Release;
@@ -2210,7 +2214,10 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/**",
 					/opt/local/Library/Frameworks,
@@ -2218,6 +2225,7 @@
 					/usr/local/lib,
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -2250,7 +2258,9 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/**",
 					/opt/local/Library/Frameworks,
@@ -2258,6 +2268,7 @@
 					/usr/local/lib,
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
