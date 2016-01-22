@@ -324,7 +324,6 @@
 		4E5D104C1C515B2E00AEDE6D /* sndfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D104B1C515B2E00AEDE6D /* sndfile.framework */; };
 		4E5D10791C51785200AEDE6D /* samplerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10781C51785200AEDE6D /* samplerate.framework */; };
 		4EC286F51C529BD6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F41C529BD5008CA3C8 /* libxml.framework */; };
-		4EC286F71C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
 		4EC286F81C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
 		4EC286F91C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
 		4EC286FA1C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
@@ -804,7 +803,6 @@
 				4E5D10791C51785200AEDE6D /* samplerate.framework in Frameworks */,
 				4E5D104C1C515B2E00AEDE6D /* sndfile.framework in Frameworks */,
 				4E5D10161C5153E300AEDE6D /* Vorbis.framework in Frameworks */,
-				4EC286F71C529CE6008CA3C8 /* libxml.framework in Frameworks */,
 				4E5D10121C51531100AEDE6D /* Ogg.framework in Frameworks */,
 				4E5D100F1C51501500AEDE6D /* libpng.framework in Frameworks */,
 				4E5D100C1C514FD400AEDE6D /* PortAudio.framework in Frameworks */,
@@ -2154,10 +2152,11 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(USER_LIBRARY_DIR)/Frameworks/**",
-					"/Library/Frameworks/libxml.framework/**",
+					"/usr/include/libxml2/**",
 					"/Library/Frameworks/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = "/usr/lib/**";
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2173,10 +2172,11 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(USER_LIBRARY_DIR)/Frameworks/**",
-					"/Library/Frameworks/libxml.framework/**",
+					"/usr/include/libxml2/**",
 					"/Library/Frameworks/**",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = "/usr/lib/**";
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2274,7 +2274,8 @@
 					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = /usr/lib;
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
 				PRODUCT_NAME = OpenEmulator;
 			};
@@ -2297,7 +2298,8 @@
 					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = /usr/lib;
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
 				PRODUCT_NAME = OpenEmulator;
 			};
