@@ -9,11 +9,7 @@
 /* Begin PBXBuildFile section */
 		00039E9B12B042210025D374 /* libemulation-hal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039E7C12B03F660025D374 /* libemulation-hal.a */; };
 		00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039EFE12B04E910025D374 /* libemulation.a */; };
-		00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 00039FD012B04F6C0025D374 /* libxml2.dylib */; };
 		002F57E615CDF4AC00C19659 /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57E515CDF4AC00C19659 /* libz.a */; };
-		002F57EC15CDF4C000C19659 /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57EB15CDF4C000C19659 /* libsndfile.a */; };
-		002F57EE15CDF4C600C19659 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57ED15CDF4C600C19659 /* libsamplerate.a */; };
-		002F57F815CDF6F800C19659 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002F57F715CDF6F800C19659 /* libvorbisenc.a */; };
 		00365CFA1516F4E700978DF6 /* libdiskimage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00365CF51516F3D800978DF6 /* libdiskimage.a */; };
 		003B167C12EE27ED003FB8F6 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003B167B12EE27ED003FB8F6 /* CoreAudioKit.framework */; };
 		003B16B212EE2A05003FB8F6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003B165712EE276E003FB8F6 /* AudioToolbox.framework */; };
@@ -30,7 +26,6 @@
 		496AF1DC18C677B600B35159 /* library in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1D818C677B600B35159 /* library */; };
 		496AF1DD18C677B600B35159 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1D918C677B600B35159 /* sounds */; };
 		496AF1DE18C677B600B35159 /* templates in Resources */ = {isa = PBXBuildFile; fileRef = 496AF1DA18C677B600B35159 /* templates */; };
-		49EB4C4318C63B1800AD682A /* libFLAC.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EB4C4218C63B1800AD682A /* libFLAC.dylib */; };
 		49EB4CB218C63BE500AD682A /* Application.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4C4B18C63BE500AD682A /* Application.m */; };
 		49EB4CB318C63BE500AD682A /* AudioControlsWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4C4D18C63BE500AD682A /* AudioControlsWindowController.mm */; };
 		49EB4CB418C63BE500AD682A /* BackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4C4F18C63BE500AD682A /* BackgroundView.m */; };
@@ -323,9 +318,22 @@
 		49EB4F0918C6737700AD682A /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4F0718C6737700AD682A /* util.h */; };
 		4E5D100C1C514FD400AEDE6D /* PortAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D100B1C514FD400AEDE6D /* PortAudio.framework */; };
 		4E5D100F1C51501500AEDE6D /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D100D1C51501500AEDE6D /* libpng.framework */; };
-		4E5D10101C51501500AEDE6D /* libzip Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D100E1C51501500AEDE6D /* libzip Mac.framework */; };
 		4E5D10121C51531100AEDE6D /* Ogg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10111C51531100AEDE6D /* Ogg.framework */; };
 		4E5D10161C5153E300AEDE6D /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10151C5153E300AEDE6D /* Vorbis.framework */; };
+		4E5D10181C51571500AEDE6D /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10171C51571500AEDE6D /* Vorbis.framework */; };
+		4E5D104C1C515B2E00AEDE6D /* sndfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D104B1C515B2E00AEDE6D /* sndfile.framework */; };
+		4E5D10791C51785200AEDE6D /* samplerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10781C51785200AEDE6D /* samplerate.framework */; };
+		4EC286F51C529BD6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F41C529BD5008CA3C8 /* libxml.framework */; };
+		4EC286F71C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
+		4EC286F81C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
+		4EC286F91C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
+		4EC286FA1C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
+		4EC286FB1C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
+		4EC286FD1C529D97008CA3C8 /* libzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286FC1C529D97008CA3C8 /* libzip.framework */; };
+		4EC286FE1C529D97008CA3C8 /* libzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286FC1C529D97008CA3C8 /* libzip.framework */; };
+		4EC286FF1C529D97008CA3C8 /* libzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286FC1C529D97008CA3C8 /* libzip.framework */; };
+		4EC287001C529D97008CA3C8 /* libzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286FC1C529D97008CA3C8 /* libzip.framework */; };
+		4EC287011C529D97008CA3C8 /* libzip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286FC1C529D97008CA3C8 /* libzip.framework */; };
 		B32914241AD16C4400EB7046 /* images in Resources */ = {isa = PBXBuildFile; fileRef = B32914231AD16C4400EB7046 /* images */; };
 /* End PBXBuildFile section */
 
@@ -392,17 +400,12 @@
 /* Begin PBXFileReference section */
 		00039E7C12B03F660025D374 /* libemulation-hal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libemulation-hal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00039EFE12B04E910025D374 /* libemulation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libemulation.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		00039FD012B04F6C0025D374 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		001750B013A50A9C0043E2ED /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
 		001750B113A50A9C0043E2ED /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
 		001750C013A50A9C0043E2ED /* INSTALL.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = INSTALL.md; sourceTree = "<group>"; };
 		001750C113A50A9C0043E2ED /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
 		001750C213A50A9C0043E2ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		002F57E515CDF4AC00C19659 /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = /opt/local/lib/libz.a; sourceTree = "<absolute>"; };
-		002F57E715CDF4B400C19659 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = /opt/local/lib/libvorbis.a; sourceTree = "<absolute>"; };
-		002F57EB15CDF4C000C19659 /* libsndfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsndfile.a; path = /opt/local/lib/libsndfile.a; sourceTree = "<absolute>"; };
-		002F57ED15CDF4C600C19659 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = /opt/local/lib/libsamplerate.a; sourceTree = "<absolute>"; };
-		002F57F715CDF6F800C19659 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = /opt/local/lib/libvorbisenc.a; sourceTree = "<absolute>"; };
 		00365CF51516F3D800978DF6 /* libdiskimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libdiskimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		003B158312EE26BA003FB8F6 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		003B165112EE275C003FB8F6 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -420,7 +423,6 @@
 		496AF1D818C677B600B35159 /* library */ = {isa = PBXFileReference; lastKnownFileType = folder; name = library; path = modules/libemulation/res/library; sourceTree = "<group>"; };
 		496AF1D918C677B600B35159 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = modules/libemulation/res/sounds; sourceTree = "<group>"; };
 		496AF1DA18C677B600B35159 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; name = templates; path = modules/libemulation/res/templates; sourceTree = "<group>"; };
-		49EB4C4218C63B1800AD682A /* libFLAC.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libFLAC.dylib; path = ../../../../opt/local/lib/libFLAC.dylib; sourceTree = "<group>"; };
 		49EB4C4A18C63BE500AD682A /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		49EB4C4B18C63BE500AD682A /* Application.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Application.m; sourceTree = "<group>"; };
 		49EB4C4C18C63BE500AD682A /* AudioControlsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioControlsWindowController.h; sourceTree = "<group>"; };
@@ -741,9 +743,16 @@
 		49EB4F0718C6737700AD682A /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = modules/libemulation/src/libutil/util.h; sourceTree = "<group>"; };
 		4E5D100B1C514FD400AEDE6D /* PortAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PortAudio.framework; path = ../../../../Library/Frameworks/PortAudio.framework; sourceTree = "<group>"; };
 		4E5D100D1C51501500AEDE6D /* libpng.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libpng.framework; path = ../../../../Library/Frameworks/libpng.framework; sourceTree = "<group>"; };
-		4E5D100E1C51501500AEDE6D /* libzip Mac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "libzip Mac.framework"; path = "../../../../Library/Frameworks/libzip Mac.framework"; sourceTree = "<group>"; };
 		4E5D10111C51531100AEDE6D /* Ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Ogg.framework; path = ../../../../Library/Frameworks/Ogg.framework; sourceTree = "<group>"; };
 		4E5D10151C5153E300AEDE6D /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = ../../../../Library/Frameworks/Vorbis.framework; sourceTree = "<group>"; };
+		4E5D10171C51571500AEDE6D /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = ../../../../Library/Frameworks/Vorbis.framework; sourceTree = "<group>"; };
+		4E5D104B1C515B2E00AEDE6D /* sndfile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = sndfile.framework; path = ../../../../Library/Frameworks/sndfile.framework; sourceTree = "<group>"; };
+		4E5D10781C51785200AEDE6D /* samplerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = samplerate.framework; path = ../../../../Library/Frameworks/samplerate.framework; sourceTree = "<group>"; };
+		4E5D107A1C51794300AEDE6D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		4E5D107C1C517A4900AEDE6D /* libzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libzip.framework; path = ../../../../Library/Frameworks/libzip.framework; sourceTree = "<group>"; };
+		4EC286F41C529BD5008CA3C8 /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = ../../../../../../Library/Frameworks/libxml.framework; sourceTree = "<group>"; };
+		4EC286F61C529CE6008CA3C8 /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = ../../../../../../Library/Frameworks/libxml.framework; sourceTree = "<group>"; };
+		4EC286FC1C529D97008CA3C8 /* libzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libzip.framework; path = ../../../../Library/Frameworks/libzip.framework; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B32914231AD16C4400EB7046 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = modules/libemulation/res/images; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -753,6 +762,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EC286FE1C529D97008CA3C8 /* libzip.framework in Frameworks */,
+				4EC286F81C529CE6008CA3C8 /* libxml.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -760,6 +771,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EC287001C529D97008CA3C8 /* libzip.framework in Frameworks */,
+				4EC286FA1C529CE6008CA3C8 /* libxml.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -767,6 +780,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EC286FF1C529D97008CA3C8 /* libzip.framework in Frameworks */,
+				4EC286F91C529CE6008CA3C8 /* libxml.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,6 +789,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EC287011C529D97008CA3C8 /* libzip.framework in Frameworks */,
+				4EC286FB1C529CE6008CA3C8 /* libxml.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -781,10 +798,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EC286FD1C529D97008CA3C8 /* libzip.framework in Frameworks */,
+				4EC286F51C529BD6008CA3C8 /* libxml.framework in Frameworks */,
+				4EC286FD1C529D97008CA3C8 /* libzip.framework in Frameworks */,
+				4E5D10791C51785200AEDE6D /* samplerate.framework in Frameworks */,
+				4E5D104C1C515B2E00AEDE6D /* sndfile.framework in Frameworks */,
 				4E5D10161C5153E300AEDE6D /* Vorbis.framework in Frameworks */,
+				4EC286F71C529CE6008CA3C8 /* libxml.framework in Frameworks */,
 				4E5D10121C51531100AEDE6D /* Ogg.framework in Frameworks */,
 				4E5D100F1C51501500AEDE6D /* libpng.framework in Frameworks */,
-				4E5D10101C51501500AEDE6D /* libzip Mac.framework in Frameworks */,
 				4E5D100C1C514FD400AEDE6D /* PortAudio.framework in Frameworks */,
 				00039F0112B04EAA0025D374 /* libemulation.a in Frameworks */,
 				00039E9B12B042210025D374 /* libemulation-hal.a in Frameworks */,
@@ -795,18 +817,14 @@
 				0054E6311131BEE7006D32D9 /* Carbon.framework in Frameworks */,
 				0054E66C1131BF58006D32D9 /* Quartz.framework in Frameworks */,
 				00F4D0BF12E2E42F00B7F5E6 /* ApplicationServices.framework in Frameworks */,
+				4E5D10181C51571500AEDE6D /* Vorbis.framework in Frameworks */,
 				003B167C12EE27ED003FB8F6 /* CoreAudioKit.framework in Frameworks */,
 				003B16B212EE2A05003FB8F6 /* AudioToolbox.framework in Frameworks */,
-				49EB4C4318C63B1800AD682A /* libFLAC.dylib in Frameworks */,
 				003B16B712EE2A0D003FB8F6 /* AudioUnit.framework in Frameworks */,
 				003B16C312EE2A18003FB8F6 /* CoreAudio.framework in Frameworks */,
 				003B16C812EE2A61003FB8F6 /* CoreServices.framework in Frameworks */,
 				008CA97E147803E500B9F5D0 /* IOKit.framework in Frameworks */,
-				00039FD112B04F6C0025D374 /* libxml2.dylib in Frameworks */,
 				002F57E615CDF4AC00C19659 /* libz.a in Frameworks */,
-				002F57EC15CDF4C000C19659 /* libsndfile.a in Frameworks */,
-				002F57EE15CDF4C600C19659 /* libsamplerate.a in Frameworks */,
-				002F57F815CDF6F800C19659 /* libvorbisenc.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,6 +953,11 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
+				4EC286F41C529BD5008CA3C8 /* libxml.framework */,
+				4E5D107C1C517A4900AEDE6D /* libzip.framework */,
+				4E5D107A1C51794300AEDE6D /* libxml2.2.tbd */,
+				4E5D10781C51785200AEDE6D /* samplerate.framework */,
+				4E5D104B1C515B2E00AEDE6D /* sndfile.framework */,
 				4E5D10151C5153E300AEDE6D /* Vorbis.framework */,
 				B32914231AD16C4400EB7046 /* images */,
 				496AF1D818C677B600B35159 /* library */,
@@ -954,17 +977,13 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4EC286FC1C529D97008CA3C8 /* libzip.framework */,
+				4EC286F61C529CE6008CA3C8 /* libxml.framework */,
+				4E5D10171C51571500AEDE6D /* Vorbis.framework */,
 				4E5D10111C51531100AEDE6D /* Ogg.framework */,
 				4E5D100D1C51501500AEDE6D /* libpng.framework */,
-				4E5D100E1C51501500AEDE6D /* libzip Mac.framework */,
 				4E5D100B1C514FD400AEDE6D /* PortAudio.framework */,
-				49EB4C4218C63B1800AD682A /* libFLAC.dylib */,
-				002F57ED15CDF4C600C19659 /* libsamplerate.a */,
-				002F57EB15CDF4C000C19659 /* libsndfile.a */,
-				002F57E715CDF4B400C19659 /* libvorbis.a */,
-				002F57F715CDF6F800C19659 /* libvorbisenc.a */,
 				002F57E515CDF4AC00C19659 /* libz.a */,
-				00039FD012B04F6C0025D374 /* libxml2.dylib */,
 				00F4D0BE12E2E42F00B7F5E6 /* ApplicationServices.framework */,
 				003B165712EE276E003FB8F6 /* AudioToolbox.framework */,
 				003B165112EE275C003FB8F6 /* AudioUnit.framework */,
@@ -2088,8 +2107,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/PortAudio.framework/Headers/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/Headers",
+					"$(USER_LIBRARY_DIR)/Frameworks/samplerate.framework/Headers",
+					"$(USER_LIBRARY_DIR)/Frameworks/libzip.framework/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "emulation-hal";
 			};
@@ -2099,8 +2127,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/PortAudio.framework/Headers/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/Headers",
+					"$(USER_LIBRARY_DIR)/Frameworks/samplerate.framework/Headers",
+					"$(USER_LIBRARY_DIR)/Frameworks/libzip.framework/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "emulation-hal";
 			};
@@ -2110,8 +2147,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					/Library/Frameworks,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"/Library/Frameworks/libxml.framework/**",
+					"/Library/Frameworks/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2121,8 +2166,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					/Library/Frameworks,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"/Library/Frameworks/libxml.framework/**",
+					"/Library/Frameworks/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2132,8 +2185,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/libzip.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/libpng.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/samplerate.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/PortAudio.framework/Headers/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = emulation;
 			};
@@ -2143,8 +2206,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/libzip.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/libpng.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/samplerate.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/PortAudio.framework/Headers/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = emulation;
 			};
@@ -2154,8 +2227,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/PortAudio.framework/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2165,8 +2244,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/PortAudio.framework/**",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2177,11 +2262,17 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/raw/devel/OpenEmulator/src/macosx,
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"$(USER_LIBRARY_DIR)/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/libzip.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/portaudio.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/samplerate.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
@@ -2194,11 +2285,17 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/raw/devel/OpenEmulator/src/macosx,
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 					"$(USER_LIBRARY_DIR)/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"$(USER_LIBRARY_DIR)/Frameworks/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/libzip.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/portaudio.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/samplerate.framework/**",
+					"$(USER_LIBRARY_DIR)/Frameworks/sndfile.framework/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
