@@ -747,9 +747,8 @@
 		4E5D10171C51571500AEDE6D /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = ../../../../Library/Frameworks/Vorbis.framework; sourceTree = "<group>"; };
 		4E5D104B1C515B2E00AEDE6D /* sndfile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = sndfile.framework; path = ../../../../Library/Frameworks/sndfile.framework; sourceTree = "<group>"; };
 		4E5D10781C51785200AEDE6D /* samplerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = samplerate.framework; path = ../../../../Library/Frameworks/samplerate.framework; sourceTree = "<group>"; };
-		4E5D107A1C51794300AEDE6D /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
 		4E5D107C1C517A4900AEDE6D /* libzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libzip.framework; path = ../../../../Library/Frameworks/libzip.framework; sourceTree = "<group>"; };
-		4EC286F41C529BD5008CA3C8 /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = ../../../../../../Library/Frameworks/libxml.framework; sourceTree = "<group>"; };
+		4EC286F41C529BD5008CA3C8 /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = /Library/Frameworks/libxml.framework; sourceTree = "<absolute>"; };
 		4EC286F61C529CE6008CA3C8 /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = ../../../../../../Library/Frameworks/libxml.framework; sourceTree = "<group>"; };
 		4EC286FC1C529D97008CA3C8 /* libzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libzip.framework; path = ../../../../Library/Frameworks/libzip.framework; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -951,12 +950,6 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
-				4EC286F41C529BD5008CA3C8 /* libxml.framework */,
-				4E5D107C1C517A4900AEDE6D /* libzip.framework */,
-				4E5D107A1C51794300AEDE6D /* libxml2.2.tbd */,
-				4E5D10781C51785200AEDE6D /* samplerate.framework */,
-				4E5D104B1C515B2E00AEDE6D /* sndfile.framework */,
-				4E5D10151C5153E300AEDE6D /* Vorbis.framework */,
 				B32914231AD16C4400EB7046 /* images */,
 				496AF1D818C677B600B35159 /* library */,
 				496AF1D918C677B600B35159 /* sounds */,
@@ -975,6 +968,11 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4EC286F41C529BD5008CA3C8 /* libxml.framework */,
+				4E5D107C1C517A4900AEDE6D /* libzip.framework */,
+				4E5D10781C51785200AEDE6D /* samplerate.framework */,
+				4E5D104B1C515B2E00AEDE6D /* sndfile.framework */,
+				4E5D10151C5153E300AEDE6D /* Vorbis.framework */,
 				4EC286FC1C529D97008CA3C8 /* libzip.framework */,
 				4EC286F61C529CE6008CA3C8 /* libxml.framework */,
 				4E5D10171C51571500AEDE6D /* Vorbis.framework */,
