@@ -86,7 +86,6 @@
 		49EB4CEC18C63BE500AD682A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4C9F18C63BE500AD682A /* main.m */; };
 		49EB4CED18C63BE500AD682A /* NSStringAdditions.mm in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CA118C63BE500AD682A /* NSStringAdditions.mm */; };
 		49EB4CEE18C63BE500AD682A /* PreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CA418C63BE500AD682A /* PreferencesWindowController.m */; };
-		49EB4CF018C63BE500AD682A /* sparkle_dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4CA618C63BE500AD682A /* sparkle_dsa_pub.pem */; };
 		49EB4CF118C63BE500AD682A /* TemplateChooserItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CA818C63BE500AD682A /* TemplateChooserItem.mm */; };
 		49EB4CF218C63BE500AD682A /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CAA18C63BE500AD682A /* TemplateChooserViewController.m */; };
 		49EB4CF318C63BE500AD682A /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CAC18C63BE500AD682A /* TemplateChooserWindowController.m */; };
@@ -323,6 +322,7 @@
 		4E5D10181C51571500AEDE6D /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10171C51571500AEDE6D /* Vorbis.framework */; };
 		4E5D104C1C515B2E00AEDE6D /* sndfile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D104B1C515B2E00AEDE6D /* sndfile.framework */; };
 		4E5D10791C51785200AEDE6D /* samplerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E5D10781C51785200AEDE6D /* samplerate.framework */; };
+		4EC13B4D1C536F85006A5AAD /* roms in Resources */ = {isa = PBXBuildFile; fileRef = 4EC13B4A1C536EEA006A5AAD /* roms */; };
 		4EC286F51C529BD6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F41C529BD5008CA3C8 /* libxml.framework */; };
 		4EC286F81C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
 		4EC286F91C529CE6008CA3C8 /* libxml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC286F61C529CE6008CA3C8 /* libxml.framework */; };
@@ -748,6 +748,7 @@
 		4E5D104B1C515B2E00AEDE6D /* sndfile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = sndfile.framework; path = ../../../../Library/Frameworks/sndfile.framework; sourceTree = "<group>"; };
 		4E5D10781C51785200AEDE6D /* samplerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = samplerate.framework; path = ../../../../Library/Frameworks/samplerate.framework; sourceTree = "<group>"; };
 		4E5D107C1C517A4900AEDE6D /* libzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libzip.framework; path = ../../../../Library/Frameworks/libzip.framework; sourceTree = "<group>"; };
+		4EC13B4A1C536EEA006A5AAD /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; path = roms; sourceTree = "<group>"; };
 		4EC286F41C529BD5008CA3C8 /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = /Library/Frameworks/libxml.framework; sourceTree = "<absolute>"; };
 		4EC286F61C529CE6008CA3C8 /* libxml.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libxml.framework; path = ../../../../../../Library/Frameworks/libxml.framework; sourceTree = "<group>"; };
 		4EC286FC1C529D97008CA3C8 /* libzip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libzip.framework; path = ../../../../Library/Frameworks/libzip.framework; sourceTree = "<group>"; };
@@ -950,6 +951,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
+				4EC13B4A1C536EEA006A5AAD /* roms */,
 				B32914231AD16C4400EB7046 /* images */,
 				496AF1D818C677B600B35159 /* library */,
 				496AF1D918C677B600B35159 /* sounds */,
@@ -1708,7 +1710,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				49EB4CF018C63BE500AD682A /* sparkle_dsa_pub.pem in Resources */,
+				4EC13B4D1C536F85006A5AAD /* roms in Resources */,
 				49EB4CCB18C63BE500AD682A /* AudioPlay.png in Resources */,
 				49EB4CE018C63BE500AD682A /* IconRevert.png in Resources */,
 				49EB4D0C18C6536100AD682A /* Preferences.xib in Resources */,
