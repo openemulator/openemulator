@@ -327,6 +327,9 @@
 		49EB4F0118C6709F00AD682A /* PAAudio.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4EF718C6709F00AD682A /* PAAudio.h */; };
 		49EB4F0818C6737700AD682A /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4F0618C6737700AD682A /* util.cpp */; };
 		49EB4F0918C6737700AD682A /* util.h in Headers */ = {isa = PBXBuildFile; fileRef = 49EB4F0718C6737700AD682A /* util.h */; };
+		AB28CDEB1D20C190003C4C08 /* SAMDACCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB28CDE91D20C190003C4C08 /* SAMDACCard.cpp */; };
+		ABEAE5C11D1E11C2006B3812 /* S.A.M. Front.png in Resources */ = {isa = PBXBuildFile; fileRef = ABEAE5C01D1E11C2006B3812 /* S.A.M. Front.png */; };
+		ABEAE5C31D1E11D4006B3812 /* Don't Ask S.A.M..xml in Resources */ = {isa = PBXBuildFile; fileRef = ABEAE5C21D1E11D4006B3812 /* Don't Ask S.A.M..xml */; };
 		B32914241AD16C4400EB7046 /* images in Resources */ = {isa = PBXBuildFile; fileRef = B32914231AD16C4400EB7046 /* images */; };
 /* End PBXBuildFile section */
 
@@ -745,6 +748,10 @@
 		49EB4F0618C6737700AD682A /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = modules/libemulation/src/libutil/util.cpp; sourceTree = "<group>"; };
 		49EB4F0718C6737700AD682A /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = modules/libemulation/src/libutil/util.h; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB28CDE91D20C190003C4C08 /* SAMDACCard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SAMDACCard.cpp; path = "Don't Ask/SAMDACCard.cpp"; sourceTree = "<group>"; };
+		AB28CDEA1D20C190003C4C08 /* SAMDACCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SAMDACCard.h; path = "Don't Ask/SAMDACCard.h"; sourceTree = "<group>"; };
+		ABEAE5C01D1E11C2006B3812 /* S.A.M. Front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "S.A.M. Front.png"; path = "modules/libemulation/res/images/Don't Ask/S.A.M. Front.png"; sourceTree = "<group>"; };
+		ABEAE5C21D1E11D4006B3812 /* Don't Ask S.A.M..xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Don't Ask S.A.M..xml"; path = "modules/libemulation/res/library/Apple II/Don't Ask S.A.M..xml"; sourceTree = "<group>"; };
 		B32914231AD16C4400EB7046 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = modules/libemulation/res/images; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -936,6 +943,9 @@
 		2A37F4AAFDCFA73011CA2CEA /* OpenEmulator */ = {
 			isa = PBXGroup;
 			children = (
+				ABEAE5C21D1E11D4006B3812 /* Don't Ask S.A.M..xml */,
+				ABEAE5C01D1E11C2006B3812 /* S.A.M. Front.png */,
+				ABEAE5BE1D1E0A5C006B3812 /* roms */,
 				B32914231AD16C4400EB7046 /* images */,
 				496AF1D818C677B600B35159 /* library */,
 				496AF1D918C677B600B35159 /* sounds */,
@@ -1139,6 +1149,7 @@
 		49EB4D8518C6702100AD682A /* Implementation */ = {
 			isa = PBXGroup;
 			children = (
+				AB28CDE81D20C174003C4C08 /* Don't Ask */,
 				49EB4D8618C6702100AD682A /* Apple */,
 				49EB4DC318C6702100AD682A /* Generic */,
 				49EB4DE818C6702200AD682A /* MOS */,
@@ -1404,6 +1415,15 @@
 				49EB4E3818C6702200AD682A /* IEEE488Interface.h */,
 			);
 			path = IEEE;
+			sourceTree = "<group>";
+		};
+		AB28CDE81D20C174003C4C08 /* Don't Ask */ = {
+			isa = PBXGroup;
+			children = (
+				AB28CDE91D20C190003C4C08 /* SAMDACCard.cpp */,
+				AB28CDEA1D20C190003C4C08 /* SAMDACCard.h */,
+			);
+			name = "Don't Ask";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1719,12 +1739,14 @@
 				49EB4CDE18C63BE500AD682A /* IconLibrary.png in Resources */,
 				49EB4CE418C63BE500AD682A /* IconWarmRestart.png in Resources */,
 				49EB4CCF18C63BE500AD682A /* Emulation.icns in Resources */,
+				ABEAE5C31D1E11D4006B3812 /* Don't Ask S.A.M..xml in Resources */,
 				49EB4D0E18C6536100AD682A /* TemplateChooserView.xib in Resources */,
 				49EB4CD218C63BE500AD682A /* EmulationShowRollover.png in Resources */,
 				49EB4D0918C6536100AD682A /* Emulation.xib in Resources */,
 				49EB4CC418C63BE500AD682A /* MainMenu.xib in Resources */,
 				49EB4CDA18C63BE500AD682A /* IconDebuggerBreak.png in Resources */,
 				49EB4CC318C63BE500AD682A /* Library.xib in Resources */,
+				ABEAE5C11D1E11C2006B3812 /* S.A.M. Front.png in Resources */,
 				49EB4CC818C63BE500AD682A /* AudioMax.png in Resources */,
 				49EB4CC718C63BE500AD682A /* TemplateChooserView.xib in Resources */,
 				49EB4CE618C63BE500AD682A /* ToolbarBackground.png in Resources */,
@@ -1904,6 +1926,7 @@
 				49EB4CEB18C63BE500AD682A /* LibraryWindowController.m in Sources */,
 				49EB4CBE18C63BE500AD682A /* EmulationOutlineView.m in Sources */,
 				49EB4CE818C63BE500AD682A /* LibraryItem.mm in Sources */,
+				AB28CDEB1D20C190003C4C08 /* SAMDACCard.cpp in Sources */,
 				49EB4CED18C63BE500AD682A /* NSStringAdditions.mm in Sources */,
 				49EB4CEE18C63BE500AD682A /* PreferencesWindowController.m in Sources */,
 				49EB4CBD18C63BE500AD682A /* EmulationOutlineCell.m in Sources */,
