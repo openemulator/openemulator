@@ -12,6 +12,8 @@
 #import "EmulationOutlineCell.h"
 #import "EmulationItem.h"
 
+#import "EmulationWindowController.h"
+
 @implementation EmulationOutlineView
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -34,7 +36,13 @@
 
 - (IBAction)delete:(id)sender
 {
-    return [[[self window] windowController] delete:sender];
+    EmulationWindowController *windowController = (EmulationWindowController *)[[self window] windowController];
+
+    NSAssert([windowController isKindOfClass:[EmulationWindowController class]],
+             @"Expected windowController to be an instance of %@",
+             [EmulationWindowController class]);
+
+    [windowController delete:sender];
 }
 
 - (BOOL)performKeyEquivalent:(NSEvent *)theEvent

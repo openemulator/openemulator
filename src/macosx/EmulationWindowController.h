@@ -60,6 +60,7 @@ NSOutlineViewDataSource, NSComboBoxDataSource>
 - (BOOL)doUnmount:(EmulationItem *)item;
 - (IBAction)showInFinder:(id)sender;
 - (IBAction)showDevice:(id)sender;
+- (IBAction)delete:(id)sender;
 
 - (BOOL)connect:(NSString *)thePath
           label:(NSString *)theLabel
