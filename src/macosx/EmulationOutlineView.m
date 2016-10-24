@@ -40,7 +40,7 @@
 
     NSAssert([windowController isKindOfClass:[EmulationWindowController class]],
              @"Expected windowController to be an instance of %@",
-             [EmulationWindowController class]);
+             NSStringFromClass([EmulationWindowController class]));
 
     [windowController delete:sender];
 }
