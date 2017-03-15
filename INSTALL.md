@@ -56,7 +56,8 @@ This caused the headers to be found, but the build failed because of the `-lpng1
 #### Link any headers that homebrew doesn’t link
 
 	HOMEBREW_PREFIX=$(brew config | awk ' /HOMEBREW_PREFIX/ {print $2}')
-	ln -s $HOMEBREW_PREFIX/Cellar/libzip/0.11.2/lib/libzip/include/zipconf.h $HOMEBREW_PREFIX/include/zipconf.h
+	MAX_ZIP_VER=$(ls $HOMEBREW_PREFIX/Cellar/libzip | sort -n | tail -1)
+	ln -s $HOMEBREW_PREFIX/Cellar/libzip/$MAX_ZIP_VER/lib/libzip/include/zipconf.h $HOMEBREW_PREFIX/include/zipconf.h
 
 **Note:** If you're installing into a non-standard location, you'll need to configure
 xcode to find the headers and libraries:
