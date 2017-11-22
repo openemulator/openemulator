@@ -2254,6 +2254,7 @@
 					/opt/local/include,
 					/usr/local/include,
 					/usr/include/libxml2,
+					/usr/local/lib/libzip/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/**",
@@ -2293,6 +2294,7 @@
 					/opt/local/include,
 					/usr/local/include,
 					/usr/include/libxml2,
+					/usr/local/lib/libzip/include,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/lib/**",

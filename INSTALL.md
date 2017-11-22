@@ -35,7 +35,7 @@ Then try the following commands:
 
 If you can't compile because of this error: "'zipconf.h' file not found", try:
 
-	sudo ln -s /opt/local/lib/libzip/include/zipconf.h /opt/local/include/zipconf.h 
+	sudo ln -s /opt/local/lib/libzip/include/zipconf.h /opt/local/include/zipconf.h
 
 ### Homebrew
 
@@ -46,27 +46,19 @@ If you can't compile because of this error: "'zipconf.h' file not found", try:
 **Note:** if I missed any, follow my procedure: try to build, see which header file or library is
 missing, and search for it on Google to find out what package to install.
 
-_Interesting note: my homebrew config was initially out-of-date, so it installed libpng 1.5.
+_Interesting note: my Homebrew config was initially out-of-date, so it installed libpng 1.5.
 This caused the headers to be found, but the build failed because of the `-lpng16` library param.
 `brew update && brew upgrade libpng` fixed it._
 
 	brew update
 	brew install libpng libsamplerate libsndfile libzip portaudio
 
-#### Link any headers that homebrew doesn’t link
-
-	HOMEBREW_PREFIX=$(brew config | awk ' /HOMEBREW_PREFIX/ {print $2}')
-	MAX_ZIP_VER=$(ls $HOMEBREW_PREFIX/Cellar/libzip | sort -n | tail -1)
-	ln -s $HOMEBREW_PREFIX/Cellar/libzip/$MAX_ZIP_VER/lib/libzip/include/zipconf.h $HOMEBREW_PREFIX/include/zipconf.h
-
-**Note:** If you're installing into a non-standard location, you'll need to configure
-xcode to find the headers and libraries:
+**Note:** If you're installing Homebrew into a non-standard location, you'll need to configure
+Xcode to find its headers and libraries:
 - Type command-shift-o then type xcodeproj to open the file `OpenEmulator.xcodeproj`.
 - At the top, make sure the OpenEmulator project, not a target, is selected.
-- Add the include dir to Header Search Paths (eg. `/Users/joe/homebrew/include`).
-- Add the lib dir to Library Search Paths (eg. `/Users/joe/homebrew/lib`).
-        
-        
+- Add the "include" dir to Header Search Paths (eg. `/Users/joe/homebrew/include`).
+- Add the "lib" dir to Library Search Paths (eg. `/Users/joe/homebrew/lib`).
 
 ## Linux
 
@@ -115,7 +107,7 @@ followed by:
 followed by:
 
 	make
-	
+
 ## Windows
 
 Not yet available.

@@ -45,7 +45,7 @@ OpenEmulator emulates the following systems:
 	
 ## Feedback
 
-If you find a bug, or would like a specif feature, please report it at:
+If you find a bug, or would like a specific feature, please report it at:
 
 [https://github.com/OpenEmulatorProject/OpenEmulator-OSX/issues](https://github.com/OpenEmulatorProject/OpenEmulator-OSX/issues)
 
