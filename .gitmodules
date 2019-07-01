@@ -1,3 +1,3 @@
 [submodule "modules/libemulation"]
 	path = modules/libemulation
-	url = git@github.com:openemulator/libemulation.git
+	url = https://github.com/openemulator/libemulation.git

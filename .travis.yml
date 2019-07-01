@@ -1,0 +1,22 @@
+dist: trusty
+sudo: required
+
+matrix:
+  include:
+    - os: osx
+      language: objective-c
+      compiler: clang
+      osx_image: xcode10.2
+      addons:
+        homebrew:
+          packages:
+          - libzip
+          - portaudio
+          - libsndfile
+          - libsamplerate
+          update: true
+      script:
+        - |
+          cmake -Hmodules/libemulation -Bmodules/libemulation/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build modules/libemulation/build --config Release
+          xcodebuild

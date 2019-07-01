@@ -318,7 +318,7 @@
 	<key>CFBundleSignature</key>
 	<string>opem</string>
 	<key>CFBundleVersion</key>
-	<string>${BUILD_NUMBER}</string>
+	<string>1.0.4</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.education</string>
 	<key>LSMinimumSystemVersion</key>
