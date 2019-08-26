@@ -6,9 +6,9 @@
 
 ---
 
-This is OpenEmulator, a cross-platform emulator of many legacy computer systems.
+This is **OpenEmulator**, a cross-platform emulator of many legacy computer systems.
 
-OpenEmulator is currently only fully supported on Mac OS X, with support for Linux and Windows operating systems being developed. For compilation and installation instructions, refer to [INSTALL.md](https://github.com/openemulator/openemulator/blob/master/INSTALL.md).
+OpenEmulator is currently only fully supported on macOS, with support for Linux and Windows operating systems being developed. For compilation and installation instructions, refer to [INSTALL.md](INSTALL.md).
 
 ## About
 OpenEmulator aims to be an accurate, portable emulator of legacy computer systems. By using a software components framework, it is easy to expand a software emulation with additional software devices, just as a real system could be expanded with real devices.
@@ -31,32 +31,29 @@ A second pillar is awesome GPU-accelerated video rendering. There is support for
 The effects that are available for video rendering are: NTSC/PAL decoding, standard monitor controls like brightness, contrast, saturation, hue, active video center/size controls, monitor shadow masks like triad, in-line, aperture grille, LCD, Bayer, a CRT barrel effect, CRT dynamic scanline effect, CRT phosphor persistence, CRT center lighting, video bandwidth controls, composite color IRE levels, composite color luma and chroma bandwidth, composite color per-line variable color burst, composite color per-line U phase alternation, composite color Y'UV, Y'IQ (with standard I and Q bandwidth) and Sony decoding.
 
 #### Component Framework
-The third pillar of OpenEmulator is a component framework. This feature most likely appeals to computer programmers who want to develop their own emulations. The basis of an OpenEmulator emulation is an XML description called "Emulation Description Language". This is very similar to Java NetBeans and allows the description, connection and configuration of software components. It is thus very easy to interconnect different CPUs, address decoders, memories, chip-sets or input/output devices.
+The third pillar of OpenEmulator is a component framework. This feature most likely appeals to computer programmers who want to develop their own emulations. The basis of an OpenEmulator emulation is an XML description called "Emulation Description Language". This is very similar to Java NetBeans and allows for the description, connection and configuration of software components. It is thus very easy to interconnect different CPUs, address decoders, memories, chip-sets or input/output devices.
 
 It is also easy to add your own software components to the framework. You are encouraged to submit your own emulations as patches to the OpenEmulator team, so your work gets all the attention it deserves.
 
 ## Systems
-
 OpenEmulator emulates the following systems:
 
 - Apple I
-    - Original Apple I
-	- Replica-1
-	- A-ONE
+  - Original Apple I
+  - Replica-1
+  - A-ONE
 - Apple II
-    - Original Apple II
-	- Apple II+
-	- Apple II Europlus
-	- Apple II J-Plus
-	
-## Feedback
+  - Original Apple II
+  - Apple II+
+  - Apple II Europlus
+  - Apple II J-Plus
 
+## Feedback and contributing
 If you find a bug, or would like a specific feature, please report it at:
 
 [https://github.com/openemulator/openemulator/issues](https://github.com/openemulator/openemulator/issues)
 
-If you like to contribute to the project, fork the repository on Github and send us your pull requests!
+If you would like to contribute to the project, fork the repository on GitHub and send us your pull requests!
 
 ## License
-OpenEmulator is released under the [GNU General Public License v3](https://github.com/openemulator/openemulator/blob/master/COPYING).
-	
+OpenEmulator is released under the [GNU General Public License v3](COPYING).
