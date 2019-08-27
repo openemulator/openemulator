@@ -49,7 +49,6 @@
 		49EB4CC118C63BE500AD682A /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4C6818C63BE500AD682A /* Canvas.xib */; };
 		49EB4CC218C63BE500AD682A /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4C6A18C63BE500AD682A /* Emulation.xib */; };
 		49EB4CC318C63BE500AD682A /* Library.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4C6C18C63BE500AD682A /* Library.xib */; };
-		49EB4CC418C63BE500AD682A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4C6E18C63BE500AD682A /* MainMenu.xib */; };
 		49EB4CC518C63BE500AD682A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4C7018C63BE500AD682A /* Preferences.xib */; };
 		49EB4CC618C63BE500AD682A /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4C7218C63BE500AD682A /* TemplateChooser.xib */; };
 		49EB4CC718C63BE500AD682A /* TemplateChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4C7418C63BE500AD682A /* TemplateChooserView.xib */; };
@@ -96,14 +95,7 @@
 		49EB4CF218C63BE500AD682A /* TemplateChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CAA18C63BE500AD682A /* TemplateChooserViewController.m */; };
 		49EB4CF318C63BE500AD682A /* TemplateChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CAC18C63BE500AD682A /* TemplateChooserWindowController.m */; };
 		49EB4CF418C63BE500AD682A /* VerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 49EB4CAE18C63BE500AD682A /* VerticallyCenteredTextFieldCell.m */; };
-		49EB4D0718C6536100AD682A /* AudioControls.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4CF718C6536000AD682A /* AudioControls.xib */; };
-		49EB4D0818C6536100AD682A /* Canvas.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4CF918C6536000AD682A /* Canvas.xib */; };
-		49EB4D0918C6536100AD682A /* Emulation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4CFB18C6536000AD682A /* Emulation.xib */; };
-		49EB4D0A18C6536100AD682A /* Library.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4CFD18C6536000AD682A /* Library.xib */; };
 		49EB4D0B18C6536100AD682A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4CFF18C6536000AD682A /* MainMenu.xib */; };
-		49EB4D0C18C6536100AD682A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4D0118C6536000AD682A /* Preferences.xib */; };
-		49EB4D0D18C6536100AD682A /* TemplateChooser.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4D0318C6536100AD682A /* TemplateChooser.xib */; };
-		49EB4D0E18C6536100AD682A /* TemplateChooserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 49EB4D0518C6536100AD682A /* TemplateChooserView.xib */; };
 		49EB4D1418C65CD500AD682A /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49EB4D1318C65CD500AD682A /* libpng16.a */; };
 		AB2672121E5E8FC900B971E0 /* roms in Resources */ = {isa = PBXBuildFile; fileRef = AB2672111E5E8FC900B971E0 /* roms */; };
 		B32914241AD16C4400EB7046 /* images in Resources */ = {isa = PBXBuildFile; fileRef = B32914231AD16C4400EB7046 /* images */; };
@@ -556,21 +548,16 @@
 				49EB4CF018C63BE500AD682A /* sparkle_dsa_pub.pem in Resources */,
 				49EB4CCB18C63BE500AD682A /* AudioPlay.png in Resources */,
 				49EB4CE018C63BE500AD682A /* IconRevert.png in Resources */,
-				49EB4D0C18C6536100AD682A /* Preferences.xib in Resources */,
 				49EB4CE218C63BE500AD682A /* IconVideo.png in Resources */,
-				49EB4D0718C6536100AD682A /* AudioControls.xib in Resources */,
 				49EB4CE318C63BE500AD682A /* IconWakeUp.png in Resources */,
 				49EB4CD718C63BE500AD682A /* EmulationUnmountSelected.png in Resources */,
 				49EB4CD118C63BE500AD682A /* EmulationShowPressed.png in Resources */,
-				49EB4D0D18C6536100AD682A /* TemplateChooser.xib in Resources */,
-				49EB4D0A18C6536100AD682A /* Library.xib in Resources */,
 				49EB4CC518C63BE500AD682A /* Preferences.xib in Resources */,
 				49EB4CD818C63BE500AD682A /* IconAudio.png in Resources */,
 				49EB4CCE18C63BE500AD682A /* DiskImage.icns in Resources */,
 				49EB4CDB18C63BE500AD682A /* IconDevices.png in Resources */,
 				49EB4CE118C63BE500AD682A /* IconSleep.png in Resources */,
 				496AF1DC18C677B600B35159 /* library in Resources */,
-				49EB4D0818C6536100AD682A /* Canvas.xib in Resources */,
 				49EB4CD018C63BE500AD682A /* EmulationShow.png in Resources */,
 				49EB4CD518C63BE500AD682A /* EmulationUnmountPressed.png in Resources */,
 				AB2672121E5E8FC900B971E0 /* roms in Resources */,
@@ -580,10 +567,7 @@
 				49EB4CDE18C63BE500AD682A /* IconLibrary.png in Resources */,
 				49EB4CE418C63BE500AD682A /* IconWarmRestart.png in Resources */,
 				49EB4CCF18C63BE500AD682A /* Emulation.icns in Resources */,
-				49EB4D0E18C6536100AD682A /* TemplateChooserView.xib in Resources */,
 				49EB4CD218C63BE500AD682A /* EmulationShowRollover.png in Resources */,
-				49EB4D0918C6536100AD682A /* Emulation.xib in Resources */,
-				49EB4CC418C63BE500AD682A /* MainMenu.xib in Resources */,
 				49EB4CDA18C63BE500AD682A /* IconDebuggerBreak.png in Resources */,
 				49EB4CC318C63BE500AD682A /* Library.xib in Resources */,
 				49EB4CC818C63BE500AD682A /* AudioMax.png in Resources */,
