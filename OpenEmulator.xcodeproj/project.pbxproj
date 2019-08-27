@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -530,7 +530,7 @@
 				ORGANIZATIONNAME = OpenEmulator;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
-			compatibilityVersion = "Xcode 10.0";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -865,7 +865,7 @@
 					/usr/local/opt/libxml2/lib,
 					/usr/local/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -904,7 +904,7 @@
 					/usr/local/opt/libxml2/lib,
 					/usr/local/lib,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = NO;
 			};
 			name = Release;
