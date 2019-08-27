@@ -800,7 +800,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/raw/devel/OpenEmulator/src/macosx,
+					"$(PROJECT_DIR)/src/macosx",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
@@ -818,7 +818,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/raw/devel/OpenEmulator/src/macosx,
+					"$(PROJECT_DIR)/src/macosx",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
@@ -839,11 +839,6 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					/opt/local/Library/Frameworks,
-					/usr/local/opt/libxml2/lib,
-					/usr/local/lib,
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -877,11 +872,6 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					/opt/local/Library/Frameworks,
-					/usr/local/opt/libxml2/lib,
-					/usr/local/lib,
-				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
