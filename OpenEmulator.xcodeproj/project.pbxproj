@@ -260,7 +260,7 @@
 		8D15AC370486D014006FF6A4 /* OpenEmulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenEmulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB2672111E5E8FC900B971E0 /* roms */ = {isa = PBXFileReference; lastKnownFileType = folder; name = roms; path = modules/libemulation/res/roms; sourceTree = "<group>"; };
 		B32914231AD16C4400EB7046 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = modules/libemulation/res/images; sourceTree = "<group>"; };
-		F60993D522C97E7E00B9BE53 /* libemulation.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemulation.a; path = modules/libemulation/_builds/libemulation.a; sourceTree = "<group>"; };
+		F60993D522C97E7E00B9BE53 /* libemulation.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libemulation.a; path = modules/libemulation/build/libemulation.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -806,7 +806,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/modules/libemulation/_builds",
+					"$(PROJECT_DIR)/modules/libemulation/build",
 				);
 				PRODUCT_NAME = OpenEmulator;
 			};
@@ -824,7 +824,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/src/macosx/Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/modules/libemulation/_builds",
+					"$(PROJECT_DIR)/modules/libemulation/build",
 				);
 				PRODUCT_NAME = OpenEmulator;
 			};
@@ -840,7 +840,6 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/modules/libemulation/build/**",
 					/opt/local/Library/Frameworks,
 					/usr/local/opt/libxml2/lib,
 					/usr/local/lib,
@@ -861,7 +860,6 @@
 					"${SRCROOT}/modules/libemulation/src/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/modules/libemulation/build/**",
 					/usr/local/opt/libxml2/lib,
 					/usr/local/lib,
 				);
@@ -880,7 +878,6 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/modules/libemulation/build/**",
 					/opt/local/Library/Frameworks,
 					/usr/local/opt/libxml2/lib,
 					/usr/local/lib,
@@ -900,7 +897,6 @@
 					"${SRCROOT}/modules/libemulation/src/**",
 				);
 				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/modules/libemulation/build/**",
 					/usr/local/opt/libxml2/lib,
 					/usr/local/lib,
 				);
