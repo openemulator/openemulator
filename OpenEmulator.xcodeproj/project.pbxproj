@@ -518,7 +518,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = OpenEmulator;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "OpenEmulator" */;
@@ -792,6 +792,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/modules/libemulation/build",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
 				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Debug;
@@ -810,6 +811,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/modules/libemulation/build",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.openemulator.OpenEmulator;
 				PRODUCT_NAME = OpenEmulator;
 			};
 			name = Release;
