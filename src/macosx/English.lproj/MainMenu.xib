@@ -31,9 +31,6 @@
                             </menuItem>
                             <menuItem title="Donate..." hidden="YES" enabled="NO" id="926">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="openDonate:" target="812" id="948"/>
-                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="236">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
