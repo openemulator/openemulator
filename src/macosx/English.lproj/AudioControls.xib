@@ -8,7 +8,6 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="AudioControlsWindowController">
             <connections>
-                <outlet property="fPlayDurationLabel" destination="1610" id="1647"/>
                 <outlet property="fPlayNameLabel" destination="1608" id="1648"/>
                 <outlet property="fPlayPosition" destination="1615" id="1791"/>
                 <outlet property="fPlayPositionLabel" destination="1609" id="1797"/>
